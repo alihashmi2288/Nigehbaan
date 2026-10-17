@@ -15,6 +15,12 @@ import {
   HeartHandshake,
   ShieldCheck,
   CheckCircle2,
+  AlertTriangle,
+  Users,
+  Target,
+  Activity,
+  HelpCircle,
+  ShieldAlert,
 } from 'lucide-react';
 import { LinearNav, LinearFooter } from '@/components/layout';
 
@@ -87,54 +93,105 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* 3 Live Preview Highlights */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                {/* 1. Critical Patient */}
-                <div className="p-3.5 rounded-[8px] bg-surface-2 border border-hairline space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold text-semantic-critical-text">
-                      NG-101 • SCORE 86.5
-                    </span>
-                    <span className="px-1.5 py-0.5 text-[10px] font-bold rounded bg-semantic-critical/20 text-semantic-critical-text border border-semantic-critical-border">
-                      CRITICAL #1
-                    </span>
+              {/* Operational Workflow Breadcrumb Header */}
+              <div className="mb-3 px-1 flex items-center justify-between text-[11px] font-mono text-ink-subtle uppercase">
+                <span>Tactical Operational Pipeline</span>
+                <span className="text-brand">Incident → Assessment → Recommendation → Action</span>
+              </div>
+
+              {/* 4-Step Coherent Operational Workflow */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {/* Step 1: Incident Intake */}
+                <div className="p-3.5 rounded-[8px] bg-surface-2 border border-hairline space-y-2 flex flex-col justify-between hover:border-hairline-strong transition-all">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-ink-subtle">
+                        01. Incident Intake
+                      </span>
+                      <span className="px-1.5 py-0.5 text-[10px] font-mono font-bold rounded bg-surface-3 text-ink-muted border border-hairline">
+                        SECTOR 2
+                      </span>
+                    </div>
+                    <div className="text-xs font-mono font-bold text-ink flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-semantic-critical animate-ping" />
+                      NG-101 (Voice / Urdu)
+                    </div>
+                    <p className="text-[12px] text-ink-muted leading-[1.4]">
+                      Dialysis patient trapped in 1.6m rising water; power outage imminent.
+                    </p>
                   </div>
-                  <p className="text-xs text-ink font-medium">Dialysis patient trapped in chest-deep water</p>
-                  <p className="text-[11px] text-ink-subtle leading-[1.4]">
-                    Prioritized automatically: missed medical treatment + high flood depth.
-                  </p>
+                  <div className="pt-2 border-t border-hairline text-[11px] font-mono text-ink-subtle">
+                    Channel: Bilingual Hotline
+                  </div>
                 </div>
 
-                {/* 2. Silent Blackout Area */}
-                <div className="p-3.5 rounded-[8px] bg-surface-2 border border-semantic-blind-spot-border/50 space-y-2 relative overflow-hidden">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold text-semantic-blind-spot-text">
-                      NG-103 • SCORE 68.7
-                    </span>
-                    <span className="px-1.5 py-0.5 text-[10px] font-bold rounded bg-semantic-blind-spot/20 text-semantic-blind-spot-text border border-semantic-blind-spot-border">
-                      AUTO SEARCH SWEEP
-                    </span>
+                {/* Step 2: Deterministic Assessment */}
+                <div className="p-3.5 rounded-[8px] bg-surface-2 border border-hairline space-y-2 flex flex-col justify-between hover:border-hairline-strong transition-all">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-ink-subtle">
+                        02. Deterministic Score
+                      </span>
+                      <span className="px-1.5 py-0.5 text-[10px] font-mono font-bold rounded bg-semantic-critical/20 text-semantic-critical-text border border-semantic-critical-border">
+                        CRITICAL #1
+                      </span>
+                    </div>
+                    <div className="text-xs font-mono font-bold text-semantic-critical-text">
+                      SCORE 86.5 / 100
+                    </div>
+                    <p className="text-[12px] text-ink-muted leading-[1.4]">
+                      MCDA 5-factor formula: Life Threat 4.5, Medical 5.0. Missing data renormalized.
+                    </p>
                   </div>
-                  <p className="text-xs text-ink font-medium">Sector 3A Total Blackout (Tower Collapsed)</p>
-                  <p className="text-[11px] text-ink-subtle leading-[1.4]">
-                    Zero calls for 110 mins while water is rising $\to$ system deploys search boat.
-                  </p>
+                  <div className="pt-2 border-t border-hairline text-[11px] font-mono text-brand">
+                    Audit: 100% Deterministic
+                  </div>
                 </div>
 
-                {/* 3. Resource Warning */}
-                <div className="p-3.5 rounded-[8px] bg-surface-2 border border-hairline space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold text-semantic-warning-text">
-                      SMART WARNING
-                    </span>
-                    <span className="px-1.5 py-0.5 text-[10px] font-mono font-bold rounded bg-surface-3 text-ink-muted">
-                      +35 MIN DELAY
-                    </span>
+                {/* Step 3: Tactical Recommendation */}
+                <div className="p-3.5 rounded-[8px] bg-surface-2 border border-hairline space-y-2 flex flex-col justify-between hover:border-hairline-strong transition-all">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-ink-subtle">
+                        03. Scarcity Match
+                      </span>
+                      <span className="px-1.5 py-0.5 text-[10px] font-mono font-bold rounded bg-surface-3 text-semantic-success-text border border-semantic-success-border/30">
+                        MATCHED
+                      </span>
+                    </div>
+                    <div className="text-xs font-mono font-bold text-ink">
+                      Shallow Jet-Boat 01
+                    </div>
+                    <p className="text-[12px] text-ink-muted leading-[1.4]">
+                      Paired with Civil Hospital Annexe (backup generator &amp; dialysis verified).
+                    </p>
                   </div>
-                  <p className="text-xs text-ink font-medium">Warning before committing the last shallow boat</p>
-                  <p className="text-[11px] text-ink-subtle leading-[1.4]">
-                    Alerts dispatcher that downstream emergency NG-104 will wait 35 min longer.
-                  </p>
+                  <div className="pt-2 border-t border-hairline text-[11px] font-mono text-semantic-success-text">
+                    Capability Shelter Validated
+                  </div>
+                </div>
+
+                {/* Step 4: Coordinator Action */}
+                <div className="p-3.5 rounded-[8px] bg-surface-2 border border-brand/40 space-y-2 flex flex-col justify-between relative overflow-hidden shadow-[0_0_12px_rgba(94,106,210,0.15)]">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-brand">
+                        04. Human Dispatch
+                      </span>
+                      <span className="px-1.5 py-0.5 text-[10px] font-mono font-bold rounded bg-brand text-white">
+                        ACTION GATE
+                      </span>
+                    </div>
+                    <div className="text-xs font-mono font-bold text-semantic-warning-text flex items-center gap-1">
+                      ⚠️ Trade-Off: +35m Delay
+                    </div>
+                    <p className="text-[12px] text-ink-muted leading-[1.4]">
+                      Warns leaves 0 boats in Sector 2. Coordinator clicks to approve assignment.
+                    </p>
+                  </div>
+                  <div className="pt-2 border-t border-hairline text-[11px] font-mono text-ink-subtle">
+                    Invariant: No Auto-Dispatch
+                  </div>
                 </div>
               </div>
 
@@ -148,6 +205,268 @@ export default function HomePage() {
                   <span>Open Full Cockpit View</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </NextLink>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ================================================================= */}
+        {/* PROBLEM 01 CHALLENGE ALIGNMENT                                    */}
+        {/* ================================================================= */}
+        <section className="py-20 sm:py-24 border-t border-hairline bg-surface-1/30">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-16">
+            {/* Header & Core Challenge Banner */}
+            <div className="text-center max-w-3xl mx-auto space-y-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-2 border border-hairline text-[12px] font-mono tracking-[0.4px] text-brand">
+                <Target className="w-3.5 h-3.5 text-brand" />
+                <span>PROBLEM 01 // DISASTER RESPONSE &amp; EMERGENCY COORDINATION</span>
+              </div>
+              <h2 className="text-3xl sm:text-5xl font-semibold leading-[1.1] tracking-[-1.5px] text-ink">
+                Finding who needs help most.
+              </h2>
+              <div className="p-4 sm:p-5 rounded-[12px] bg-surface-1 border border-brand/30 text-left relative overflow-hidden mt-6 shadow-lg">
+                <span className="text-[11px] font-mono uppercase text-brand font-semibold block mb-1">
+                  The Core Hackathon Challenge
+                </span>
+                <p className="text-sm sm:text-base text-ink font-medium leading-[1.5]">
+                  &ldquo;How can technology identify who needs help most and coordinate available resources to reach them before the situation becomes critical?&rdquo;
+                </p>
+                <p className="text-xs sm:text-[13px] text-ink-subtle mt-2 leading-[1.5]">
+                  During floods and extreme emergencies, warnings fail to reach isolated elderly residents, low-income zones, and people with disabilities. At the same time, rescue teams and boats are strictly finite. Below is how Nigehbaan systematically solves each mandate of the challenge.
+                </p>
+              </div>
+            </div>
+
+            {/* PART 1: 3 KEY QUESTIONS TO THINK ABOUT */}
+            <div className="space-y-6">
+              <div className="flex items-baseline justify-between border-b border-hairline pb-3">
+                <div>
+                  <span className="text-xs font-mono text-brand uppercase tracking-wider block">
+                    01 // Critical Dilemmas
+                  </span>
+                  <h3 className="text-xl sm:text-2xl font-semibold text-ink tracking-tight">
+                    Key Questions &amp; How Nigehbaan Answers Them
+                  </h3>
+                </div>
+                <span className="text-xs font-mono text-ink-subtle hidden sm:inline">
+                  3 Mandates Evaluated
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                {/* Q1 */}
+                <div className="p-6 rounded-[12px] bg-surface-1 border border-hairline relative overflow-hidden flex flex-col justify-between before:absolute before:inset-x-0 before:top-0 before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent hover:border-hairline-strong transition-all">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-mono text-brand font-semibold">QUESTION 01</span>
+                      <span className="px-2 py-0.5 rounded-full bg-surface-2 border border-hairline text-[10px] font-mono text-ink-subtle">
+                        Vulnerability Signals
+                      </span>
+                    </div>
+                    <h4 className="text-[18px] font-medium text-ink leading-snug">
+                      Who is most at risk?
+                    </h4>
+                    <p className="text-[13px] text-ink-subtle leading-[1.5]">
+                      <strong className="text-ink">Prompt:</strong> Vulnerability depends on location, age, health, mobility, and communications. How to find people when warnings do not reach everyone?
+                    </p>
+                    <div className="p-3 rounded-[8px] bg-surface-2 border border-hairline text-xs text-ink-muted leading-[1.5] space-y-1">
+                      <div className="font-semibold text-brand font-mono text-[11px]">NIGEHBAAN&apos;S SOLUTION:</div>
+                      <div>Evaluates a 5-factor physical vulnerability matrix ($&gt;1.5$m water, bedridden mobility, dialysis/ventilator dependence) rather than smartphone loudness. If a phone is dead, an evacuation inability floor of $\ge 4.0$ is automatically enforced.</div>
+                    </div>
+                  </div>
+                  <div className="pt-4 mt-4 border-t border-hairline text-[11px] font-mono text-ink-subtle flex items-center gap-1.5">
+                    <Activity className="w-3.5 h-3.5 text-brand" />
+                    <span>5-Factor Deterministic Assessment</span>
+                  </div>
+                </div>
+
+                {/* Q2 */}
+                <div className="p-6 rounded-[12px] bg-surface-1 border border-hairline relative overflow-hidden flex flex-col justify-between before:absolute before:inset-x-0 before:top-0 before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent hover:border-hairline-strong transition-all">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-mono text-brand font-semibold">QUESTION 02</span>
+                      <span className="px-2 py-0.5 rounded-full bg-surface-2 border border-hairline text-[10px] font-mono text-ink-subtle">
+                        Prioritization &amp; Trust
+                      </span>
+                    </div>
+                    <h4 className="text-[18px] font-medium text-ink leading-snug">
+                      Who gets help first?
+                    </h4>
+                    <p className="text-[13px] text-ink-subtle leading-[1.5]">
+                      <strong className="text-ink">Prompt:</strong> Supplies and boats are finite. The system must match scarce resources to the greatest need and justify priority in a way responders trust.
+                    </p>
+                    <div className="p-3 rounded-[8px] bg-surface-2 border border-hairline text-xs text-ink-muted leading-[1.5] space-y-1">
+                      <div className="font-semibold text-brand font-mono text-[11px]">NIGEHBAAN&apos;S SOLUTION:</div>
+                      <div>100% deterministic mathematical scoring (0–100) using MCDA formulas—the AI is never allowed to invent or alter a score. Every recommendation displays an opportunity-cost delay warning before human dispatch.</div>
+                    </div>
+                  </div>
+                  <div className="pt-4 mt-4 border-t border-hairline text-[11px] font-mono text-ink-subtle flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-semantic-success-text" />
+                    <span>Auditable Math • Human-in-the-Loop</span>
+                  </div>
+                </div>
+
+                {/* Q3 */}
+                <div className="p-6 rounded-[12px] bg-surface-1 border border-hairline relative overflow-hidden flex flex-col justify-between before:absolute before:inset-x-0 before:top-0 before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent hover:border-hairline-strong transition-all">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-mono text-brand font-semibold">QUESTION 03</span>
+                      <span className="px-2 py-0.5 rounded-full bg-surface-2 border border-hairline text-[10px] font-mono text-ink-subtle">
+                        Proactive Staging
+                      </span>
+                    </div>
+                    <h4 className="text-[18px] font-medium text-ink leading-snug">
+                      How early can you act?
+                    </h4>
+                    <p className="text-[13px] text-ink-subtle leading-[1.5]">
+                      <strong className="text-ink">Prompt:</strong> Help is most effective before situations turn critical. Think about early signals, forecasts, crowd reports, and pre-positioning.
+                    </p>
+                    <div className="p-3 rounded-[8px] bg-surface-2 border border-hairline text-xs text-ink-muted leading-[1.5] space-y-1">
+                      <div className="font-semibold text-brand font-mono text-[11px]">NIGEHBAAN&apos;S SOLUTION:</div>
+                      <div>Pre-positions shallow-water jet boats and mobile medical units at **T-0 Baseline** based on river hydrograph elevation models—staging resources hours before dikes breach instead of reacting to panicked calls.</div>
+                    </div>
+                  </div>
+                  <div className="pt-4 mt-4 border-t border-hairline text-[11px] font-mono text-ink-subtle flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-brand" />
+                    <span>T-0 Pre-Disaster Staging</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* PART 2: WHO IS AFFECTED */}
+            <div className="space-y-6">
+              <div className="flex items-baseline justify-between border-b border-hairline pb-3">
+                <div>
+                  <span className="text-xs font-mono text-brand uppercase tracking-wider block">
+                    02 // Stakeholder Matrix
+                  </span>
+                  <h3 className="text-xl sm:text-2xl font-semibold text-ink tracking-tight">
+                    Who Is Affected &amp; How Nigehbaan Serves Them
+                  </h3>
+                </div>
+                <span className="text-xs font-mono text-ink-subtle hidden sm:inline">
+                  4 Core Populations Protected
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Persona 1 */}
+                <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline space-y-2.5">
+                  <div className="w-8 h-8 rounded-[6px] bg-surface-2 border border-hairline flex items-center justify-center text-brand">
+                    <Radio className="w-4 h-4" />
+                  </div>
+                  <h4 className="text-base font-medium text-ink">Low-Lying Residents</h4>
+                  <p className="text-xs text-ink-subtle leading-[1.5]">
+                    Monitored via GIS flood polygons and autonomous blind-spot detectors. If cell towers collapse, search sweeps are synthesized automatically.
+                  </p>
+                </div>
+
+                {/* Persona 2 */}
+                <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline space-y-2.5">
+                  <div className="w-8 h-8 rounded-[6px] bg-surface-2 border border-hairline flex items-center justify-center text-semantic-critical-text">
+                    <HeartHandshake className="w-4 h-4" />
+                  </div>
+                  <h4 className="text-base font-medium text-ink">Elderly &amp; Disabled</h4>
+                  <p className="text-xs text-ink-subtle leading-[1.5]">
+                    Bedridden and dialysis patients cannot self-evacuate. They receive prioritized medical weighting and guaranteed evacuation factor floors ($\ge 4.0$).
+                  </p>
+                </div>
+
+                {/* Persona 3 */}
+                <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline space-y-2.5">
+                  <div className="w-8 h-8 rounded-[6px] bg-surface-2 border border-hairline flex items-center justify-center text-semantic-warning-text">
+                    <Users className="w-4 h-4" />
+                  </div>
+                  <h4 className="text-base font-medium text-ink">Rescue Responders</h4>
+                  <p className="text-xs text-ink-subtle leading-[1.5]">
+                    Protected against fatigue and boat depletion. The cockpit displays queue turnaround delays (+35m penalty) before committing specialized assets.
+                  </p>
+                </div>
+
+                {/* Persona 4 */}
+                <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline space-y-2.5">
+                  <div className="w-8 h-8 rounded-[6px] bg-surface-2 border border-hairline flex items-center justify-center text-semantic-success-text">
+                    <Building2 className="w-4 h-4" />
+                  </div>
+                  <h4 className="text-base font-medium text-ink">Shelter Managers</h4>
+                  <p className="text-xs text-ink-subtle leading-[1.5]">
+                    Live capacity telemetry and capability-based pairing routes oxygen/dialysis evacuees strictly to generator-backed hospitals, preventing overcrowding.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* PART 3: WHERE IT GETS HARD */}
+            <div className="space-y-6">
+              <div className="flex items-baseline justify-between border-b border-hairline pb-3">
+                <div>
+                  <span className="text-xs font-mono text-brand uppercase tracking-wider block">
+                    03 // Real-World Stress Points
+                  </span>
+                  <h3 className="text-xl sm:text-2xl font-semibold text-ink tracking-tight">
+                    &ldquo;Where It Gets Hard&rdquo; — Tackling the 3 Toughest Edge Cases
+                  </h3>
+                </div>
+                <span className="text-xs font-mono text-ink-subtle hidden sm:inline">
+                  Zero Assumptions • Resilient Architecture
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                {/* Hard 1: Incomplete Information */}
+                <div className="p-6 rounded-[12px] bg-surface-1 border border-hairline relative space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono text-semantic-unknown-text font-bold">EDGE CASE 01</span>
+                    <span className="px-2 py-0.5 rounded-full bg-surface-2 text-[10px] font-mono text-ink-subtle border border-hairline">
+                      Missing Data
+                    </span>
+                  </div>
+                  <h4 className="text-base font-medium text-ink">Incomplete Information</h4>
+                  <p className="text-xs text-ink-subtle leading-[1.5]">
+                    <strong className="text-ink">The Reality:</strong> Reports are late, duplicated, inaccurate, or missing details because phones die mid-call.
+                  </p>
+                  <div className="p-3 rounded-[8px] bg-surface-2 border border-hairline text-xs text-ink-muted leading-[1.5]">
+                    <span className="text-brand font-mono font-semibold block mb-0.5">WEIGHT RENORMALIZATION:</span>
+                    When factor data is missing, weights renormalize across known factors. Missing information flags uncertainty for verification; it <strong>never</strong> lowers a victim&apos;s score.
+                  </div>
+                </div>
+
+                {/* Hard 2: Competing Priorities */}
+                <div className="p-6 rounded-[12px] bg-surface-1 border border-hairline relative space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono text-semantic-warning-text font-bold">EDGE CASE 02</span>
+                    <span className="px-2 py-0.5 rounded-full bg-surface-2 text-[10px] font-mono text-ink-subtle border border-hairline">
+                      Resource Contention
+                    </span>
+                  </div>
+                  <h4 className="text-base font-medium text-ink">Competing Priorities</h4>
+                  <p className="text-xs text-ink-subtle leading-[1.5]">
+                    <strong className="text-ink">The Reality:</strong> A medical emergency, a stranded family, and a flooded school all demand the same single boat.
+                  </p>
+                  <div className="p-3 rounded-[8px] bg-surface-2 border border-hairline text-xs text-ink-muted leading-[1.5]">
+                    <span className="text-brand font-mono font-semibold block mb-0.5">OPPORTUNITY COST ENGINE:</span>
+                    Calculates scarcity impact before dispatch. If assigning an asset to a stranded group leaves zero boats and delays a dying patient by +35 min, the system explicitly warns the coordinator.
+                  </div>
+                </div>
+
+                {/* Hard 3: Connectivity Failure */}
+                <div className="p-6 rounded-[12px] bg-surface-1 border border-hairline relative space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono text-semantic-blind-spot-text font-bold">EDGE CASE 03</span>
+                    <span className="px-2 py-0.5 rounded-full bg-surface-2 text-[10px] font-mono text-ink-subtle border border-hairline">
+                      Infrastructure Outage
+                    </span>
+                  </div>
+                  <h4 className="text-base font-medium text-ink">Connectivity Failure</h4>
+                  <p className="text-xs text-ink-subtle leading-[1.5]">
+                    <strong className="text-ink">The Reality:</strong> Cellular towers collapse, fiber lines snap, and batteries die precisely when help is needed.
+                  </p>
+                  <div className="p-3 rounded-[8px] bg-surface-2 border border-hairline text-xs text-ink-muted leading-[1.5]">
+                    <span className="text-brand font-mono font-semibold block mb-0.5">SILENT BLIND-SPOT SWEEP &amp; PWA:</span>
+                    Sectors silent for &gt;90m during rising water auto-synthesize a recon sweep with an enforced floor $\ge 60.0$. Responders in boats use offline PWA queues that auto-sync upon reconnection.
+                  </div>
+                </div>
               </div>
             </div>
           </div>

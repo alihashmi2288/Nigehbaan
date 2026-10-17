@@ -177,6 +177,36 @@ body {
   color: var(--ink) !important;
 }
 
+/* Tactical dark tooltips (All markers, shelters, assets, sectors) */
+.leaflet-tooltip {
+  background-color: var(--surface-1) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--hairline-strong) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75) !important;
+  padding: 4px 8px !important;
+  font-family: inherit !important;
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+}
+
+/* Tooltip directional arrow tips */
+.leaflet-tooltip-top:before {
+  border-top-color: var(--surface-1) !important;
+}
+
+.leaflet-tooltip-bottom:before {
+  border-bottom-color: var(--surface-1) !important;
+}
+
+.leaflet-tooltip-left:before {
+  border-left-color: var(--surface-1) !important;
+}
+
+.leaflet-tooltip-right:before {
+  border-right-color: var(--surface-1) !important;
+}
+
 /* Sector blind-spot pulse animation */
 @keyframes blind-spot-pulse {
   0% {
@@ -224,4 +254,21 @@ body {
   animation: critical-halo-pulse 2s cubic-bezier(0, 0, 0.2, 1) infinite;
   pointer-events: none;
 }
+
+/* Accessibility: prefers-reduced-motion overrides (Task 7) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .marker-critical-pulse,
+  .sector-polygon-blind-spot {
+    animation: none !important;
+  }
+}
+
 

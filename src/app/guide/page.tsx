@@ -23,6 +23,14 @@ import {
   ExternalLink,
   ShieldCheck,
   HelpCircle,
+  MapPin,
+  ListOrdered,
+  Activity,
+  Compass,
+  PlayCircle,
+  RotateCcw,
+  PlusCircle,
+  History,
 } from 'lucide-react';
 import { LinearNav, LinearFooter } from '@/components/layout';
 
@@ -40,15 +48,15 @@ export default function GuidePage() {
         <section className="text-center sm:text-left border-b border-hairline pb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-2 border border-hairline text-[13px] font-medium tracking-[0.4px] text-ink-muted mb-5">
             <BookOpen className="w-3.5 h-3.5 text-brand" />
-            <span>HOW IT WORKS // JUDGE &amp; OPERATOR BLUEPRINT</span>
+            <span>HOW IT WORKS // OPERATOR &amp; EVALUATOR BLUEPRINT</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-semibold leading-[1.1] tracking-[-1.8px] text-ink mb-4">
-            Platform Guide &amp; How to Use
+            Platform Guide &amp; How to Use Nigehbaan
           </h1>
 
           <p className="text-base sm:text-lg font-normal leading-[1.5] text-ink-muted max-w-3xl">
-            A plain-language guide for hackathon judges and emergency teams. Learn how Nigehbaan calculates fair priority scores without AI hallucinations, how it spots silent blackout neighborhoods, and how to test the platform in 3 minutes.
+            A clear, plain-language walkthrough for judges, responders, and first-time visitors. Learn what each panel does, how to test the core features in 3 minutes, and how transparent math saves lives without AI guesswork.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -70,9 +78,122 @@ export default function GuidePage() {
         </section>
 
         {/* ================================================================= */}
-        {/* SECTION 1: 3-MINUTE EVALUATOR QUICKSTART                          */}
+        {/* SECTION 0: 15-SECOND ORIENTATION (WHAT AM I LOOKING AT?)         */}
         {/* ================================================================= */}
         <section className="space-y-6">
+          <div>
+            <span className="text-[12px] font-mono uppercase tracking-[0.4px] text-brand block mb-1">
+              Section 00 // Quick Orientation
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-[-0.6px] text-ink">
+              What Am I Looking At in the Cockpit?
+            </h2>
+            <p className="text-sm text-ink-subtle mt-1">
+              Nigehbaan is not a consumer smartphone app—it is the <strong>Emergency Dispatch Command Center</strong> used by disaster relief directors during catastrophic floods.
+            </p>
+          </div>
+
+          {/* The 3-Panel Breakdown */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Left Panel */}
+            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-3 before:absolute before:inset-x-0 before:top-0 before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent">
+              <div className="w-8 h-8 rounded-[6px] bg-surface-2 border border-hairline flex items-center justify-center text-brand">
+                <ListOrdered className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-[11px] font-mono text-ink-subtle uppercase block">Left Panel</span>
+                <h3 className="text-base font-medium text-ink">The Triage Queue</h3>
+                <span className="text-xs text-brand font-mono font-medium block mt-0.5">&ldquo;Who needs help most&rdquo;</span>
+              </div>
+              <p className="text-[13px] text-ink-subtle leading-[1.5]">
+                Lists all incoming emergency reports ranked <strong>0 to 100</strong> purely by flood depth, trapped medical patients, and physical inability to move—never by who shouts loudest.
+              </p>
+            </div>
+
+            {/* Center Panel */}
+            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-3 before:absolute before:inset-x-0 before:top-0 before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent">
+              <div className="w-8 h-8 rounded-[6px] bg-surface-2 border border-hairline flex items-center justify-center text-brand">
+                <MapPin className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-[11px] font-mono text-ink-subtle uppercase block">Center Panel</span>
+                <h3 className="text-base font-medium text-ink">The Tactical GIS Map</h3>
+                <span className="text-xs text-brand font-mono font-medium block mt-0.5">&ldquo;Where they are&rdquo;</span>
+              </div>
+              <p className="text-[13px] text-ink-subtle leading-[1.5]">
+                A real-time dark map displaying the 4 flood sectors of District Alpha, real-time flood heights, prepositioned rescue boats, and available hospital shelters.
+              </p>
+            </div>
+
+            {/* Right Panel */}
+            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-3 before:absolute before:inset-x-0 before:top-0 before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent">
+              <div className="w-8 h-8 rounded-[6px] bg-surface-2 border border-hairline flex items-center justify-center text-brand">
+                <Activity className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-[11px] font-mono text-ink-subtle uppercase block">Right Panel</span>
+                <h3 className="text-base font-medium text-ink">The Incident Inspector</h3>
+                <span className="text-xs text-brand font-mono font-medium block mt-0.5">&ldquo;How we help them&rdquo;</span>
+              </div>
+              <p className="text-[13px] text-ink-subtle leading-[1.5]">
+                Clicking any case reveals the exact 5-factor mathematical formula, matches verified generator-backed hospitals, and allows human coordinators to assign rescue boats.
+              </p>
+            </div>
+          </div>
+
+          {/* Key Buttons in the Top Bar */}
+          <div className="p-5 rounded-[12px] bg-surface-2 border border-hairline space-y-3">
+            <span className="text-xs font-mono font-semibold uppercase text-ink-muted block">
+              Top Bar Navigation Controls Explained:
+            </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+              <div className="p-2.5 rounded-[8px] bg-surface-1 border border-hairline space-y-1">
+                <div className="font-mono font-bold text-semantic-critical-text flex items-center gap-1.5">
+                  <PhoneCall className="w-3.5 h-3.5" />
+                  <span>Voice Hotline</span>
+                </div>
+                <p className="text-ink-subtle text-[11px] leading-[1.4]">
+                  Play simulated Urdu voice distress calls with live animated audio soundwaves and instant translation.
+                </p>
+              </div>
+
+              <div className="p-2.5 rounded-[8px] bg-surface-1 border border-hairline space-y-1">
+                <div className="font-mono font-bold text-brand flex items-center gap-1.5">
+                  <PlusCircle className="w-3.5 h-3.5" />
+                  <span>Emergency Intake</span>
+                </div>
+                <p className="text-ink-subtle text-[11px] leading-[1.4]">
+                  Simulate logging a new emergency report with instant AI extraction and automatic offline heuristic backup.
+                </p>
+              </div>
+
+              <div className="p-2.5 rounded-[8px] bg-surface-1 border border-hairline space-y-1">
+                <div className="font-mono font-bold text-ink flex items-center gap-1.5">
+                  <BarChart3 className="w-3.5 h-3.5 text-brand" />
+                  <span>FCFS Analysis</span>
+                </div>
+                <p className="text-ink-subtle text-[11px] leading-[1.4]">
+                  Opens the retrospective impact dashboard showing lives saved and 97% wait-time reduction.
+                </p>
+              </div>
+
+              <div className="p-2.5 rounded-[8px] bg-surface-1 border border-hairline space-y-1">
+                <div className="font-mono font-bold text-ink-muted flex items-center gap-1.5">
+                  <RotateCcw className="w-3.5 h-3.5 text-ink-subtle" />
+                  <span>Reset Drill</span>
+                </div>
+                <p className="text-ink-subtle text-[11px] leading-[1.4]">
+                  1-Click button that instantly clears all dispatches and restores the clean baseline scenario.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ================================================================= */}
+        {/* SECTION 1: 3-MINUTE EVALUATOR QUICKSTART                          */}
+        {/* ================================================================= */}
+        <section className="space-y-6 border-t border-hairline pt-12">
           <div>
             <span className="text-[12px] font-mono uppercase tracking-[0.4px] text-brand block mb-1">
               Section 01 // Interactive Walkthrough
@@ -81,13 +202,13 @@ export default function GuidePage() {
               The 3-Minute Quickstart (What to Click)
             </h2>
             <p className="text-sm text-ink-subtle mt-1">
-              Follow these 6 simple steps in the Command Cockpit to see all the breakthroughs in action.
+              Follow these 6 simple steps in the Command Cockpit to experience the entire system in action.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Step 1 */}
-            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-2.5">
+            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-2.5 before:absolute before:inset-x-0 before:top-0 before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold text-brand">STEP 1 • 0:00 – 0:30</span>
                 <span className="text-[11px] font-mono text-ink-subtle">Baseline (T-0)</span>
@@ -96,10 +217,13 @@ export default function GuidePage() {
               <p className="text-[13px] text-ink-subtle leading-[1.5]">
                 Launch the Cockpit. Look at the interactive dark GIS map showing District Alpha. You will see 4 flood sectors, rescue boat depots, and emergency shelters with live capacity gauges.
               </p>
+              <div className="pt-2 text-[11px] font-mono text-brand">
+                Action: Observe pre-positioned boats before water rises.
+              </div>
             </div>
 
             {/* Step 2 */}
-            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-2.5">
+            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-2.5 before:absolute before:inset-x-0 before:top-0 before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold text-semantic-critical-text">STEP 2 • 0:30 – 1:00</span>
                 <span className="text-[11px] font-mono text-ink-subtle">Advance to T+3</span>
@@ -108,10 +232,13 @@ export default function GuidePage() {
               <p className="text-[13px] text-ink-subtle leading-[1.5]">
                 Click <span className="text-ink font-mono font-medium">T+3</span> on the timeline bar. The top emergency is <span className="text-semantic-critical-text font-mono font-medium">NG-101</span> (Score 86.5 — Critical): a dialysis patient trapped in deep water. Click the card to see the 5-factor math card explaining exactly why it is ranked #1.
               </p>
+              <div className="pt-2 text-[11px] font-mono text-semantic-critical-text">
+                Action: Click NG-101 in the left queue.
+              </div>
             </div>
 
             {/* Step 3 */}
-            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-2.5">
+            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-2.5 before:absolute before:inset-x-0 before:top-0 before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold text-semantic-blind-spot-text">STEP 3 • 1:00 – 1:30</span>
                 <span className="text-[11px] font-mono text-ink-subtle">Advance to T+6</span>
@@ -120,10 +247,13 @@ export default function GuidePage() {
               <p className="text-[13px] text-ink-subtle leading-[1.5]">
                 Click <span className="text-ink font-mono font-medium">T+6</span> on the timeline. Tower-Alpha-3 collapses and Sector 3A goes totally silent for 110 minutes. Nigehbaan spots the silence and automatically generates <span className="text-semantic-blind-spot-text font-mono font-medium">NG-103</span> (Score 68.7, High Priority) so boats are sent immediately.
               </p>
+              <div className="pt-2 text-[11px] font-mono text-semantic-blind-spot-text">
+                Action: Watch Sector 3A turn purple on the map.
+              </div>
             </div>
 
             {/* Step 4 */}
-            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-2.5">
+            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-2.5 before:absolute before:inset-x-0 before:top-0 before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold text-semantic-warning-text">STEP 4 • 1:30 – 2:00</span>
                 <span className="text-[11px] font-mono text-ink-subtle">Smart Resource Warning</span>
@@ -132,10 +262,13 @@ export default function GuidePage() {
               <p className="text-[13px] text-ink-subtle leading-[1.5]">
                 Click NG-101 $\to$ Click <span className="text-ink font-medium">&quot;Assign Resource&quot;</span> $\to$ Select <span className="text-ink font-medium">Shallow Jet-Boat 01</span>. The modal warns: *&quot;Sending this leaves 0 boats in Sector 2; the next patient NG-104 will wait +35 minutes longer.&quot;* A human must click to approve.
               </p>
+              <div className="pt-2 text-[11px] font-mono text-semantic-warning-text">
+                Action: Observe opportunity-cost delay warning.
+              </div>
             </div>
 
             {/* Step 5 */}
-            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-2.5">
+            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-2.5 before:absolute before:inset-x-0 before:top-0 before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold text-semantic-critical-text">STEP 5 • 2:00 – 2:30</span>
                 <span className="text-[11px] font-mono text-ink-subtle">Voice &amp; Offline Mode</span>
@@ -144,18 +277,24 @@ export default function GuidePage() {
               <p className="text-[13px] text-ink-subtle leading-[1.5]">
                 Click <span className="text-semantic-critical-text font-medium">&quot;Voice Hotline&quot;</span> in the header to play real simulated audio with animated soundwaves and Urdu/English subtitles. Then toggle browser offline mode: reports queue locally and auto-upload when reconnected.
               </p>
+              <div className="pt-2 text-[11px] font-mono text-semantic-critical-text">
+                Action: Click red Voice Hotline button in header.
+              </div>
             </div>
 
             {/* Step 6 */}
-            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-2.5">
+            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-2.5 before:absolute before:inset-x-0 before:top-0 before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold text-brand">STEP 6 • 2:30 – 3:00</span>
                 <span className="text-[11px] font-mono text-ink-subtle">Advance to T+12 &amp; Reset</span>
               </div>
               <h3 className="text-base font-medium text-ink">View Lives Saved &amp; 1-Click Reset</h3>
               <p className="text-[13px] text-ink-subtle leading-[1.5]">
-                Click <span className="text-ink font-mono font-medium">T+12</span> $\to$ Click <span className="text-brand font-medium">&quot;FCFS Analysis&quot;</span> to see how Nigehbaan cut critical wait time by 97% and saved 4 lives. Then click <span className="text-ink font-medium">&quot;Reset Simulation&quot;</span> in the top bar to instantly restore the pristine baseline.
+                Click <span className="text-ink font-mono font-medium">T+12</span> $\to$ Click <span className="text-brand font-medium">&quot;FCFS Analysis&quot;</span> to see how Nigehbaan cut critical wait time by 97% and saved 4 lives. Then click <span className="text-ink font-medium">&quot;Reset Drill&quot;</span> in the top bar to instantly restore the pristine baseline.
               </p>
+              <div className="pt-2 text-[11px] font-mono text-brand">
+                Action: Open FCFS Analysis, then click Reset.
+              </div>
             </div>
           </div>
         </section>
@@ -172,7 +311,7 @@ export default function GuidePage() {
               How the Priority Score (0–100) is Calculated
             </h2>
             <p className="text-sm text-ink-subtle mt-1">
-              In simple terms: we score emergencies like a fair report card across 5 factors, using pure math. The AI is never allowed to guess numbers.
+              In simple terms: we score emergencies like a fair report card across 5 physical factors, using pure math. The AI is never allowed to guess numbers.
             </p>
           </div>
 
@@ -240,12 +379,67 @@ export default function GuidePage() {
         </section>
 
         {/* ================================================================= */}
-        {/* SECTION 3: 3 GOLDEN SAFETY RULES                                  */}
+        {/* SECTION 3: PLAIN-ENGLISH GLOSSARY                                 */}
         {/* ================================================================= */}
         <section className="space-y-6 border-t border-hairline pt-12">
           <div>
             <span className="text-[12px] font-mono uppercase tracking-[0.4px] text-brand block mb-1">
-              Section 03 // Safety &amp; Trust
+              Section 03 // Terminology Demystified
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-[-0.6px] text-ink">
+              Plain-English Glossary
+            </h2>
+            <p className="text-sm text-ink-subtle mt-1">
+              Technical emergency concepts explained in simple everyday terms.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline space-y-2">
+              <span className="text-xs font-mono font-bold text-semantic-critical-text uppercase">
+                FCFS (First-Come, First-Served)
+              </span>
+              <p className="text-[13px] text-ink-subtle leading-[1.5]">
+                How old emergency call centers work: responding to callers in the order they dial in. This rewards healthy people with smartphone batteries while letting bedridden residents with dead batteries drown in silence.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline space-y-2">
+              <span className="text-xs font-mono font-bold text-semantic-blind-spot-text uppercase">
+                Silent Blind Spot
+              </span>
+              <p className="text-[13px] text-ink-subtle leading-[1.5]">
+                When a flooded neighbourhood goes dark because its cell tower collapsed. Old software thinks zero calls means zero trouble. Nigehbaan recognizes the silence and automatically launches a physical search sweep.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline space-y-2">
+              <span className="text-xs font-mono font-bold text-semantic-unknown-text uppercase">
+                Weight Renormalization
+              </span>
+              <p className="text-[13px] text-ink-subtle leading-[1.5]">
+                A mathematical rule preventing victims with incomplete call notes from receiving a 0. The math redistributes weights across whatever facts are confirmed, protecting the victim’s priority rank.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline space-y-2">
+              <span className="text-xs font-mono font-bold text-semantic-warning-text uppercase">
+                Opportunity Cost Penalty
+              </span>
+              <p className="text-[13px] text-ink-subtle leading-[1.5]">
+                The hidden cost of sending a rescue boat: dispatching the only shallow boat to a low-risk task delays the next critical patient by +35 minutes. Nigehbaan calculates and warns dispatchers before they send the boat.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ================================================================= */}
+        {/* SECTION 4: 3 GOLDEN SAFETY RULES                                  */}
+        {/* ================================================================= */}
+        <section className="space-y-6 border-t border-hairline pt-12">
+          <div>
+            <span className="text-[12px] font-mono uppercase tracking-[0.4px] text-brand block mb-1">
+              Section 04 // Safety &amp; Trust
             </span>
             <h2 className="text-2xl sm:text-3xl font-semibold tracking-[-0.6px] text-ink">
               Our 3 Golden Safety Rules

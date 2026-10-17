@@ -24,6 +24,8 @@ interface PhaseMeta {
   riverGauge: number;
   hazardLevel: 'Normal' | 'High' | 'Severe' | 'Catastrophic';
   summary: string;
+  narrativeBadge: string;
+  narrativeHint: string;
 }
 
 const PHASES_CONFIG: PhaseMeta[] = [
@@ -35,6 +37,8 @@ const PHASES_CONFIG: PhaseMeta[] = [
     riverGauge: 0.6,
     hazardLevel: 'Normal',
     summary: 'Monsoon surge inbound. All 4 cell towers online. Arterial roads open.',
+    narrativeBadge: 'Baseline Staging',
+    narrativeHint: 'Pre-positioned boats',
   },
   {
     id: 'T3',
@@ -44,6 +48,8 @@ const PHASES_CONFIG: PhaseMeta[] = [
     riverGauge: 1.3,
     hazardLevel: 'High',
     summary: 'Sector 2 lowlands waist-deep. Culverts submerged. Gadap Link Road closed.',
+    narrativeBadge: 'Flood Surge',
+    narrativeHint: 'Dialysis case NG-101',
   },
   {
     id: 'T6',
@@ -53,6 +59,8 @@ const PHASES_CONFIG: PhaseMeta[] = [
     riverGauge: 1.9,
     hazardLevel: 'Severe',
     summary: 'Tower-Alpha-3 collapsed (08:55). Sector 3A silent >90m. Blind spot synthesized.',
+    narrativeBadge: 'Silent Blackout ⚡',
+    narrativeHint: 'Sector 3A blind spot',
   },
   {
     id: 'T12',
@@ -62,6 +70,8 @@ const PHASES_CONFIG: PhaseMeta[] = [
     riverGauge: 2.4,
     hazardLevel: 'Catastrophic',
     summary: 'Sectors 2 & 3A inundated. Shelter 03 breaches 97% and loses power generator.',
+    narrativeBadge: 'Crisis Resolution',
+    narrativeHint: 'FCFS comparison',
   },
 ];
 
@@ -238,18 +248,37 @@ export function TimelineScrubber() {
                   )}
                 </div>
 
-                {/* Node Text Metadata */}
+                {/* Node Text Metadata with Narrative Subtitle */}
                 <div className="mt-2 flex flex-col items-center">
+                  <div className="flex items-center gap-1">
+                    <span
+                      className={`text-xs font-mono tracking-tight font-bold transition-colors ${
+                        isActive ? 'text-brand' : 'text-ink-muted group-hover:text-ink'
+                      }`}
+                    >
+                      {phase.shortLabel}
+                    </span>
+                    {phase.id === 'T6' && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-semantic-blind-spot animate-ping" />
+                    )}
+                  </div>
+
                   <span
-                    className={`text-xs font-mono tracking-tight font-bold transition-colors ${
-                      isActive ? 'text-brand' : 'text-ink-muted group-hover:text-ink'
+                    className={`mt-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold transition-all ${
+                      isActive
+                        ? 'bg-brand/20 text-brand border border-brand/40 shadow-sm'
+                        : phase.id === 'T6'
+                        ? 'bg-semantic-blind-spot/15 text-semantic-blind-spot-text border border-semantic-blind-spot-border'
+                        : 'bg-surface-3 text-ink-muted border border-hairline'
                     }`}
                   >
-                    {phase.shortLabel}
+                    {phase.narrativeBadge}
                   </span>
-                  <span className="text-[11px] font-sans font-medium text-ink-subtle hidden sm:inline">
-                    {phase.label.replace(/^T[+-]\d+\s+/, '')}
+
+                  <span className="text-[10px] font-sans font-medium text-ink-subtle hidden lg:inline mt-0.5 text-center">
+                    {phase.narrativeHint}
                   </span>
+
                   <span
                     className={`text-[10px] font-mono mt-0.5 ${
                       isActive ? 'text-brand-hover font-semibold' : 'text-ink-subtle'

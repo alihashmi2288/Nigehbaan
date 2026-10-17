@@ -38,6 +38,9 @@ export const IncidentMarkerLayer: React.FC = () => {
         : '—';
 
     const pulseHtml = isCritical ? `<div class="marker-critical-pulse"></div>` : '';
+    const selectionRingHtml = isSelected
+      ? `<div style="position: absolute; inset: -5px; border: 2px solid #5e6ad2; border-radius: 9999px; box-shadow: 0 0 12px rgba(94,106,210,0.8); pointer-events: none; animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;"></div>`
+      : '';
     const borderColor = isSelected ? '#5e6ad2' : colors.solid;
     const boxShadow = isSelected
       ? '0 0 0 2px #5e6ad2, 0 4px 14px rgba(94, 106, 210, 0.6)'
@@ -51,6 +54,7 @@ export const IncidentMarkerLayer: React.FC = () => {
       html: `
         <div style="position: relative; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
           ${pulseHtml}
+          ${selectionRingHtml}
           <div style="
             position: relative;
             width: 28px;

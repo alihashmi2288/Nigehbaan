@@ -160,12 +160,143 @@ export const IncidentInspector: React.FC = () => {
 
       {/* Inspector Scrollable Body */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-surface-3">
-        {/* Coordinator Dispatch Bar (Invariant 5: No Autonomous Dispatch) */}
+        {/* =================================================================== */}
+        {/* 1. Human-Readable Incident Summary & Citizen Ground Truth (Task 5)  */}
+        {/* =================================================================== */}
+        <div className="bg-surface-1 border border-hairline rounded-lg p-4 space-y-3">
+          <div className="flex items-center justify-between border-b border-hairline pb-2">
+            <span className="text-xs font-mono font-bold tracking-tight text-ink uppercase">
+              Citizen Distress Telemetry
+            </span>
+
+            {/* Reporter & Phone Access Badges */}
+            <div className="flex items-center gap-1.5 text-[10px] font-mono">
+              <span className="px-1.5 py-0.5 rounded bg-surface-3 border border-hairline text-ink-muted">
+                {incident.reporterType.replace('_', ' ').toUpperCase()}
+              </span>
+              <span className="px-1.5 py-0.5 rounded bg-surface-3 border border-hairline text-ink-muted">
+                {incident.phoneAccess.replace('_', ' ').toUpperCase()}
+              </span>
+            </div>
+          </div>
+
+          {/* Honest AI / Heuristic Extraction Provenance Badge (Invariant 7 & Test 1.8) */}
+          {incident.provenanceBadge && (
+            <div
+              className={`px-2.5 py-1.5 rounded text-[11px] font-mono flex items-center gap-2 border ${
+                incident.isAI
+                  ? 'bg-brand/15 text-brand border-brand/30 font-semibold'
+                  : 'bg-surface-3 text-semantic-unknown-text border-hairline'
+              }`}
+            >
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  incident.isAI ? 'bg-brand' : 'bg-semantic-unknown'
+                }`}
+              />
+              <span>{incident.provenanceBadge}</span>
+            </div>
+          )}
+
+          {/* Primary Text */}
+          <div className="p-3 rounded bg-surface-2 border border-hairline">
+            <p className="text-xs text-ink font-medium leading-relaxed font-sans">
+              {incident.reportText}
+            </p>
+          </div>
+
+          {/* Bilingual Urdu / Translation View if available */}
+          {incident.reportTranslation && (
+            <div className="p-3 rounded bg-surface-2 border border-hairline space-y-1.5">
+              <span className="text-[10px] font-mono uppercase text-ink-subtle flex items-center gap-1">
+                <Languages className="w-3 h-3 text-brand" />
+                English Verified Translation
+              </span>
+              <p className="text-xs text-ink-muted leading-relaxed font-sans">
+                {incident.reportTranslation}
+              </p>
+            </div>
+          )}
+
+          {/* Voice Hotline Audio Recording Player Trigger (Milestone 11 / Test 2.3) */}
+          {incident.reporterType === 'voice_hotline' && (
+            <div className="pt-1">
+              <button
+                type="button"
+                data-testid="inspector-play-voice-button"
+                onClick={() => setIsVoicePlayerOpen(true)}
+                className="w-full px-3 py-2 rounded text-xs font-mono font-bold bg-brand/15 hover:bg-brand/25 text-brand border border-brand/30 flex items-center justify-center gap-2 transition-all shadow-sm"
+              >
+                <PhoneCall className="w-3.5 h-3.5 animate-pulse" />
+                <span>Play Voice Recording &amp; Waveform</span>
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Voice Distress Modal for Inspector */}
+        <VoiceDistressPlayer
+          isOpen={isVoicePlayerOpen}
+          onClose={() => setIsVoicePlayerOpen(false)}
+        />
+
+        {/* =================================================================== */}
+        {/* 2. Recommended Action & Matched Shelter Facility (Task 5)           */}
+        {/* =================================================================== */}
+        <div className="bg-surface-2 border border-hairline rounded-lg p-3.5 space-y-2.5">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-mono uppercase text-brand font-bold flex items-center gap-1.5">
+              <Crosshair className="w-3.5 h-3.5 text-brand" />
+              Recommended Operational Action
+            </span>
+            <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-brand/15 text-brand border border-brand/30">
+              DECISION SUPPORT
+            </span>
+          </div>
+
+          <div className="p-2.5 rounded bg-surface-1 border border-hairline space-y-1">
+            <div className="text-xs font-sans font-semibold text-ink">
+              {incident.reporterType === 'system_blind_spot'
+                ? 'Deploy Shallow Jet-Boat or Reconnaissance Unit for Sector Field Sweep'
+                : (incident.factors[1] ?? 0) >= 4.0
+                ? 'Deploy Shallow Jet-Boat with Critical Care Evacuation Protocol'
+                : (incident.factors[3] ?? 0) >= 3.5
+                ? 'Deploy Shallow Jet-Boat for Flooded Channel Extraction'
+                : 'Deploy High-Clearance Rescue Asset for Community Relocation'}
+            </div>
+            <p className="text-[11px] text-ink-subtle leading-normal">
+              {incident.reporterType === 'system_blind_spot'
+                ? 'Sector went dark with rising water. Physical recon sweep enforced at priority floor ≥ 60.0.'
+                : 'Scarcity-aware recommendation accounts for sector boat scarcity and downstream delay penalties.'}
+            </p>
+          </div>
+
+          {/* Matched Shelter Staging Facility */}
+          {matchedShelter && (
+            <div className="flex items-center justify-between text-xs font-mono p-2 rounded bg-surface-1 border border-hairline text-ink-muted">
+              <span className="flex items-center gap-1.5">
+                <Building2 className="w-3.5 h-3.5 text-brand" />
+                Target Facility: {matchedShelter.name}
+              </span>
+              <span className="text-[11px] text-ink-subtle">
+                {matchedShelter.capacityCurrent}/{matchedShelter.capacityTotal} (
+                {Math.round((matchedShelter.capacityCurrent / matchedShelter.capacityTotal) * 100)}%)
+              </span>
+            </div>
+          )}
+
+          {/* Proactive Pre-Disaster Staging Alert */}
+          <StagingAlertBadge sectorId={incident.sectorId} />
+        </div>
+
+        {/* =================================================================== */}
+        {/* 3. Resource Assignment Controls (Dispatch Gate - Task 5)            */}
+        {/* =================================================================== */}
         <div className="bg-surface-2 border border-hairline rounded-lg p-3.5 space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-mono uppercase text-ink-subtle font-semibold flex items-center gap-1.5">
               <Send className="w-3.5 h-3.5 text-brand" />
-              Coordinator Dispatch Control
+              Coordinator Dispatch Gate
             </span>
             <span
               className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${
@@ -214,7 +345,7 @@ export const IncidentInspector: React.FC = () => {
                   type="button"
                   data-testid="assign-resource-button"
                   onClick={() => setIsAssignModalOpen(true)}
-                  className="px-3.5 py-1.5 rounded text-xs font-mono font-bold text-white bg-brand hover:bg-brand-hover transition-colors flex items-center gap-1.5 shadow-sm"
+                  className="px-3.5 py-1.5 rounded text-xs font-mono font-bold text-white bg-brand hover:bg-brand-hover active:bg-brand-focus transition-colors flex items-center gap-1.5 shadow-sm"
                 >
                   <Send className="w-3.5 h-3.5" />
                   Assign Resource
@@ -229,102 +360,24 @@ export const IncidentInspector: React.FC = () => {
               )}
             </div>
           )}
-
-          {/* Matched Shelter Staging Facility */}
-          {matchedShelter && (
-            <div className="flex items-center justify-between text-xs font-mono pt-2 border-t border-hairline text-ink-muted">
-              <span className="flex items-center gap-1.5">
-                <Building2 className="w-3.5 h-3.5 text-brand" />
-                Staging Shelter: {matchedShelter.name}
-              </span>
-              <span className="text-[11px] text-ink-subtle">
-                Capacity: {matchedShelter.capacityCurrent}/{matchedShelter.capacityTotal} (
-                {Math.round((matchedShelter.capacityCurrent / matchedShelter.capacityTotal) * 100)}%)
-              </span>
-            </div>
-          )}
         </div>
 
-        {/* Proactive Pre-Disaster Staging Alert (Milestone 10: Task T10.2 & Test 2.2) */}
-        <StagingAlertBadge sectorId={incident.sectorId} />
-
-        {/* Distress Report & Citizen Ground Truth */}
-        <div className="bg-surface-1 border border-hairline rounded-lg p-4 space-y-3">
-          <div className="flex items-center justify-between border-b border-hairline pb-2">
-            <span className="text-xs font-mono font-bold tracking-tight text-ink uppercase">
-              Citizen Distress Telemetry
-            </span>
-
-            {/* Reporter & Phone Access Badges */}
-            <div className="flex items-center gap-1.5 text-[10px] font-mono">
-              <span className="px-1.5 py-0.5 rounded bg-surface-3 border border-hairline text-ink-muted">
-                {incident.reporterType.replace('_', ' ').toUpperCase()}
-              </span>
-              <span className="px-1.5 py-0.5 rounded bg-surface-3 border border-hairline text-ink-muted">
-                {incident.phoneAccess.replace('_', ' ').toUpperCase()}
-              </span>
-            </div>
-          </div>
-
-          {/* Honest AI / Heuristic Extraction Provenance Badge (Invariant 7 & Test 1.8) */}
-          {incident.provenanceBadge && (
-            <div
-              className={`px-2.5 py-1.5 rounded text-[11px] font-mono flex items-center gap-2 border ${
-                incident.isAI
-                  ? 'bg-brand/15 text-brand border-brand/30 font-semibold'
-                  : 'bg-surface-3 text-semantic-unknown-text border-hairline'
-              }`}
-            >
-              <span
-                className={`w-1.5 h-1.5 rounded-full ${
-                  incident.isAI ? 'bg-brand' : 'bg-semantic-unknown'
-                }`}
-              />
-              <span>{incident.provenanceBadge}</span>
-            </div>
-          )}
-
-          {/* Primary Text */}
-          <div className="p-3 rounded bg-surface-2 border border-hairline">
-            <p className="text-xs text-ink leading-relaxed font-sans">
-              {incident.reportText}
-            </p>
-          </div>
-
-          {/* Bilingual Urdu / Translation View if available */}
-          {incident.reportTranslation && (
-            <div className="p-3 rounded bg-surface-2 border border-hairline space-y-1.5">
-              <span className="text-[10px] font-mono uppercase text-ink-subtle flex items-center gap-1">
-                <Languages className="w-3 h-3 text-brand" />
-                English Verified Translation
-              </span>
-              <p className="text-xs text-ink-muted leading-relaxed font-sans">
-                {incident.reportTranslation}
-              </p>
-            </div>
-          )}
-
-          {/* Voice Hotline Audio Recording Player Trigger (Milestone 11 / Test 2.3) */}
-          {incident.reporterType === 'voice_hotline' && (
-            <div className="pt-1">
-              <button
-                type="button"
-                data-testid="inspector-play-voice-button"
-                onClick={() => setIsVoicePlayerOpen(true)}
-                className="w-full px-3 py-2 rounded text-xs font-mono font-bold bg-brand/15 hover:bg-brand/25 text-brand border border-brand/30 flex items-center justify-center gap-2 transition-all shadow-sm"
-              >
-                <PhoneCall className="w-3.5 h-3.5 animate-pulse" />
-                <span>Play Voice Recording &amp; Waveform</span>
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Voice Distress Modal for Inspector */}
-        <VoiceDistressPlayer
-          isOpen={isVoicePlayerOpen}
-          onClose={() => setIsVoicePlayerOpen(false)}
+        {/* Human Coordinator Resource Assignment Modal */}
+        <AssignmentModal
+          isOpen={isAssignModalOpen}
+          onClose={() => setIsAssignModalOpen(false)}
+          incident={incident}
         />
+
+        {/* =================================================================== */}
+        {/* 4. Priority-Scoring Explanation (Factor Breakdown - Task 5)         */}
+        {/* =================================================================== */}
+        <FactorBreakdownCard incident={incident} />
+
+        {/* =================================================================== */}
+        {/* 5. Supporting Evidence & Diagnostics (Explainability & Uncertainty) */}
+        {/* =================================================================== */}
+        <ExplainabilityCard incident={incident} />
 
         {/* Uncertainty Radar Flags */}
         {incident.uncertaintyFlags.length > 0 && (
@@ -364,19 +417,6 @@ export const IncidentInspector: React.FC = () => {
           incidentA={incident.code === 'NG-109' ? incidents.find((i) => i.code === 'NG-108') : incident}
           incidentB={incident.code === 'NG-108' ? incidents.find((i) => i.code === 'NG-109') : incident}
         />
-
-        {/* Human Coordinator Resource Assignment Modal (Task T7.2, T7.3) */}
-        <AssignmentModal
-          isOpen={isAssignModalOpen}
-          onClose={() => setIsAssignModalOpen(false)}
-          incident={incident}
-        />
-
-        {/* MCDA Factor Breakdown Card (Task T4.2) */}
-        <FactorBreakdownCard incident={incident} />
-
-        {/* Explainability Rationale Card (Task T4.3) */}
-        <ExplainabilityCard incident={incident} />
       </div>
     </aside>
   );

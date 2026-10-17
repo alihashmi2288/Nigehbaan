@@ -73,16 +73,16 @@ export const ShelterMarkerLayer: React.FC = () => {
             <Tooltip
               direction="top"
               offset={[0, -16]}
-              className="tactical-shelter-tooltip bg-surface-1/95 border border-hairline text-ink text-xs font-mono px-2 py-1 rounded shadow-lg backdrop-blur-sm"
+              className="tactical-shelter-tooltip"
             >
-              <div className="flex items-center gap-1.5">
-                <span className="font-bold text-ink">{shelter.name}</span>
+              <div className="flex items-center gap-2 whitespace-nowrap">
+                <span className="font-bold text-ink text-xs">{shelter.name}</span>
                 <span
-                  className="px-1.5 py-0.2 rounded text-[10px] font-mono font-bold"
+                  className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold tracking-tight"
                   style={{
                     backgroundColor: `${occupancy.statusBadgeColor}20`,
                     color: occupancy.statusBadgeColor,
-                    border: `1px solid ${occupancy.statusBadgeColor}50`,
+                    border: `1px solid ${occupancy.statusBadgeColor}60`,
                   }}
                 >
                   {occupancy.percentage}% Cap

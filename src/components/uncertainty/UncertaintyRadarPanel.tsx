@@ -124,8 +124,31 @@ export const UncertaintyRadarPanel: React.FC = () => {
         {/* Panel Content (Collapsible) */}
         {isExpanded && (
           <div className="p-3.5 space-y-3">
+            {/* Epistemic Status Grounding Legend */}
+            <div className="flex flex-wrap items-center justify-between text-[10px] font-mono pb-1 border-b border-hairline text-ink-subtle">
+              <span className="text-ink font-semibold uppercase">Epistemic Status:</span>
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-semantic-success" />
+                  <span>Confirmed Facts</span>
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-semantic-blind-spot" />
+                  <span>Inferred Risks</span>
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-semantic-warning" />
+                  <span>Disputed / Proxies</span>
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-semantic-unknown" />
+                  <span>Missing Info</span>
+                </span>
+              </div>
+            </div>
+
             {/* Quick Status Flag Pills */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 text-xs font-mono">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 text-xs font-mono">
               {/* 1. Missing Location */}
               <button
                 type="button"
@@ -135,24 +158,29 @@ export const UncertaintyRadarPanel: React.FC = () => {
                   }
                 }}
                 disabled={radarResult.missingLocationIncidents.length === 0}
-                className={`p-2 rounded border text-left flex flex-col justify-between transition-all ${
+                className={`p-2.5 rounded border text-left flex flex-col justify-between transition-all ${
                   radarResult.summary.missingLocationCount > 0
                     ? 'bg-surface-2 border-semantic-unknown-text/40 hover:border-brand text-ink cursor-pointer'
                     : 'bg-surface-2/40 border-hairline text-ink-tertiary cursor-default opacity-60'
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] text-ink-subtle uppercase">Missing Loc</span>
-                  <MapPinOff className="w-3.5 h-3.5 text-semantic-unknown-text" />
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[10px] text-ink-subtle uppercase font-semibold">Missing Loc</span>
+                    <MapPinOff className="w-3.5 h-3.5 text-semantic-unknown-text" />
+                  </div>
+                  <div className="font-bold text-sm text-semantic-unknown-text">
+                    {radarResult.summary.missingLocationCount}
+                    {radarResult.missingLocationIncidents.length > 0 && (
+                      <span className="text-[10px] ml-1.5 text-ink-subtle font-normal">
+                        ({radarResult.missingLocationIncidents.map((i) => i.code).join(', ')})
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <div className="font-bold text-sm text-semantic-unknown-text">
-                  {radarResult.summary.missingLocationCount}
-                  {radarResult.missingLocationIncidents.length > 0 && (
-                    <span className="text-[10px] ml-1.5 text-ink-subtle font-normal">
-                      ({radarResult.missingLocationIncidents.map((i) => i.code).join(', ')})
-                    </span>
-                  )}
-                </div>
+                <p className="text-[10px] text-ink-subtle leading-tight pt-1.5 font-sans">
+                  Missing GPS; approximate sector triangulation only.
+                </p>
               </button>
 
               {/* 2. Stale Reports (>60m) */}
@@ -164,24 +192,29 @@ export const UncertaintyRadarPanel: React.FC = () => {
                   }
                 }}
                 disabled={radarResult.staleIncidents.length === 0}
-                className={`p-2 rounded border text-left flex flex-col justify-between transition-all ${
+                className={`p-2.5 rounded border text-left flex flex-col justify-between transition-all ${
                   radarResult.summary.staleCount > 0
                     ? 'bg-surface-2 border-semantic-warning-border hover:border-brand text-ink cursor-pointer'
                     : 'bg-surface-2/40 border-hairline text-ink-tertiary cursor-default opacity-60'
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] text-ink-subtle uppercase">Stale &gt;60m</span>
-                  <ClockAlert className="w-3.5 h-3.5 text-semantic-warning-text" />
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[10px] text-ink-subtle uppercase font-semibold">Stale &gt;60m</span>
+                    <ClockAlert className="w-3.5 h-3.5 text-semantic-warning-text" />
+                  </div>
+                  <div className="font-bold text-sm text-semantic-warning-text">
+                    {radarResult.summary.staleCount}
+                    {radarResult.staleIncidents.length > 0 && (
+                      <span className="text-[10px] ml-1.5 text-ink-subtle font-normal">
+                        ({radarResult.staleIncidents.map((i) => i.code).join(', ')})
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <div className="font-bold text-sm text-semantic-warning-text">
-                  {radarResult.summary.staleCount}
-                  {radarResult.staleIncidents.length > 0 && (
-                    <span className="text-[10px] ml-1.5 text-ink-subtle font-normal">
-                      ({radarResult.staleIncidents.map((i) => i.code).join(', ')})
-                    </span>
-                  )}
-                </div>
+                <p className="text-[10px] text-ink-subtle leading-tight pt-1.5 font-sans">
+                  No re-contact &gt;1h; condition may have escalated.
+                </p>
               </button>
 
               {/* 3. Conflicting Reports */}
@@ -189,22 +222,27 @@ export const UncertaintyRadarPanel: React.FC = () => {
                 type="button"
                 onClick={() => handleOpenConflictModal()}
                 disabled={radarResult.conflictPairs.length === 0}
-                className={`p-2 rounded border text-left flex flex-col justify-between transition-all ${
+                className={`p-2.5 rounded border text-left flex flex-col justify-between transition-all ${
                   radarResult.summary.conflictPairCount > 0
                     ? 'bg-semantic-warning/15 border-semantic-warning-border hover:border-semantic-warning-text text-semantic-warning-text cursor-pointer ring-1 ring-semantic-warning-border/50'
                     : 'bg-surface-2/40 border-hairline text-ink-tertiary cursor-default opacity-60'
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] uppercase font-bold">Landmark Conflict</span>
-                  <ArrowRightLeft className="w-3.5 h-3.5" />
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[10px] uppercase font-bold">Landmark Conflict</span>
+                    <ArrowRightLeft className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="font-bold text-sm">
+                    {radarResult.summary.conflictPairCount} Pair
+                    <span className="text-[10px] ml-1.5 opacity-80 font-normal">
+                      (NG-108/109)
+                    </span>
+                  </div>
                 </div>
-                <div className="font-bold text-sm">
-                  {radarResult.summary.conflictPairCount} Pair
-                  <span className="text-[10px] ml-1.5 opacity-80 font-normal">
-                    (NG-108/109)
-                  </span>
-                </div>
+                <p className="text-[10px] text-ink-muted leading-tight pt-1.5 font-sans">
+                  Contradictory reports; preserved un-merged for check.
+                </p>
               </button>
 
               {/* 4. Potential Duplicates */}
@@ -216,24 +254,29 @@ export const UncertaintyRadarPanel: React.FC = () => {
                   }
                 }}
                 disabled={radarResult.duplicatePairs.length === 0}
-                className={`p-2 rounded border text-left flex flex-col justify-between transition-all ${
+                className={`p-2.5 rounded border text-left flex flex-col justify-between transition-all ${
                   radarResult.summary.duplicatePairCount > 0
                     ? 'bg-surface-2 border-brand/50 hover:border-brand text-ink cursor-pointer'
                     : 'bg-surface-2/40 border-hairline text-ink-tertiary cursor-default opacity-60'
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] text-ink-subtle uppercase">Potential Dupes</span>
-                  <Copy className="w-3.5 h-3.5 text-brand" />
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[10px] text-ink-subtle uppercase font-semibold">Potential Dupes</span>
+                    <Copy className="w-3.5 h-3.5 text-brand" />
+                  </div>
+                  <div className="font-bold text-sm text-brand">
+                    {radarResult.summary.duplicatePairCount} Pair
+                    {radarResult.duplicatePairs.length > 0 && (
+                      <span className="text-[10px] ml-1.5 text-ink-subtle font-normal">
+                        (NG-104/110)
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <div className="font-bold text-sm text-brand">
-                  {radarResult.summary.duplicatePairCount} Pair
-                  {radarResult.duplicatePairs.length > 0 && (
-                    <span className="text-[10px] ml-1.5 text-ink-subtle font-normal">
-                      (NG-104/110)
-                    </span>
-                  )}
-                </div>
+                <p className="text-[10px] text-ink-subtle leading-tight pt-1.5 font-sans">
+                  Multiple proxy calls from same coordinates.
+                </p>
               </button>
 
               {/* 5. Silent Sector Blind Spot */}
@@ -245,24 +288,29 @@ export const UncertaintyRadarPanel: React.FC = () => {
                   }
                 }}
                 disabled={radarResult.blindSpotIncidents.length === 0}
-                className={`p-2 rounded border text-left flex flex-col justify-between transition-all ${
+                className={`p-2.5 rounded border text-left flex flex-col justify-between transition-all ${
                   radarResult.summary.blindSpotCount > 0
                     ? 'bg-semantic-blind-spot/15 border-semantic-blind-spot-border hover:border-semantic-blind-spot-text text-semantic-blind-spot-text cursor-pointer ring-1 ring-semantic-blind-spot-border/50'
                     : 'bg-surface-2/40 border-hairline text-ink-tertiary cursor-default opacity-60'
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] uppercase font-bold">Blind Spot</span>
-                  <Radio className="w-3.5 h-3.5 animate-pulse" />
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[10px] uppercase font-bold">Blind Spot</span>
+                    <Radio className="w-3.5 h-3.5 animate-pulse" />
+                  </div>
+                  <div className="font-bold text-sm">
+                    {radarResult.summary.blindSpotCount} Active
+                    {radarResult.blindSpotIncidents.length > 0 && (
+                      <span className="text-[10px] ml-1.5 opacity-80 font-normal">
+                        (Sector 3A)
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <div className="font-bold text-sm">
-                  {radarResult.summary.blindSpotCount} Active
-                  {radarResult.blindSpotIncidents.length > 0 && (
-                    <span className="text-[10px] ml-1.5 opacity-80 font-normal">
-                      (Sector 3A)
-                    </span>
-                  )}
-                </div>
+                <p className="text-[10px] text-ink-muted leading-tight pt-1.5 font-sans">
+                  Silence detected during surge; field sweep active.
+                </p>
               </button>
             </div>
 

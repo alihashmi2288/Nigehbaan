@@ -98,6 +98,8 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
     }
   };
 
+  const isStale = incident.uncertaintyFlags.includes('STALE_REPORT');
+
   return (
     <div
       role="button"
@@ -105,9 +107,9 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
       onClick={onSelect}
       onKeyDown={handleKeyDown}
       aria-pressed={isSelected}
-      className={`relative w-full rounded-md p-3.5 transition-all cursor-pointer text-left select-none border ${
+      className={`relative w-full rounded-md p-3.5 transition-all cursor-pointer text-left select-none border focus-visible:ring-2 focus-visible:ring-brand focus-visible:outline-none ${
         isSelected
-          ? 'bg-surface-2 border-brand shadow-[0_0_0_1px_#5e6ad2,0_4px_16px_rgba(94,106,210,0.25)]'
+          ? 'bg-surface-2 border-brand ring-2 ring-brand/70 shadow-[0_0_16px_rgba(94,106,210,0.3)]'
           : 'bg-surface-1 hover:bg-surface-2 border-hairline hover:border-hairline-strong'
       }`}
       style={{
@@ -117,10 +119,18 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
     >
       {/* Top Header Row */}
       <div className="flex items-center justify-between gap-2 mb-2">
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-1.5 flex-wrap">
           <span className="font-mono font-bold text-sm tracking-tight text-ink">
             {incident.code}
           </span>
+
+          {/* Active Selection Badge (Distinct from severity) */}
+          {isSelected && (
+            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase bg-brand text-white tracking-wider flex items-center gap-1 shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+              SELECTED
+            </span>
+          )}
 
           {/* Sector Badge */}
           <span className="px-1.5 py-0.5 rounded text-[10px] font-mono uppercase bg-surface-3 border border-hairline text-ink-muted">
@@ -171,10 +181,85 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
         </div>
       </div>
 
-      {/* Headline / Distress Report Snippet */}
-      <p className="text-xs text-ink-muted line-clamp-2 leading-relaxed mb-2.5">
+      {/* Headline / Distress Report Snippet (High-Contrast Readable Sans) */}
+      <p className="text-xs text-ink font-medium line-clamp-2 leading-relaxed mb-2 font-sans">
         {incident.reportText}
       </p>
+
+      {/* 5-Factor Triage Vector Chips with Tooltips (Recommendation 1) */}
+      <div
+        className="flex items-center gap-1 mb-2.5 overflow-x-auto py-0.5"
+        title="MCDA 5-Factor Vector (Hover for breakdown)"
+      >
+        <span className="text-[9px] font-mono text-ink-subtle uppercase mr-0.5 tracking-wider">
+          MCDA:
+        </span>
+        {/* Factor 1: Life Threat */}
+        <span
+          title={`Life Threat (f1): ${incident.factors[0] !== null ? incident.factors[0].toFixed(1) : 'Unknown'} / 5.0 • Weight: 30% • Drowning/structural risk`}
+          className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold border cursor-help transition-colors ${
+            incident.factors[0] !== null
+              ? (incident.factors[0] ?? 0) >= 4.0
+                ? 'bg-semantic-critical/20 text-semantic-critical-text border-semantic-critical-border'
+                : 'bg-surface-3 text-ink-muted border-hairline'
+              : 'bg-semantic-unknown/15 text-semantic-unknown-text border-semantic-unknown-border'
+          }`}
+        >
+          L{incident.factors[0] !== null ? incident.factors[0].toFixed(1) : '?'}
+        </span>
+
+        {/* Factor 2: Medical Urgency */}
+        <span
+          title={`Medical Urgency (f2): ${incident.factors[1] !== null ? incident.factors[1].toFixed(1) : 'Unknown'} / 5.0 • Weight: 25% • Dialysis/oxygen/trauma urgency`}
+          className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold border cursor-help transition-colors ${
+            incident.factors[1] !== null
+              ? (incident.factors[1] ?? 0) >= 4.0
+                ? 'bg-semantic-critical/20 text-semantic-critical-text border-semantic-critical-border'
+                : 'bg-surface-3 text-ink-muted border-hairline'
+              : 'bg-semantic-unknown/15 text-semantic-unknown-text border-semantic-unknown-border'
+          }`}
+        >
+          M{incident.factors[1] !== null ? incident.factors[1].toFixed(1) : '?'}
+        </span>
+
+        {/* Factor 3: Evacuation Inability */}
+        <span
+          title={`Evacuation Inability (f3): ${incident.factors[2] !== null ? incident.factors[2].toFixed(1) : 'Unknown'} / 5.0 • Weight: 20% • Bedridden/isolated/dead phone`}
+          className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold border cursor-help transition-colors ${
+            incident.factors[2] !== null
+              ? (incident.factors[2] ?? 0) >= 4.0
+                ? 'bg-semantic-warning/20 text-semantic-warning-text border-semantic-warning-border'
+                : 'bg-surface-3 text-ink-muted border-hairline'
+              : 'bg-semantic-unknown/15 text-semantic-unknown-text border-semantic-unknown-border'
+          }`}
+        >
+          E{incident.factors[2] !== null ? incident.factors[2].toFixed(1) : '?'}
+        </span>
+
+        {/* Factor 4: Flood Environmental Danger */}
+        <span
+          title={`Environmental Danger (f4): ${incident.factors[3] !== null ? incident.factors[3].toFixed(1) : 'Unknown'} / 5.0 • Weight: 15% • Water depth/velocity`}
+          className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold border cursor-help transition-colors ${
+            incident.factors[3] !== null
+              ? 'bg-surface-3 text-ink-muted border-hairline'
+              : 'bg-semantic-unknown/15 text-semantic-unknown-text border-semantic-unknown-border'
+          }`}
+        >
+          F{incident.factors[3] !== null ? incident.factors[3].toFixed(1) : '?'}
+        </span>
+
+        {/* Factor 5: Population Affected */}
+        <span
+          title={`Population Affected (f5): ${incident.factors[4] !== null ? incident.factors[4].toFixed(1) : 'Unknown'} / 5.0 • Weight: 10% • Trapped headcount`}
+          className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold border cursor-help transition-colors ${
+            incident.factors[4] !== null
+              ? 'bg-surface-3 text-ink-muted border-hairline'
+              : 'bg-semantic-unknown/15 text-semantic-unknown-text border-semantic-unknown-border'
+          }`}
+        >
+          P{incident.factors[4] !== null ? incident.factors[4].toFixed(1) : '?'}
+        </span>
+      </div>
 
       {/* Uncertainty & Provenance Flags */}
       {(incident.uncertaintyFlags.length > 0 || isMissingLocation || hasNoPhone) && (
@@ -207,9 +292,14 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
 
       {/* Card Footer: Timestamp & Metadata */}
       <div className="flex items-center justify-between text-[11px] font-mono text-ink-subtle pt-2 border-t border-hairline">
-        <span className="flex items-center gap-1">
-          <Clock className="w-3 h-3 text-ink-subtle" />
-          {formatTimestamp(incident.timestamp)}
+        <span className="flex items-center gap-1.5">
+          <Clock className={`w-3 h-3 ${isStale ? 'text-semantic-warning-text' : 'text-ink-subtle'}`} />
+          <span>{formatTimestamp(incident.timestamp)}</span>
+          {isStale ? (
+            <span className="text-[10px] text-semantic-warning-text font-bold">STALE</span>
+          ) : (
+            <span className="text-[10px] text-semantic-success-text opacity-90">FRESH</span>
+          )}
         </span>
 
         <span className="flex items-center gap-1">

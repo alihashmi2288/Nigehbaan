@@ -139,9 +139,35 @@ export const TacticalMap: React.FC = () => {
         )}
       </div>
 
-      {/* Bottom-Left Tactical Coordinates HUD */}
-      <div className="absolute bottom-3 left-3 z-[1000] pointer-events-none">
-        <div className="bg-surface-1/90 border border-hairline rounded-md px-2.5 py-1.5 shadow-lg backdrop-blur-sm flex items-center gap-3 text-[11px] font-mono text-ink-subtle">
+      {/* Bottom-Left Tactical Legend & Coordinates HUD */}
+      <div className="absolute bottom-3 left-3 z-[1000] pointer-events-none flex flex-col gap-1.5">
+        {/* Compact Map Legend */}
+        <div className="bg-surface-1/95 border border-hairline rounded-md px-2.5 py-1.5 shadow-lg backdrop-blur-sm flex items-center gap-3 text-[10px] font-mono text-ink-muted">
+          <span className="text-ink font-bold uppercase tracking-wider text-[9px]">Legend:</span>
+          <span className="flex items-center gap-1">
+            <span className="w-2.5 h-2.5 rounded-full bg-semantic-critical border border-semantic-critical-border inline-block" />
+            <span>Critical</span>
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="w-2.5 h-2.5 rounded-full bg-semantic-warning border border-semantic-warning-border inline-block" />
+            <span>High</span>
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="w-2.5 h-2.5 rounded-full border-2 border-brand inline-block" />
+            <span>Selected</span>
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="w-2.5 h-2.5 rounded-[3px] bg-semantic-success border border-semantic-success-border inline-block" />
+            <span>Asset</span>
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="w-2.5 h-2.5 rounded-[3px] bg-surface-2 border border-brand/60 inline-block" />
+            <span>Shelter</span>
+          </span>
+        </div>
+
+        {/* Coordinates HUD */}
+        <div className="bg-surface-1/90 border border-hairline rounded-md px-2.5 py-1 shadow-lg backdrop-blur-sm flex items-center gap-3 text-[11px] font-mono text-ink-subtle">
           <div className="flex items-center gap-1.5">
             <Compass className="w-3.5 h-3.5 text-brand" />
             <span className="text-ink">DISTRICT ALPHA</span>

@@ -18,6 +18,10 @@ import {
   BarChart3,
   BookOpen,
   ArrowLeft,
+  Crosshair,
+  ArrowRight,
+  Compass,
+  X,
 } from 'lucide-react';
 import { ResetButton } from '@/components/layout';
 import { MapWrapper } from '@/components/map';
@@ -30,7 +34,7 @@ import { AuditLogDrawer } from '@/components/audit';
 import { TimelineScrubber } from '@/components/timeline';
 import { FcfsComparisonPanel } from '@/components/analytics';
 import { PwaOfflineBanner } from '@/components/pwa';
-import { useAppStore, selectVisibleIncidents } from '@/store';
+import { useAppStore, selectVisibleIncidents, selectRankedVisibleIncidents } from '@/store';
 import { TimelinePhaseId } from '@/types';
 
 export default function DashboardPage() {
@@ -43,17 +47,32 @@ export default function DashboardPage() {
   const incidents = useAppStore((state) => state.incidents);
   const resources = useAppStore((state) => state.resources);
   const activityLogs = useAppStore((state) => state.activityLogs);
+  const setSelectedIncidentId = useAppStore((state) => state.setSelectedIncidentId);
 
   const [isIntakeModalOpen, setIsIntakeModalOpen] = useState(false);
   const [isAuditModalOpen, setIsAuditModalOpen] = useState(false);
   const [isVoiceHotlineOpen, setIsVoiceHotlineOpen] = useState(false);
   const [isFcfsModalOpen, setIsFcfsModalOpen] = useState(false);
+  const [isBriefingVisible, setIsBriefingVisible] = useState(true);
 
   useEffect(() => {
     setHydrated(true);
+    if (typeof window !== 'undefined') {
+      const dismissed = localStorage.getItem('nigehbaan_briefing_dismissed');
+      if (dismissed === 'true') {
+        setIsBriefingVisible(false);
+      }
+    }
   }, [setHydrated]);
 
   const visibleIncidents = selectVisibleIncidents(incidents, timelinePhase, simulationClock);
+  const rankedVisible = selectRankedVisibleIncidents(incidents, timelinePhase, simulationClock);
+  const topIncident = rankedVisible.length > 0 ? rankedVisible[0] : null;
+  const topUnassignedIncident = rankedVisible.find(
+    (i) => !i.assignedResourceId && i.status !== 'assigned'
+  );
+  const targetIncident = topUnassignedIncident ?? topIncident;
+
   const criticalCount = visibleIncidents.filter((i) => i.category === 'Critical').length;
   const availableResources = resources.filter((r) => r.status === 'available').length;
   const isSector3ABlindSpot = timelinePhase === 'T6' || timelinePhase === 'T12';
@@ -81,36 +100,29 @@ export default function DashboardPage() {
             </div>
           </NextLink>
 
-          {/* Navigation breadcrumb to Home & Guide */}
-          <div className="hidden lg:flex items-center gap-2 text-xs border-l border-hairline pl-3 ml-1 text-ink-muted">
+          {/* Quick Nav: Overview & Platform Guide */}
+          <div className="hidden md:flex items-center gap-2 border-l border-hairline pl-3 ml-1">
             <NextLink
               href="/"
-              className="hover:text-ink transition-colors flex items-center gap-1"
+              className="px-2.5 py-1.5 rounded-[6px] text-xs font-mono font-medium bg-surface-2 hover:bg-surface-3 text-ink-muted hover:text-ink border border-hairline flex items-center gap-1.5 transition-all shadow-sm group"
+              title="Return to Product Overview"
             >
-              <ArrowLeft className="w-3 h-3" />
+              <ArrowLeft className="w-3.5 h-3.5 text-ink-subtle group-hover:-translate-x-0.5 transition-transform" />
               <span>Overview</span>
             </NextLink>
-            <span className="text-hairline-strong">/</span>
+
             <NextLink
               href="/guide"
-              className="hover:text-ink transition-colors flex items-center gap-1 text-ink-subtle hover:text-ink"
+              className="px-2.5 py-1.5 rounded-[6px] text-xs font-mono font-medium bg-surface-2 hover:bg-surface-3 text-ink-muted hover:text-ink border border-hairline flex items-center gap-1.5 transition-all shadow-sm"
+              title="Open Platform Guide & Operator Blueprint"
             >
-              <BookOpen className="w-3 h-3 text-brand" />
+              <BookOpen className="w-3.5 h-3.5 text-brand" />
               <span>Platform Guide</span>
             </NextLink>
           </div>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Guide Shortcut */}
-          <NextLink
-            href="/guide"
-            className="hidden sm:inline-flex px-2.5 py-1.5 rounded-[6px] text-xs font-mono font-medium bg-surface-2 hover:bg-surface-3 text-ink-muted hover:text-ink border border-hairline items-center gap-1.5 transition-all shadow-sm"
-          >
-            <BookOpen className="w-3.5 h-3.5 text-brand" />
-            <span>Guide</span>
-          </NextLink>
-
           {/* Bilingual Voice Distress Hotline (Milestone 11 / Acceptance Test 2.3) */}
           <button
             type="button"
@@ -209,6 +221,43 @@ export default function DashboardPage() {
         {/* PWA Offline Synchronization Ribbon (Task T12.1) */}
         <PwaOfflineBanner />
 
+        {/* First-Time Coordinator Briefing Ribbon (Recommendation 4) */}
+        {isBriefingVisible && (
+          <div className="bg-surface-1 border border-brand/35 rounded-lg p-3 sm:px-4 sm:py-2.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs shadow-md relative overflow-hidden before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-brand">
+            <div className="flex items-center gap-2.5 text-ink">
+              <div className="w-6 h-6 rounded bg-brand/10 border border-brand/30 flex items-center justify-center text-brand shrink-0">
+                <Compass className="w-3.5 h-3.5" />
+              </div>
+              <p className="font-sans text-ink-muted leading-relaxed">
+                <strong className="text-ink font-semibold mr-1 font-mono uppercase text-[11px]">Coordinator Briefing:</strong>
+                You are managing the District Alpha flood drill. Click any incident in the left queue to inspect its transparent math score, or advance the timeline to <strong className="text-brand font-mono">T+6</strong> to trigger the silent cell tower blackout.
+              </p>
+            </div>
+            <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+              <NextLink
+                href="/guide"
+                className="px-2.5 py-1 rounded-[6px] bg-surface-2 hover:bg-surface-3 text-ink hover:text-white border border-hairline font-mono text-[11px] font-medium flex items-center gap-1 transition-colors"
+              >
+                <BookOpen className="w-3 h-3 text-brand" />
+                <span>2-Min Guide</span>
+              </NextLink>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsBriefingVisible(false);
+                  if (typeof window !== 'undefined') {
+                    localStorage.setItem('nigehbaan_briefing_dismissed', 'true');
+                  }
+                }}
+                className="p-1 rounded hover:bg-surface-2 text-ink-subtle hover:text-ink transition-colors"
+                title="Dismiss briefing"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Disaster Timeline Scrubber & Phase Controller (Task T8.1 & T8.2) */}
         <TimelineScrubber />
 
@@ -263,6 +312,51 @@ export default function DashboardPage() {
 
         {/* Tactical Uncertainty Radar Panel (Milestone 6: Tasks T6.1 & T6.3) */}
         <UncertaintyRadarPanel />
+
+        {/* Tactical Operational Situational Awareness & Recommended Action Bar (Task 2) */}
+        <section className="bg-surface-1 border border-hairline rounded-lg p-3.5 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 shadow-md relative overflow-hidden before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-brand">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded bg-surface-2 border border-hairline flex items-center justify-center text-brand shrink-0">
+              <Crosshair className="w-4 h-4" />
+            </div>
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-brand">
+                  Recommended Coordinator Next Action
+                </span>
+                {topIncident && (
+                  <span className="px-1.5 py-0.2 rounded text-[10px] font-mono bg-surface-3 border border-hairline text-ink-muted">
+                    TOP QUEUE: {topIncident.code} ({topIncident.category} • {(topIncident.score ?? topIncident.expectedScore ?? 0).toFixed(1)})
+                  </span>
+                )}
+                {isSector3ABlindSpot && (
+                  <span className="px-1.5 py-0.2 rounded text-[10px] font-mono bg-semantic-blind-spot/15 border border-semantic-blind-spot-border text-semantic-blind-spot-text flex items-center gap-1">
+                    <AlertTriangle className="w-2.5 h-2.5 animate-pulse" />
+                    SECTOR 3A SILENT (110m)
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-ink font-medium leading-relaxed font-sans">
+                {targetIncident
+                  ? !targetIncident.assignedResourceId && targetIncident.status !== 'assigned'
+                    ? `Assign specialized rescue asset to ${targetIncident.code} in ${targetIncident.sectorId.replace('-', ' ').toUpperCase()} (${targetIncident.category} priority — ${targetIncident.reportText.slice(0, 80)}...)`
+                    : `Active dispatch assigned for ${targetIncident.code}. Monitoring downstream sectors for escalation.`
+                  : 'All sectors nominal. Advance disaster timeline to drill crisis escalation.'}
+              </p>
+            </div>
+          </div>
+
+          {targetIncident && (
+            <button
+              type="button"
+              onClick={() => setSelectedIncidentId(targetIncident.id)}
+              className="px-3.5 py-1.5 rounded-[6px] text-xs font-mono font-bold text-white bg-brand hover:bg-brand-hover active:bg-brand-focus transition-all flex items-center gap-1.5 shrink-0 shadow-sm"
+            >
+              <span>Inspect {targetIncident.code}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </section>
 
         {/* Tactical 3-Panel Operations Command Cockpit (Milestone 4 Integration) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
