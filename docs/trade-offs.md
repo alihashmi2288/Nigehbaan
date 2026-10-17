@@ -58,6 +58,32 @@ In a fast-paced 36-hour hackathon, the most dangerous failure mode is building a
 - **What We Left Out:** Fabricating synthetic individual names or phone numbers inside dead zones.
   - *Rationale:* Hallucinating fake victims inside a black hole violates emergency safety standards. Blind spots are strictly geographical entities requiring human ground reconnaissance.
 
+### What We Chose: Pre-Disaster Vulnerability Baseline & T-0 Proactive Staging
+- **Choice:** Overlaying simulated pre-existing demographic and community health logs (Lady Health Worker registries, dialysis patient rosters, informal settlement flood elevation data) onto early hydrological surge projections at `T-0 Early Warning`.
+- **Why:**
+  - Directly answers the prompt's *"How early can you act?"* and *"Who is most at risk?"* criteria.
+  - Moving shallow boats and mobile medical units to high-ground staging depots *before* access roads are cut off at `T+3` saves more lives than reactive triage after inundation.
+- **What We Left Out:** Live automated integration with nationwide civil registry databases (NADRA).
+  - *Rationale:* Accessing real national citizen databases in a hackathon violates privacy regulations and creates API security vulnerabilities. Seeded demographic baselines provide complete conceptual proof-of-concept without legal or privacy risks.
+
+### What We Chose: Deterministic Opportunity Cost & Competing Priority Trade-Off Warnings
+- **Choice:** Calculating and displaying an explicit, auditable trade-off card whenever a coordinator prepares to assign a scarce asset (e.g. *"Assigning Shallow Jet-Boat 01 leaves 0 shallow assets in Sector 3; Incident #4 [Score 3.9] will incur an estimated +35 min delay"*).
+- **Why:**
+  - Emergency coordination is fundamentally about **competing priorities under extreme resource scarcity**.
+  - Provides commanders with the true cost of their decision before they hit "Approve".
+  - Strictly deterministic math: checks asset availability in the sector and computes queue turnaround time heuristics.
+- **What We Left Out:** LLM-generated subjective trade-off opinions.
+  - *Rationale:* Asking an LLM *"Is it worth sending this boat?"* produces vague, non-auditable opinions. Responders need hard numbers (remaining assets, projected turnaround delays).
+
+### What We Chose: Two-Stage Allocation & Shelter Capacity State Counters
+- **Choice:** Coupling asset dispatch (vehicle capability + terrain) with destination shelter capacity routing (live beds, generator backup, clinical capability like dialysis support), modeled as reactive state counters.
+- **Why:**
+  - Directly satisfies the hackathon's 4th stakeholder: *"Shelter and relief managers who must balance capacity against demand."*
+  - Rescuing a patient with kidney failure only to drop them at a shelter without power or dialysis backup is a critical failure.
+  - Automatically filters out shelters exceeding 95% occupancy or suffering grid collapse.
+- **What We Left Out:** A complex multi-warehouse supply chain / ERP software module.
+  - *Rationale:* Building supply-chain inventory, cot allocation grids, and food calorie logs would bloat the project and distract from the primary challenge: *Finding who needs help most and coordinating response*. Lightweight reactive state counters deliver 100% of the operational value with zero bloat.
+
 ### What We Chose: Community Proxy & Low-Tech Intake
 - **Choice:** Supporting dual-mode citizen intake (self-reporting vs. proxy reporting for neighbors) with explicit phone accessibility tagging (`has_phone`, `no_phone`, `network_down`), alongside simulated **Bilingual Urdu/English Voice Hotlines**.
 - **Why:**

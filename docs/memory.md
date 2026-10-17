@@ -72,10 +72,21 @@ defines safety and development constraints.
     a synthetic incident (`reporter_type = 'system_blind_spot'`) linked to
     `sector_id`, unifying blind-spot triage, priority scoring, and physical
     welfare patrol dispatch inside the existing incident workflow.
+-   Pre-Disaster Vulnerability Baseline & T-0 Proactive Staging: Static
+    demographic/community health baselines (LHW registers, chronic dialysis lists,
+    katchi abadis) are overlaid onto early hydrological surge forecasts at T-0
+    to generate proactive asset staging recommendations before road cutoffs at T+3.
+-   Deterministic Opportunity Cost & Competing Priority Warnings: When assigning
+    scarce assets, system computes and displays an explicit trade-off warning
+    card (asset depletion count + turnaround queue delay to next queued high-urgency incident).
+-   Two-Stage Allocation & Shelter Capacity Destination Matching: Resource allocation
+    matches both vehicle capability (terrain/mobility) and destination relief shelter
+    (live bed capacity, power generator, dialysis readiness), auto-filtering shelters
+    >95% full or grid-down.
 
 ## 4. Current status
 
-**Last updated:** 2026-10-17 14:03 PKT\
+**Last updated:** 2026-10-17 14:50 PKT\
 **Current phase:** Phase 0 --- Bootstrap and visual shell\
 **Team Name:** Byte Alpha's\
 **Members:** Syed Ali Hashmi (Team Leader, EB-24210106108, 3rd Year BSSE UBIT), Syed Umer Hashmi (2nd Year BSCS)\
@@ -108,11 +119,42 @@ defines safety and development constraints.
 
 ## 5. Latest implementation session
 
+### Session --- 2026-10-17 14:50 PKT
+
+-   **Phase/task:** Phase 0 --- Comprehensive Documentation Alignment Pass (Problem 01 Full Matrix)
+-   **Implemented:**
+    - Integrated Pre-Disaster Vulnerability Registry & T-0 Proactive Staging across all specs (answering "How early can you act?" and "Who is most at risk?").
+    - Integrated Deterministic Tactical Opportunity Cost Calculator and Competing Priority Warning Cards (answering "Every decision carries a cost" and "Competing priorities").
+    - Integrated Two-Stage Allocation & Shelter Capacity Destination Matching (answering 4th stakeholder group: "Shelter and relief managers balancing capacity against demand").
+    - Cleaned up bash code block line breaks in `README.md` and fixed all line numbering artifacts in `docs/rules.md`.
+    - Added design tokens and component specs for `opportunity-cost-warning`, `shelter-capacity-gauge`, and `pre-position-pill` in `DESIGN.md`.
+-   **Files added/changed:**
+    - [`README.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/README.md)
+    - [`AGENTS.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/AGENTS.md)
+    - [`DESIGN.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/DESIGN.md)
+    - [`docs/PRD.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/docs/PRD.md)
+    - [`docs/architecture.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/docs/architecture.md)
+    - [`docs/trade-offs.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/docs/trade-offs.md)
+    - [`docs/rules.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/docs/rules.md)
+    - [`docs/memory.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/docs/memory.md)
+-   **Commands run:**
+    - Python verification and cleanup scripts on `docs/rules.md`.
+-   **Tests/checks:**
+    - Verified all 8 files compile with clean Markdown formatting, accurate cross-links, and preserved section structures.
+-   **Manual browser verification:** N/A (Documentation phase)
+-   **Known issues:** None.
+-   **Environment/deployment changes:** None.
+-   **Decisions made and why:**
+    - Model shelter capacity as deterministic state counters coupled to dispatch approvals rather than a complex multi-warehouse ERP to maintain 100% demo resilience and focus on the core triage problem.
+    - Mandate that Opportunity Cost is strictly deterministic arithmetic (turnaround delay + asset depletion), completely prohibiting non-deterministic LLM hallucination of delay minutes.
+-   **Next smallest task:**
+    - Phase 0 bootstrap: Run Next.js 14/15 App Router initialization with TypeScript and configure Tailwind tokens from `DESIGN.md`.
+
 ### Session --- 2026-10-17 14:19 PKT
 
 -   **Phase/task:** Phase 0 --- Team Configuration & Agent Contract Hardening
 -   **Implemented:**
-    - Updated `AGENTS.md` with explicit Section 2.E ("Mandatory Living Memory & Decision History (`docs/memory.md`)") and strengthened Step 5 in Definition of Done. Every codebase decision, file creation, code edit, refactoring, and library addition must be logged in `docs/memory.md` with rationale and file paths.
+    - Updated `AGENTS.md` with explicit Section 2.E ("Mandatory Living Memory & Decision History (`docs/memory.md`)") and strengthened Step 5 in Definition of Done.
     - Configured official team details (`Byte Alpha's`, Syed Ali Hashmi, Syed Umer Hashmi) and repository URL (`https://github.com/alihashmi2288/Nigehbaan.git`) in `README.md` and `docs/memory.md`.
     - Removed redundant `docs/demo-script.md` and `docs/submission.md`.
 -   **Files added/changed:**

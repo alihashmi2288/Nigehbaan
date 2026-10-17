@@ -71,6 +71,10 @@ technical incident categories or completing every field. Also acts as a
 Community Proxy Reporter submitting on behalf of vulnerable neighbors,
 family members, or residents who lack phones or connectivity.
 
+### Tertiary user: Shelter & Relief Manager
+
+Needs to balance shelter capacity, bed availability, generator backup, and medical capability against inbound evacuees, ensuring incoming victims (especially those with chronic conditions or mobility impairments) are routed to capable shelters before facilities breach capacity.
+
 ### Demo-only stakeholder: Evaluator
 
 Needs to understand the problem, see the product work live, inspect how
@@ -110,6 +114,13 @@ decisions are made, and understand limitations.
     and evolving blind spots dynamically.
 19. Explainable AI Rationale Cards providing transparent, human-auditable
     justifications alongside deterministic priority scores.
+20. Pre-Disaster Vulnerability Baseline & T-0 Proactive Staging: Community health logs
+    and demographic baselines overlaid with hydrological forecasts at T-0 to recommend
+    pre-positioning boats and medical assets before roads flood.
+21. Deterministic Opportunity Cost & Competing Priority Warnings: Explicit trade-off
+    confirmation alerts showing asset depletion and queue delay impacts before dispatch approval.
+22. Two-Stage Allocation & Shelter Capacity Destination Matching: Matching both vehicle capability
+    and destination relief shelter bed/generator capacity.
 
 ### Explicitly out of scope
 
@@ -150,14 +161,15 @@ decisions are made, and understand limitations.
 5.  Coordinator may request clarification, mark information verified,
     change status, or proceed to resource review.
 
-### Journey C --- Recommend and approve a resource
+### Journey C --- Recommend and approve a resource with Opportunity Cost & Shelter Matching
 
 1.  Coordinator selects an incident.
-2.  System filters resources by availability and capability.
-3.  System explains the recommended resource and any known constraints.
-4.  Coordinator approves, rejects, or changes the recommendation.
-5.  Assignment and activity log update; resource availability changes
-    consistently.
+2.  System performs two-stage matching:
+    a. **Asset-to-Incident:** Filters specialized vehicles (shallow jet-boat, 4x4, mobile clinic) by terrain obstacles and patient mobility.
+    b. **Incident-to-Shelter:** Matches destination relief shelters/hospitals based on live bed capacity, generator backup, and clinical capability (e.g. dialysis support), auto-filtering shelters >95% full.
+3.  **Opportunity Cost Trade-Off Warning:** System calculates and displays explicit consequences before approval (e.g., remaining asset count in sector, turnaround delay penalty to next queued high-urgency incident).
+4.  Coordinator reviews the trade-off, selects or overrides the matched shelter destination, and approves the assignment.
+5.  Assignment, shelter capacity counter, and activity log update; resource availability changes consistently.
 
 ### Journey D --- Resolve uncertainty
 
@@ -203,6 +215,13 @@ decisions are made, and understand limitations.
 4.  Extracted entities (medical urgency, water depth, mobility impairment) are structured
     and fed into the deterministic priority engine and incident queue with visible provenance.
 5.  Coordinator inspects the raw audio, transcript, and AI-extracted candidates side-by-side.
+
+### Journey H --- Pre-Disaster Vulnerability Baseline & T-0 Proactive Staging
+
+1.  Prior to active flood inundation, coordinator inspects the Pre-Disaster Vulnerability Registry (Lady Health Worker logs, chronic dialysis patients, low-lying informal settlements / *katchi abadis*).
+2.  At `T-0 Early Warning` on the Timeline Scrubber, hydrological surge forecasts intersect with vulnerability hotspots.
+3.  System generates proactive staging recommendations (e.g. stage Shallow Jet-Boat 01 and Mobile Medical Unit at high-ground staging depot near Sector 3A).
+4.  Coordinator approves pre-positioning, securing asset access before arterial roads submerge at `T+3`.
 
 ## 7. Functional requirements
 
@@ -327,6 +346,23 @@ decisions are made, and understand limitations.
                     Rationale Cards                     accompanied by a transparent
                                                         human-auditable summary of
                                                         why it was prioritized
+
+  FR-23             Pre-Disaster      Must              System overlays static
+                    Vulnerability                       vulnerability registries (LHW logs,
+                    Baseline & T-0                      dialysis lists, katchi abadis) with
+                    Staging                             T-0 hydrological alerts to recommend
+                                                        staging assets before road cutoffs
+
+  FR-24             Tactical          Must              System deterministically computes
+                    Opportunity Cost                    and displays resource scarcity
+                    Warnings                            trade-off alerts and queue turnaround
+                                                        delay penalties before human dispatch
+                                                        confirmation
+
+  FR-25             Shelter Capacity  Must              Resource assignment matches both vehicle
+                    Destination                         capability and destination relief shelter
+                    Matching                            bed/generator capacity, auto-filtering
+                                                        facilities >95% full or grid-down
   ----------------------------------------------------------------------------
 
 ## 8. Priority model

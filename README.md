@@ -46,30 +46,37 @@ graph TD
     end
 ```
 
-### 1. The Uncertainty Radar & "Data Black Hole" Detection
+### 1. Pre-Disaster Vulnerability Baseline & T-0 Proactive Pre-Positioning
+- **Acting Before the Crisis:** Leverages simulated community health baselines (Lady Health Worker logs, chronic dialysis lists, low-lying informal settlements / *katchi abadis*) to identify who is most at risk *before* distress calls begin.
+- **Proactive Staging at T-0:** When early hydrological surge forecasts trigger at `T-0`, Nigehbaan recommends pre-positioning shallow-draft jet-boats and mobile clinics at high-ground staging depots near Sector 3A before road access is submerged at `T+3`.
+
+### 2. The Uncertainty Radar & "Data Black Hole" Detection
 - Decouples **urgency** from **information confidence**.
 - Actively detects missing locations, stale claims (>60m), contradictory road reports, and potential duplicates (flagged, never auto-merged).
 - **Sector-to-Incident Synthesis:** When a high-hazard sector exhibits zero communications during rising floodwaters, Nigehbaan flags a `coverage_blind_spot` and automatically synthesizes an incident with an enforced **$4.0 / 5.0$ vulnerability floor**, routing it into the dispatch queue for an immediate **Physical Welfare Recon / Field Sweep**.
 
-### 2. Bilingual Voice & Audio Distress Ingestion
+### 3. Bilingual Voice & Audio Distress Ingestion
 - Accommodates low-literacy and panicking citizens through a simulated **Urdu/English Voice Hotline**.
 - Features an interactive audio waveform visualizer, real-time speech-to-text transcription, and automated entity extraction with complete data provenance.
 
-### 3. Explainable Deterministic Triage
+### 4. Explainable Deterministic Triage
 - Uses an audited Multi-Criteria Decision Analysis (MCDA) mathematical formula:
   $$V = 0.30 \cdot \text{LifeThreat} + 0.25 \cdot \text{MedicalUrgency} + 0.20 \cdot \text{EvacuationInability} + 0.15 \cdot \text{EnvironmentalDanger} + 0.10 \cdot \text{Population}$$
 - Accompanied by **Explainability Rationale Cards** providing human-auditable justifications for commanders.
 
-### 4. Smart Resource Allocation with Human Approval
-- Filters and matches specialized vehicles (shallow jet-boats, heavy 4x4s, mobile medical units) to terrain conditions and medical urgency.
+### 5. Smart Resource Allocation with Opportunity Cost & Shelter Matching
+- **Two-Stage Matching:** 
+  1. **Asset-to-Incident:** Matches specialized vehicles (shallow jet-boats, heavy 4x4s, mobile medical units) to terrain obstacles and medical urgency.
+  2. **Incident-to-Shelter:** Dynamically routes evacuees to relief camps or field hospitals based on real-time bed capacity, backup generator status, and specialized medical capabilities (e.g. dialysis support), auto-filtering shelters that exceed 95% occupancy or suffer power blackouts.
+- **Deterministic Opportunity Cost Warning:** Displays explicit trade-off consequences before approval (*"Assigning Shallow Jet-Boat 01 to Incident #1 leaves 0 shallow-draft assets in Sector 3; Incident #4 [Score 3.9] will incur an estimated +35 min delay"*).
 - Strictly enforces human-in-the-loop authorization before marking any asset dispatched.
 
-### 5. Multi-Phase Disaster Timeline Scrubber
+### 6. Multi-Phase Disaster Timeline Scrubber
 - Allows operators and hackathon evaluators to scrub through disaster progression:
-  - `T-0 Early Warning` (Pre-positioning resources)
-  - `T+3 Flood Surge` (Inundation of low-lying settlements)
+  - `T-0 Early Warning` (Hydrological forecast overlay & proactive asset pre-positioning)
+  - `T+3 Flood Surge` (Inundation of low-lying settlements, cut roads)
   - `T+6 Grid Blackout` (Cell towers drop, Uncertainty Radar triggers blind spot escalations)
-  - `T+12 Peak Crisis` (Exhaustion of shallow boats, complex triage trade-offs)
+  - `T+12 Peak Crisis` (Exhaustion of shallow boats, acute opportunity cost trade-offs)
 
 ---
 
@@ -116,7 +123,7 @@ The project specifications and governance documents are organized as follows:
 In accordance with the CODE//CONNECT'26 AI-tools policy:
 - **Assisted Coding & Architecture:** Built pair-programming with **Antigravity IDE** for architecture scaffolding, Next.js App Router implementation, TypeScript types, and verification test suites.
 - **Runtime Intelligence:** Live structured fact extraction, bilingual Urdu/English speech transcription, and natural-language explainability rationale are processed via the **Google Gemini API** (`@google/genai`) with pre-warmed heuristic fallback for zero-downtime resilience.
-- **Safety Governance:** All priority scoring, uncertainty detection algorithms, and resource compatibility checks are **100% deterministic TypeScript application code**. The LLM never makes autonomous dispatch decisions or calculates priority scores directly.
+- **Safety Governance:** All priority scoring, uncertainty detection algorithms, opportunity cost calculations, and resource compatibility checks are **100% deterministic TypeScript application code**. The LLM never makes autonomous dispatch decisions or calculates priority scores directly.
 
 ---
 
@@ -125,19 +132,21 @@ In accordance with the CODE//CONNECT'26 AI-tools policy:
 ```bash
 # 1. Clone the repository
 git clone https://github.com/alihashmi2288/Nigehbaan.git
+
+# 2. Enter project directory
 cd Nigehbaan
 
-# 2. Install dependencies
+# 3. Install dependencies
 npm install
 
-# 3. (Optional) Configure Gemini API key for live LLM extraction
+# 4. (Optional) Configure Gemini API key for live LLM extraction
 cp .env.example .env.local
-# Add GEMINI_API_KEY="your_api_key" (system automatically uses realistic fallback if omitted)
+# Set GEMINI_API_KEY="your_api_key" (system automatically uses realistic fallback if omitted)
 
-# 4. Start local development server
+# 5. Start local development server
 npm run dev
 
-# 5. Open in browser
+# 6. Open in browser
 # http://localhost:3000
 ```
 
@@ -146,10 +155,11 @@ npm run dev
 ## 🧪 Quick 3-Minute Demo Walkthrough for Evaluators
 
 1. **Dashboard Overview:** Load the application to view the active situational picture in District Alpha (`SIMULATED DATA`).
-2. **Uncertainty Radar:** Inspect the **Sector 3A (Riverbank)** dead-zone flag; observe how 90 minutes of silence synthesized a `system_blind_spot` incident with an enforced $4.0/5.0$ vulnerability floor.
-3. **Voice Hotline:** Open the **Distress Simulator**, play the simulated Urdu emergency call, watch the waveform, and click **"Transcribe & Extract"**.
-4. **Explainable Triage & Dispatch:** Open Incident #1 (Critical - Dialysis Patient), review the factor breakdown card, click **"Assign Resource"** to recommend a shallow jet-boat, and click **"Approve"**.
-5. **Timeline Scrubbing:** Scrub through `T-0`, `T+3`, `T+6`, and `T+12` on the timeline bar to watch water levels rise and cell towers drop dynamically.
+2. **T-0 Pre-Disaster Baseline:** At `T-0 Early Warning`, review the pre-disaster vulnerability registry (isolated elderly, chronic illness registry) and see the proactive staging recommendation for Shallow Jet-Boat 01 near Sector 3A.
+3. **Uncertainty Radar:** Inspect the **Sector 3A (Riverbank)** dead-zone flag at `T+6`; observe how 90 minutes of silence synthesized a `system_blind_spot` incident with an enforced $4.0/5.0$ vulnerability floor.
+4. **Voice Hotline:** Open the **Distress Simulator**, play the simulated Urdu emergency call, watch the waveform, and click **"Transcribe & Extract"**.
+5. **Explainable Triage & Opportunity Cost:** Open Incident #1 (Critical - Dialysis Patient), review the factor breakdown card, click **"Assign Resource"**, review the **Opportunity Cost Trade-Off Warning** and matched destination shelter (equipped with dialysis backup), and click **"Approve"**.
+6. **Timeline Scrubbing:** Scrub through `T-0`, `T+3`, `T+6`, and `T+12` on the timeline bar to watch water levels rise, shelter capacities fill, and cell towers drop dynamically.
 
 ---
 

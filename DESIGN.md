@@ -552,9 +552,19 @@ Nigehbaan's depth is carried by surface ladder + hairline borders. The system re
 - Displays deterministic 5-factor mathematical weighting breakdown alongside natural-language audit bullet points.
 
 **`tactical-map`** — Interactive GIS operations map.
-- Embedded container with 1px `{colors.hairline}` border, rounded `{rounded.xl}`.
-- Uncontacted dead zones rendered as semi-transparent polygons (`{colors.semantic-blind-spot-soft}`) with dashed borders (`{colors.semantic-blind-spot-border}`).
-- Unlocated incidents listed in a dedicated drawer rather than plotted at fabricated coordinates.
+**`opportunity-cost-warning`** — Tactical resource trade-off confirmation alert.
+- Background: `rgba(146, 64, 14, 0.12)`, 1px border `{colors.semantic-warning}` (`#92400E`), rounded `{rounded.md}` (8px), padding 14px.
+- Displays deterministic trade-off consequence when committing scarce assets (e.g. remaining shallow boats, queue turnaround delay `+35 min`).
+- Clean operational layout: hairline divider between current assignment impact and queued incident penalty.
+
+**`shelter-capacity-gauge`** — Live relief camp & hospital capacity indicator.
+- Container: Background `{colors.surface-2}`, 1px `{colors.hairline}` border, rounded `{rounded.md}`, padding 8px 12px.
+- Progress bar: 4px track `{colors.surface-3}`, fill `{colors.primary}` (under 80%), `{colors.semantic-warning}` (80-94%), or `{colors.semantic-critical}` (≥95% or power blackout).
+- Metadata badges: generator status (`GEN ACTIVE` / `GRID OFF`) and clinical capability (`DIALYSIS READY`).
+
+**`pre-position-pill`** — Proactive staging indicator at T-0 Early Warning.
+- Background `rgba(94, 106, 210, 0.15)`, border 1px `rgba(94, 106, 210, 0.40)`, text `{colors.primary}`, rounded `{rounded.full}`, padding 4px 10px, type `{typography.caption}`.
+- Highlights high-ground staging depots before flood waters inundate access roads.
 
 ### Footer
 

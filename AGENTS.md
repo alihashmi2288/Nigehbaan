@@ -29,17 +29,18 @@ Every AI agent must follow these strict technical rules:
 - **Data Persistence Strategy:** The primary runtime data store is a **zero-dependency, resilient In-Memory / Local Storage Repository** pre-warmed with the Sindh/Indus flood scenario (`SIMULATED DATA`). This guarantees 100% demo uptime and sub-millisecond response on Vercel without third-party database latency or migration blockers.
 
 ### B. AI Boundaries & Safety Invariants
-- **NEVER allow an LLM to generate the final priority score.** Priority is calculated strictly via the deterministic 5-factor MCDA mathematical formula in `src/lib/triageEngine.ts`.
+- **NEVER allow an LLM to generate the final priority score or opportunity cost.** Priority is calculated strictly via the deterministic 5-factor MCDA mathematical formula in `src/lib/triageEngine.ts`. Opportunity cost trade-offs (asset availability and delay penalties to next queued incidents) are calculated via deterministic heuristics in `src/lib/resourceAllocation.ts`.
 - **LLM Role:** The Google Gemini API is used *only* for:
   1. Structured fact extraction from unstructured citizen reports.
   2. Bilingual speech-to-text translation (Urdu/English).
   3. Generating human-auditable natural language explainability cards.
 - **Resilient Fallback:** All AI services must include automatic heuristic fallbacks so the app operates 100% reliably even if no API key is set on Vercel.
-- **NO Autonomous Dispatch:** The system *recommends* resources; an explicit human coordinator approval is required to assign an asset.
+- **NO Autonomous Dispatch:** The system *recommends* resources and matched destination shelters; an explicit human coordinator approval is required to assign an asset.
 - **NO Medical Diagnosis:** Triage scores are operational decision-support heuristics, never clinical diagnoses.
 
 ### C. The "Invisible Vulnerable" & Uncertainty Radar
 - **Decouple Urgency from Confidence:** Missing information must be flagged as uncertain, but must **never** automatically lower an incident's priority.
+- **Pre-Disaster Baseline & T-0 Staging:** Community health/demographic baseline data (isolated elderly, chronic illness registry, low-lying informal settlements) is leveraged at `T-0 Early Warning` to recommend proactive staging before infrastructure fails.
 - **Sector-to-Incident Synthesis:** When a monitored geographical sector exhibits zero incoming communications during flood conditions, the system raises a `coverage_blind_spot` and automatically creates a synthetic incident (`reporter_type = 'system_blind_spot'`) with an enforced **$4.0 / 5.0$ vulnerability floor**, routing it into the dispatch queue for an immediate **Physical Welfare Recon / Field Sweep**.
 - **Community Proxy Reporting:** Intake must track whether the victim has phone access (`has_phone`, `no_phone`, `network_down`, `unknown`).
 

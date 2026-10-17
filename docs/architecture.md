@@ -195,7 +195,9 @@ nigehbaan/
 │   │   └── validation.ts
 │   ├── resources/
 │   │   ├── recommend.ts
-│   │   └── assignments.ts
+│   │   ├── assignments.ts
+│   │   ├── opportunityCost.ts
+│   │   └── shelterMatching.ts
 │   ├── simulation/
 │   │   ├── scenarios.ts
 │   │   └── runner.ts
@@ -205,6 +207,7 @@ nigehbaan/
 ├── types/
 │   ├── incident.ts
 │   ├── resource.ts
+│   ├── shelter.ts
 │   ├── assignment.ts
 │   └── sector.ts
 ├── supabase/
@@ -282,13 +285,40 @@ during implementation.
 -   `id`
 -   `incident_id`
 -   `resource_id`
+-   `destination_shelter_id` (nullable UUID, references `shelters.id`)
 -   `status` (`proposed`, `approved`, `in_progress`, `completed`,
     `cancelled`)
 -   `recommendation_reason`
+-   `opportunity_cost_warning` (JSONB: `{ depleted_asset_type, remaining_in_sector, delayed_incident_id, estimated_delay_minutes }`)
 -   `constraints` (JSONB)
 -   `approved_by` (nullable in demo)
 -   `approved_at`
 -   `created_at`, `updated_at`
+
+### `shelters`
+
+-   `id` (UUID)
+-   `name` (e.g. `Alpha High School Relief Camp`)
+-   `sector_id` (UUID, references `sectors.id`)
+-   `latitude`, `longitude`
+-   `capacity_total` (integer)
+-   `capacity_current` (integer)
+-   `power_status` (`grid_online`, `generator_backup`, `blackout`)
+-   `medical_capabilities` (JSONB array: e.g. `["first_aid", "dialysis_ready", "mobility_access"]`)
+-   `status` (`operational`, `near_capacity`, `full`, `closed_flooded`)
+-   `is_simulated` (boolean)
+-   `updated_at`
+
+### `pre_disaster_vulnerabilities`
+
+-   `id` (UUID)
+-   `sector_id` (UUID, references `sectors.id`)
+-   `vulnerability_type` (`isolated_elderly`, `chronic_dialysis`, `mobility_impaired`, `low_income_katchi_abadi`)
+-   `headcount_estimate` (integer)
+-   `data_source` (`lhw_registry`, `municipal_demographics`, `rural_clinic`)
+-   `recommended_staging_asset` (`shallow_jet_boat`, `mobile_medical_unit`, `4x4_high_clearance`)
+-   `staging_depot_name` (e.g. `Sector 3 High-Ground Depot`)
+-   `is_simulated` (boolean)
 
 ### `uncertainty_flags`
 
@@ -368,18 +398,31 @@ deterministic priority engine, and resource recommendation workflow.\
 Must not: silently delete/merge reports or declare uncertain claims
 false.
 
-### Resource recommendation service
+### Resource recommendation & shelter matching service
 
-Input: incident requirements, available resource capabilities,
-assignment status, known constraints.\
-Output: ranked compatible candidates and reasons.\
-Must not: perform real dispatch or mark a resource assigned until a
-human approves.
+Input: incident requirements, available resource capabilities, shelter capacities, assignment status, known constraints.\
+Output: two-stage recommendation:
+1. **Asset-to-Incident:** Ranked compatible rescue vehicles (shallow jet-boats, heavy 4x4s, mobile clinics) matched against terrain water depth and patient mobility.
+2. **Incident-to-Shelter:** Destination relief shelter/field hospital matching live bed capacity, generator backup status, and medical facilities (e.g. dialysis readiness), auto-filtering facilities >95% full or grid-down.\
+Must not: perform real dispatch or mark a resource assigned until a human approves.
+
+### Tactical opportunity cost calculator service
+
+Input: proposed asset assignment, incident sector, active queued incidents.\
+Output: deterministic trade-off warning struct (`depleted_asset_type`, `remaining_in_sector`, `delayed_incident_id`, `estimated_delay_minutes`).\
+Logic: If assigning asset leaves 0 units of capability in sector, locates next highest queued incident requiring this capability and computes turnaround delay:
+$$\Delta t = \text{turnaround\_estimate} + \text{transit\_time}$$
+Must not: rely on LLM prompts or non-deterministic estimations; calculations are strictly audited application arithmetic.
 
 ### Simulation service
 
 Input: scenario ID and event index or timeline phase (`T0`, `T3`, `T6`, `T12`).\
 Output: deterministic changes to simulated records, sector statuses, and activity log.\
+Features:
+- At `T0 Early Warning`, evaluates static Pre-Disaster Vulnerability Baselines (LHW registers, chronic dialysis lists, low-lying settlements) against incoming hydrological surge forecasts to generate proactive staging recommendations before roads submerge at `T3`.
+- At `T3 Flood Surge`, updates flood inundation contours and road cutoffs.
+- At `T6 Grid Blackout`, triggers cell tower drops and automated `coverage_blind_spot` escalations.
+- At `T12 Peak Crisis`, models resource exhaustion and acute opportunity cost trade-offs.\
 Must not: modify real data or hide that events are simulated.
 
 ### Bilingual voice intake & transcription service
@@ -415,6 +458,15 @@ Recommended minimal routes:
                                       edits/status/verification
 
   `GET /api/resources`                List resources and availability
+
+  `POST /api/resources/opportunity-cost` Compute deterministic trade-off
+                                      impact and queue delay before assignment
+
+  `GET /api/shelters`                 List relief shelters, live bed
+                                      capacities, generator, and clinical status
+
+  `GET /api/vulnerabilities/baseline` Return pre-disaster vulnerable population
+                                      registry and proactive staging targets
 
   `POST /api/incidents/:id/assign`    Create recommendation or approve
                                       assignment, depending on explicit

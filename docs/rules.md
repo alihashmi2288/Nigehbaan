@@ -71,54 +71,60 @@ member working on Nigehbaan. Read it before making changes.
     logs, screenshots, or the demo.
 13. Avoid storing more personal information than the prototype requires.
 14. If an AI output cannot be validated, mark extraction as failed/needs
-75:     review and allow manual handling.
-76: 15. The AI must NEVER guess or fabricate phone numbers, identities, or
-77:     exact headcounts inside a blind spot. Blind spots are strictly
-78:     geographical/sector entities, not fabricated people.
-79: 16. All emergency audio samples must be strictly simulated/fictional assets
-80:     or synthesized voice; never use real individuals' actual distress calls.
-81: 17. Voice speech-to-text models must preserve transcription provenance and
-82:     visibly mark low-confidence audio translations.
-83: 
-84: ## 4. Data and decision rules
-85: 
-86: 1.  Original report text and report timestamps are required.
-87: 2.  Location may be `confirmed`, `approximate`, `missing`, or
-88:     `unverified`.
-89: 3.  Never infer coordinates from vague text without a trusted
-90:     geocoding/user-selection step.
-91: 4.  Keep resource states consistent: a resource with an active approved
-92:     assignment cannot also be `available`.
-93: 5.  A proposed assignment is not an approved assignment.
-94: 6.  Only update resource availability after an explicit
-95:     assignment/status action.
-96: 7.  Record assignment approvals, overrides, verification changes, and
-97:     resolutions in the activity log.
-98: 8.  For conflicting facts, show both claims, timestamps, and
-99:     source/report references.
-100: 9.  For stale information, show its age and the threshold used to flag
-101:     it.
-102: 10. The priority algorithm must be deterministic and unit-tested against
-103:     predefined scenarios.
-104: 11. The prototype's priority weights and thresholds are assumptions;
-105:     document them and avoid representing them as official emergency
-106:     triage guidance.
-107: 12. Unknown factors must not silently become zero-risk factors. Handle
-108:     unknowns explicitly and show the limitation.
-109: 13. An incident marked as `coverage_blind_spot` or `no_phone` must receive
-110:     an automatic vulnerability floor boost ($4.0 / 5.0$) in the scoring
-111:     engine.
-112: 14. Blind-spot actions must be categorized as 'Physical Welfare Recon /
-113:     Field Sweep' until boots on the ground confirm the situation.
-114: 15. When a sector triggers a `coverage_blind_spot`, the system automatically
-115:     creates a linked incident with `reporter_type = 'system_blind_spot'` and
-116:     `sector_id` populated, ensuring it is tracked through the standard
-117:     incident queue and assignment workflow without creating an isolated
-118:     subsystem.
-119: 16. Audio intake records must store audio duration, waveform data,
-120:     original language, and transcription timestamp alongside the structured incident.
-121: 17. Timeline progression events must execute deterministically; scrubbing
-122:     backwards or pressing Reset must completely restore pristine baseline state.
+    review and allow manual handling.
+15. The AI must NEVER guess or fabricate phone numbers, identities, or
+    exact headcounts inside a blind spot. Blind spots are strictly
+    geographical/sector entities, not fabricated people.
+16. All emergency audio samples must be strictly simulated/fictional assets
+    or synthesized voice; never use real individuals' actual distress calls.
+17. Voice speech-to-text models must preserve transcription provenance and
+    visibly mark low-confidence audio translations.
+18. Opportunity Cost calculations must be 100% deterministic mathematical heuristics (asset availability count and turnaround queue delay). The LLM must NEVER generate opportunity cost estimates, delay minutes, or trade-off decisions.
+19. Shelter capacity matching must be evaluated via deterministic state counters (bed capacity, backup power, clinical capability). Evacuees must never be assigned to shelters marked >95% full or suffering grid/generator failure.
+20. Pre-disaster vulnerability baselines (LHW logs, dialysis registries) are treated as operational staging priors at T-0, not individual surveillance.
+
+## 4. Data and decision rules
+
+1.  Original report text and report timestamps are required.
+2.  Location may be `confirmed`, `approximate`, `missing`, or
+    `unverified`.
+3.  Never infer coordinates from vague text without a trusted
+    geocoding/user-selection step.
+4.  Keep resource states consistent: a resource with an active approved
+    assignment cannot also be `available`.
+5.  A proposed assignment is not an approved assignment.
+6.  Only update resource availability after an explicit
+    assignment/status action.
+7.  Record assignment approvals, overrides, verification changes, and
+    resolutions in the activity log.
+8.  For conflicting facts, show both claims, timestamps, and
+    source/report references.
+9.  For stale information, show its age and the threshold used to flag
+    it.
+10. The priority algorithm must be deterministic and unit-tested against
+    predefined scenarios.
+11. The prototype's priority weights and thresholds are assumptions;
+    document them and avoid representing them as official emergency
+    triage guidance.
+12. Unknown factors must not silently become zero-risk factors. Handle
+    unknowns explicitly and show the limitation.
+13. An incident marked as `coverage_blind_spot` or `no_phone` must receive
+    an automatic vulnerability floor boost ($4.0 / 5.0$) in the scoring
+    engine.
+14. Blind-spot actions must be categorized as 'Physical Welfare Recon /
+    Field Sweep' until boots on the ground confirm the situation.
+15. When a sector triggers a `coverage_blind_spot`, the system automatically
+    creates a linked incident with `reporter_type = 'system_blind_spot'` and
+    `sector_id` populated, ensuring it is tracked through the standard
+    incident queue and assignment workflow without creating an isolated
+    subsystem.
+16. Audio intake records must store audio duration, waveform data,
+    original language, and transcription timestamp alongside the structured incident.
+17. Timeline progression events must execute deterministically; scrubbing
+    backwards or pressing Reset must completely restore pristine baseline state.
+18. Opportunity Cost Warnings must compute remaining assets in the sector and delay penalties (Delta t) to the next queued incident before confirmation dialog closes.
+19. Two-stage resource recommendations must validate destination shelter occupancy and clinical readiness (e.g. dialysis capability) before proposing assignment.
+20. At T-0 Early Warning, hydrological forecasts must map to pre-disaster vulnerability baselines to suggest staging before flood surges at T+3.
 
 ## 5. Error handling
 
