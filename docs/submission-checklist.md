@@ -19,7 +19,10 @@ Copy-paste ready metadata for the official hackathon submission portal:
   1. **Syed Ali Hashmi** (Team Leader) --- Roll No: `EB-24210106108` | 3rd Year BSSE (UBIT, University of Karachi)
   2. **Syed Umer Hashmi** --- Roll No: `EB-25210006105` | 2nd Year BSCS (UBIT, University of Karachi)
 - **GitHub Repository:** `https://github.com/alihashmi2288/Nigehbaan.git`
-- **Live Demo Link:** `https://nigehbaan.vercel.app`
+- **Live Demo Link (Home):** `https://nigehbaan.vercel.app`
+- **Command Cockpit (HUD):** `https://nigehbaan.vercel.app/dashboard`
+- **Platform Guide & Blueprint:** `https://nigehbaan.vercel.app/guide`
+- **Citizen Distress Intake:** `https://nigehbaan.vercel.app/incidents/new`
 - **3-Minute Video Walkthrough:** `https://youtu.be/nigehbaan-demo` *(or uploaded Loom/Drive link)*
 - **Short Description (under 100 words):**  
   Nigehbaan is an AI-assisted disaster coordination platform that finds the invisible victims of floods. When high-hazard sectors experience cellular tower collapse, its Uncertainty Radar detects the silence and synthesizes high-priority welfare recon incidents. Triage is governed by an auditable, deterministic 0–100 mathematical engine that never penalizes missing data, paired with natural-language explainability cards and deterministic opportunity-cost warnings before human dispatch approval.
