@@ -122,12 +122,13 @@ The following architectural and product decisions were formally established and 
 
 See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation checklist.
 
-- **Current Active Milestone:** **Milestone 3 --- GIS Map & Sector Polygons (Tier 1)**
+- **Current Active Milestone:** **Milestone 4 --- Triage Queue & Incident Inspector (Tier 1)**
 - **Completed Milestones:**
   - **Milestone 0 --- Bootstrap & Project Setup** (Tasks T0.1, T0.2, T0.3, T0.4 verified)
   - **Milestone 1 --- Deterministic Scoring Engine & Tests** (Tasks T1.1, T1.2, T1.3, T1.4 verified)
   - **Milestone 2 --- State Store & Seed Data** (Tasks T2.1, T2.2, T2.3 verified)
-- **Next Smallest Coding Task:** **`T3.1`** (Leaflet GIS Map Container & Dark Matter Tiles).
+  - **Milestone 3 --- GIS Map & Sector Polygons** (Tasks T3.1, T3.2, T3.3, T3.4 verified)
+- **Next Smallest Coding Task:** **`T4.1`** (Filterable Triage Incident Queue).
 
 ---
 
@@ -174,8 +175,21 @@ See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation che
   - **T2.3 (1-Click Simulation Reset Function & Activity Log):** Implemented synchronous `resetSimulation()` restoring pristine baseline seed data in <10ms, resetting timeline to `T-0`, clearing dirty assignments, and logging audit entries. Created `src/components/layout/ResetButton.tsx` and `src/components/layout/index.ts` styled with `DESIGN.md` tokens, mounted in `src/app/page.tsx` tactical HUD.
   - **Unit & Integration Tests:** Created `tests/stateStore.test.ts` with 12 comprehensive tests covering T2.1, T2.2, and T2.3.
   - **Verification:** Ran `npm test` (31/31 assertions green across 3 test files), and `npm run build` (clean Next.js production build, 0 warnings/errors).
+
+### Session --- 2026-10-17 17:55 PKT (Milestone 3: GIS Map & Sector Polygons)
+- **Phase/Task:** Milestone 3 (Tasks T3.1, T3.2, T3.3, T3.4)
+- **Accomplishments:**
+  - Installed `leaflet` (`^1.9.4`), `react-leaflet` (`^4.2.1`), and `@types/leaflet` (`^1.9.14`) compatible with React 18.
+  - **T3.1 (Leaflet GIS Map Container & Dark Matter Tiles):** Created `src/components/map/mapUtils.ts`, `src/components/map/TacticalMap.tsx`, and `src/components/map/MapWrapper.tsx` dynamically importing with `{ ssr: false }` to prevent SSR window issues, centered on District Alpha (`[24.935, 67.145]`, zoom 12) with CartoDB Dark Matter tile layer, dark zoom controls, dark attribution, and layer visibility toggles.
+  - **T3.2 (Sector Polygons & Blind-Spot Styling):** Created `src/components/map/SectorPolygonLayer.tsx` rendering all 4 sectors with hairline borders (`#23252a`) and dynamic phase-aware blind-spot highlighting on Sector 3A at T+6/T+12 with tangerine dashed stroke (`--semantic-blind-spot: #DB6D28`, `dashArray: '6, 6'`) and pulsing glow animation.
+  - **T3.3 (Incident Markers with Priority Severity Rings):** Created `src/components/map/IncidentMarkerLayer.tsx` rendering custom SVG `L.divIcon` markers color-coded by category (`Critical: #B42318`, `High: #92400E`, `Moderate: #475569`, `Low: #27a644`), CSS pulsing halos around Critical cases, selection highlighting (`#5e6ad2`), and missing location indicator for `NG-112`.
+  - **T3.4 (Rescue Resource Stations & Shelter Markers):** Created `src/components/map/ResourceStationLayer.tsx` with distinct vehicle glyphs (shallow boat, 4x4, mobile medical, recon) and availability status badges. Created `src/components/map/ShelterMarkerLayer.tsx` with occupancy gauges (`32%`, `70%`, `97%`), generator alerts (`SHL-03` grid failure), and medical capability tags.
+  - **App Dashboard Integration:** Embedded `MapWrapper` and scenario timeline scrubber into `src/app/page.tsx` with telemetry counters and status badges.
+  - **Unit & Integration Tests:** Created `tests/tacticalMap.test.ts` with 12 tests covering all Milestone 3 acceptance criteria.
+  - **Verification:** Ran `npm test` (43/43 assertions green across 4 test files), `npm run build` (clean Next.js production build with static prerendering, 0 errors/warnings), and `node scripts/verify-docs.mjs` (12/12 pass).
 - **Next Smallest Coding Task:**
-  - Task **`T3.1`** (Leaflet GIS Map Container & Dark Matter Tiles).
+  - Task **`T4.1`** (Filterable Triage Incident Queue in Milestone 4).
+
 
 
 

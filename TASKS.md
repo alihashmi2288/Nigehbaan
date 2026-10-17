@@ -227,7 +227,7 @@
 
 ## Milestone 3: GIS Map & Sector Polygons (Tier 1)
 
-### [ ] Task T3.1: Leaflet GIS Map Container & Dark Matter Tiles
+### [x] Task T3.1: Leaflet GIS Map Container & Dark Matter Tiles
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T0.2, T1.1
 - **Files to create/edit:**
@@ -247,7 +247,7 @@
 
 ---
 
-### [ ] Task T3.2: Render Sector Polygons with Blind-Spot Styling
+### [x] Task T3.2: Render Sector Polygons with Blind-Spot Styling
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T3.1, T2.2
 - **Files to create/edit:**
@@ -265,7 +265,7 @@
 
 ---
 
-### [ ] Task T3.3: Incident Markers with Priority Severity Rings
+### [x] Task T3.3: Incident Markers with Priority Severity Rings
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T3.1, T2.2
 - **Files to create/edit:**
@@ -288,7 +288,7 @@
 
 ---
 
-### [ ] Task T3.4: Rescue Resource Stations & Shelter Markers
+### [x] Task T3.4: Rescue Resource Stations & Shelter Markers
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T3.1, T2.2
 - **Files to create/edit:**

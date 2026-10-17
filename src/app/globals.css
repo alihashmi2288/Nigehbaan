@@ -79,3 +79,149 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--ink-tertiary);
 }
+
+/* =========================================================================
+   Tactical Leaflet Dark Matter Overrides & Animations (Milestone 3 GIS)
+   ========================================================================= */
+
+@import 'leaflet/dist/leaflet.css';
+
+/* Dark tactical container */
+.leaflet-container {
+  background-color: var(--canvas) !important;
+  font-family: inherit !important;
+  outline: none;
+}
+
+/* Custom dark zoom controls */
+.leaflet-bar {
+  border: 1px solid var(--hairline-strong) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+  border-radius: 6px !important;
+  overflow: hidden;
+}
+
+.leaflet-bar a {
+  background-color: var(--surface-2) !important;
+  color: var(--ink) !important;
+  border-bottom: 1px solid var(--hairline) !important;
+  width: 30px !important;
+  height: 30px !important;
+  line-height: 30px !important;
+  font-size: 16px !important;
+  transition: all 0.15s ease-in-out;
+}
+
+.leaflet-bar a:hover {
+  background-color: var(--surface-3) !important;
+  color: var(--primary-hover) !important;
+}
+
+.leaflet-bar a:last-child {
+  border-bottom: none !important;
+}
+
+/* Dark attribution control */
+.leaflet-control-attribution {
+  background: rgba(15, 16, 17, 0.85) !important;
+  color: var(--ink-subtle) !important;
+  font-size: 10px !important;
+  padding: 2px 8px !important;
+  border-top-left-radius: 4px;
+  border-top: 1px solid var(--hairline);
+  border-left: 1px solid var(--hairline);
+  backdrop-filter: blur(4px);
+}
+
+.leaflet-control-attribution a {
+  color: var(--ink-muted) !important;
+  text-decoration: none;
+}
+
+.leaflet-control-attribution a:hover {
+  text-decoration: underline;
+}
+
+/* Tactical dark popups */
+.leaflet-popup-content-wrapper {
+  background: var(--surface-1) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--hairline-strong) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.75) !important;
+  padding: 0 !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  line-height: 1.4 !important;
+  font-family: inherit !important;
+}
+
+.leaflet-popup-tip-container {
+  overflow: visible;
+}
+
+.leaflet-popup-tip {
+  background: var(--surface-1) !important;
+  border: 1px solid var(--hairline-strong) !important;
+  box-shadow: none !important;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  color: var(--ink-subtle) !important;
+  padding: 6px 6px 0 0 !important;
+}
+
+.leaflet-container a.leaflet-popup-close-button:hover {
+  color: var(--ink) !important;
+}
+
+/* Sector blind-spot pulse animation */
+@keyframes blind-spot-pulse {
+  0% {
+    stroke-opacity: 0.95;
+    fill-opacity: 0.20;
+  }
+  50% {
+    stroke-opacity: 0.40;
+    fill-opacity: 0.35;
+  }
+  100% {
+    stroke-opacity: 0.95;
+    fill-opacity: 0.20;
+  }
+}
+
+.sector-polygon-blind-spot {
+  animation: blind-spot-pulse 2.5s infinite ease-in-out;
+}
+
+/* Incident marker pulse halo */
+@keyframes critical-halo-pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  70% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+.marker-critical-pulse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 9999px;
+  background-color: var(--semantic-critical);
+  animation: critical-halo-pulse 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
