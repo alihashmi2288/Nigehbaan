@@ -127,7 +127,7 @@ graph TD
 ### Journey C --- Recommend and Approve Resource with Opportunity Cost *(Tier 1)*
 1. Coordinator selects an incident needing evacuation.
 2. System filters available assets by terrain suitability (e.g., Shallow Jet-Boat required for flood zone).
-3. Before dispatch approval, system displays an **Opportunity Cost Warning Card**: *"Assigning Shallow Jet-Boat 01 leaves 0 shallow-draft assets in Sector 3; Incident #4 [Score 78] will incur an estimated +35 min delay."*
+3. Before dispatch approval, system displays an **Opportunity Cost Warning Card**: *"Assigning Shallow Jet-Boat 01 leaves 0 shallow-draft assets in Sector 2; Incident NG-104 [Score 56.5 — High] will incur an estimated +35 min delay."*
 4. Coordinator reviews the trade-off and clicks "Approve Assignment".
 5. Resource status transitions to `assigned`, and an entry is written to the audit activity log.
 

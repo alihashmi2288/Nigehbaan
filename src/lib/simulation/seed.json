@@ -1,0 +1,427 @@
+{
+  "scenario": {
+    "name": "District Alpha Monsoon Surge",
+    "timelinePhases": [
+      {
+        "id": "T0",
+        "label": "T-0 Early Warning",
+        "wallClock": "2026-10-18T04:30:00Z",
+        "riverGauge": 0.6,
+        "hazardLevel": "Normal",
+        "description": "Monsoon surge inbound. All 4 cell towers operational. Arterial roads open."
+      },
+      {
+        "id": "T3",
+        "label": "T+3 Flood Surge",
+        "wallClock": "2026-10-18T07:30:00Z",
+        "riverGauge": 1.3,
+        "hazardLevel": "High",
+        "description": "Sector 2 lowlands water waist-deep (0.8m). Low-lying culverts submerged."
+      },
+      {
+        "id": "T6",
+        "label": "T+6 Grid Blackout",
+        "wallClock": "2026-10-18T10:30:00Z",
+        "riverGauge": 1.9,
+        "hazardLevel": "Severe",
+        "description": "Tower-Alpha-3 collapses at 08:55. Sector 3A silent >90m. Blind-spot synthesized."
+      },
+      {
+        "id": "T12",
+        "label": "T+12 Peak Crisis",
+        "wallClock": "2026-10-18T16:30:00Z",
+        "riverGauge": 2.4,
+        "hazardLevel": "Catastrophic",
+        "description": "Sectors 2 & 3A fully inundated. Shelter 03 breaches 97% capacity and loses generator."
+      }
+    ]
+  },
+  "sectors": [
+    {
+      "id": "sector-1",
+      "name": "Sector 1 (Urban High Ground)",
+      "elevationMeters": 14.5,
+      "cellTower": {
+        "id": "Tower-Alpha-1",
+        "status": "online",
+        "offlineSince": null
+      },
+      "floodGauge": {
+        "levelMeters": 0.4,
+        "trend": "stable",
+        "hazardThresholdMeters": 1.5
+      },
+      "bounds": [
+        [24.895, 67.110],
+        [24.910, 67.110],
+        [24.910, 67.135],
+        [24.895, 67.135]
+      ]
+    },
+    {
+      "id": "sector-2",
+      "name": "Sector 2 (Lowland Agriculture / Gadap Canal)",
+      "elevationMeters": 3.2,
+      "cellTower": {
+        "id": "Tower-Alpha-2",
+        "status": "online",
+        "offlineSince": null
+      },
+      "floodGauge": {
+        "levelMeters": 1.4,
+        "trend": "rising",
+        "hazardThresholdMeters": 1.2
+      },
+      "bounds": [
+        [24.908, 67.130],
+        [24.935, 67.130],
+        [24.935, 67.155],
+        [24.908, 67.155]
+      ]
+    },
+    {
+      "id": "sector-3a",
+      "name": "Sector 3A (Riverbank Informal Settlement)",
+      "elevationMeters": 1.8,
+      "cellTower": {
+        "id": "Tower-Alpha-3",
+        "status": "offline",
+        "offlineSince": "2026-10-18T08:55:00Z"
+      },
+      "floodGauge": {
+        "levelMeters": 1.9,
+        "trend": "rising",
+        "hazardThresholdMeters": 1.2
+      },
+      "bounds": [
+        [24.930, 67.150],
+        [24.960, 67.150],
+        [24.960, 67.175],
+        [24.930, 67.175]
+      ]
+    },
+    {
+      "id": "sector-4",
+      "name": "Sector 4 (Industrial Corridor / Highway)",
+      "elevationMeters": 5.0,
+      "cellTower": {
+        "id": "Tower-Alpha-4",
+        "status": "online",
+        "offlineSince": null
+      },
+      "floodGauge": {
+        "levelMeters": 0.9,
+        "trend": "rising",
+        "hazardThresholdMeters": 1.4
+      },
+      "bounds": [
+        [24.955, 67.170],
+        [24.985, 67.170],
+        [24.985, 67.200],
+        [24.955, 67.200]
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "RES-01",
+      "callsign": "Shallow Jet-Boat 01",
+      "type": "shallow_boat",
+      "stationSector": "sector-2",
+      "seatCapacity": 6,
+      "speedKmH": 28,
+      "turnaroundMinutes": 35,
+      "status": "available"
+    },
+    {
+      "id": "RES-02",
+      "callsign": "Shallow Jet-Boat 02",
+      "type": "shallow_boat",
+      "stationSector": "sector-3a",
+      "seatCapacity": 6,
+      "speedKmH": 28,
+      "turnaroundMinutes": 35,
+      "status": "available"
+    },
+    {
+      "id": "RES-03",
+      "callsign": "Heavy Rescue 4x4 Alpha",
+      "type": "heavy_4x4",
+      "stationSector": "sector-1",
+      "seatCapacity": 4,
+      "speedKmH": 45,
+      "turnaroundMinutes": 25,
+      "status": "available"
+    },
+    {
+      "id": "RES-04",
+      "callsign": "Heavy Rescue 4x4 Beta",
+      "type": "heavy_4x4",
+      "stationSector": "sector-4",
+      "seatCapacity": 4,
+      "speedKmH": 45,
+      "turnaroundMinutes": 25,
+      "status": "available"
+    },
+    {
+      "id": "RES-05",
+      "callsign": "Mobile Medical Unit 01",
+      "type": "mobile_medical",
+      "stationSector": "sector-1",
+      "seatCapacity": 2,
+      "speedKmH": 40,
+      "turnaroundMinutes": 45,
+      "status": "available"
+    },
+    {
+      "id": "RES-06",
+      "callsign": "Physical Recon Patrol 01",
+      "type": "recon_patrol",
+      "stationSector": "sector-1",
+      "seatCapacity": 3,
+      "speedKmH": 30,
+      "turnaroundMinutes": 30,
+      "status": "available"
+    }
+  ],
+  "shelters": [
+    {
+      "id": "SHL-01",
+      "name": "Government High School Camp",
+      "sectorId": "sector-1",
+      "capacityTotal": 250,
+      "capacityCurrent": 80,
+      "backupGenerator": true,
+      "capabilities": ["Basic First Aid", "Maternal Care"],
+      "status": "active"
+    },
+    {
+      "id": "SHL-02",
+      "name": "District Civil Hospital Annexe",
+      "sectorId": "sector-1",
+      "capacityTotal": 120,
+      "capacityCurrent": 84,
+      "backupGenerator": true,
+      "capabilities": ["Dialysis Support", "Oxygen", "ICU Beds"],
+      "status": "active"
+    },
+    {
+      "id": "SHL-03",
+      "name": "Highway Warehouse Relief Depot",
+      "sectorId": "sector-4",
+      "capacityTotal": 400,
+      "capacityCurrent": 388,
+      "backupGenerator": false,
+      "capabilities": ["Basic First Aid"],
+      "status": "overcrowded"
+    }
+  ],
+  "incidents": [
+    {
+      "id": "inc-101",
+      "code": "NG-101",
+      "sectorId": "sector-2",
+      "reporterType": "citizen",
+      "phoneAccess": "has_phone",
+      "timestamp": "2026-10-18T06:45:00Z",
+      "phaseArrival": "T3",
+      "reportText": "My father Syed Iqbal is on hemodialysis. Water is chest-deep inside our house. Generator submerged. Need boat immediately.",
+      "factors": [4.5, 5.0, 4.0, 4.5, 2.5],
+      "expectedScore": 86.5,
+      "category": "Critical",
+      "uncertaintyFlags": [],
+      "coordinates": [24.9125, 67.1425],
+      "targetResource": "shallow_boat",
+      "targetShelter": "SHL-02"
+    },
+    {
+      "id": "inc-102",
+      "code": "NG-102",
+      "sectorId": "sector-3a",
+      "reporterType": "voice_hotline",
+      "phoneAccess": "has_phone",
+      "timestamp": "2026-10-18T08:40:00Z",
+      "phaseArrival": "T6",
+      "reportText": "چھت پر بیٹھے ہیں پانی بڑھ رہا ہے۔ دو چھوٹے بچے ساتھ ہیں چھت سے آوازیں آ رہی ہیں۔",
+      "reportTranslation": "Sitting on roof, water rising, 2 babies with us, roof is making cracking sounds.",
+      "factors": [5.0, 2.0, 4.5, 5.0, 4.0],
+      "expectedScore": 81.0,
+      "category": "Critical",
+      "uncertaintyFlags": [],
+      "coordinates": [24.9430, 67.1650],
+      "targetResource": "shallow_boat",
+      "targetShelter": "SHL-01"
+    },
+    {
+      "id": "inc-103",
+      "code": "NG-103",
+      "sectorId": "sector-3a",
+      "reporterType": "system_blind_spot",
+      "phoneAccess": "network_down",
+      "timestamp": "2026-10-18T10:30:00Z",
+      "phaseArrival": "T6",
+      "reportText": "[SYNTHESIZED BLIND SPOT] Sector 3A silent >90m. Cell tower offline. Flood gauge 1.9m. Requires immediate welfare check.",
+      "factors": [2.5, null, 4.0, 4.5, 3.5],
+      "expectedScore": 68.7,
+      "category": "High",
+      "label": "Physical Welfare Recon / Field Sweep",
+      "uncertaintyFlags": ["COVERAGE_BLIND_SPOT"],
+      "coordinates": [24.9400, 67.1600],
+      "targetResource": "recon_patrol",
+      "targetShelter": "SHL-01"
+    },
+    {
+      "id": "inc-104",
+      "code": "NG-104",
+      "sectorId": "sector-2",
+      "reporterType": "community_proxy",
+      "phoneAccess": "no_phone",
+      "timestamp": "2026-10-18T07:15:00Z",
+      "phaseArrival": "T3",
+      "reportText": "Reporting for neighbor: Auntie Khadija lives alone at House 14. She has no phone, water waist-deep, cannot walk.",
+      "factors": [3.0, 2.0, 4.0, 3.5, 1.0],
+      "expectedScore": 56.5,
+      "category": "High",
+      "uncertaintyFlags": ["NO_PHONE_COMMUNITY_PROXY"],
+      "coordinates": [24.9150, 67.1390],
+      "targetResource": "shallow_boat",
+      "targetShelter": "SHL-01"
+    },
+    {
+      "id": "inc-105",
+      "code": "NG-105",
+      "sectorId": "sector-4",
+      "reporterType": "citizen",
+      "phoneAccess": "has_phone",
+      "timestamp": "2026-10-18T13:20:00Z",
+      "phaseArrival": "T12",
+      "reportText": "Industrial area junction flooded. 14 factory workers stranded on container roof. No injuries, food running out.",
+      "factors": [2.5, 0.0, 1.0, 3.5, 5.0],
+      "expectedScore": 39.5,
+      "category": "Moderate",
+      "uncertaintyFlags": [],
+      "coordinates": [24.9650, 67.1850],
+      "targetResource": "heavy_4x4",
+      "targetShelter": "SHL-01"
+    },
+    {
+      "id": "inc-106",
+      "code": "NG-106",
+      "sectorId": "sector-1",
+      "reporterType": "citizen",
+      "phoneAccess": "has_phone",
+      "timestamp": "2026-10-18T04:15:00Z",
+      "phaseArrival": "T0",
+      "reportText": "Knee-deep water in street near market. 3 adults at home, dry inside, power cut off. We are okay for now.",
+      "factors": [1.0, 0.0, 0.0, 2.0, 2.5],
+      "expectedScore": 17.0,
+      "category": "Low",
+      "uncertaintyFlags": [],
+      "coordinates": [24.9050, 67.1200],
+      "targetResource": "heavy_4x4",
+      "targetShelter": "SHL-01"
+    },
+    {
+      "id": "inc-107",
+      "code": "NG-107",
+      "sectorId": "sector-2",
+      "reporterType": "citizen",
+      "phoneAccess": "has_phone",
+      "timestamp": "2026-10-18T04:20:00Z",
+      "phaseArrival": "T0",
+      "reportText": "Water entered basement storage. Some furniture damaged. Looking for municipal pump.",
+      "factors": [0.0, 0.0, 0.0, 1.0, 1.0],
+      "expectedScore": 5.0,
+      "category": "Low",
+      "uncertaintyFlags": [],
+      "coordinates": [24.9180, 67.1450],
+      "targetResource": "heavy_4x4",
+      "targetShelter": "SHL-01"
+    },
+    {
+      "id": "inc-108",
+      "code": "NG-108",
+      "sectorId": "sector-4",
+      "reporterType": "citizen",
+      "phoneAccess": "has_phone",
+      "timestamp": "2026-10-18T10:14:00Z",
+      "phaseArrival": "T6",
+      "reportText": "Main Highway Bridge is completely open and safe to cross.",
+      "factors": [0.5, 0.0, 0.0, 1.0, 2.5],
+      "expectedScore": 11.0,
+      "category": "Low",
+      "uncertaintyFlags": ["CONFLICTING_REPORT"],
+      "coordinates": [24.9700, 67.1800],
+      "targetResource": "heavy_4x4",
+      "targetShelter": "SHL-01"
+    },
+    {
+      "id": "inc-109",
+      "code": "NG-109",
+      "sectorId": "sector-4",
+      "reporterType": "citizen",
+      "phoneAccess": "has_phone",
+      "timestamp": "2026-10-18T10:22:00Z",
+      "phaseArrival": "T6",
+      "reportText": "Warning: Main Highway Bridge washed out, 3 cars stalled in flood water!",
+      "factors": [3.5, 1.0, 1.5, 4.0, 3.0],
+      "expectedScore": 50.0,
+      "category": "Moderate",
+      "uncertaintyFlags": ["CONFLICTING_REPORT"],
+      "coordinates": [24.9705, 67.1810],
+      "targetResource": "heavy_4x4",
+      "targetShelter": "SHL-01"
+    },
+    {
+      "id": "inc-110",
+      "code": "NG-110",
+      "sectorId": "sector-2",
+      "reporterType": "citizen",
+      "phoneAccess": "has_phone",
+      "timestamp": "2026-10-18T10:10:00Z",
+      "phaseArrival": "T6",
+      "reportText": "Emergency: house surrounded by water near Gadap canal, elderly woman trapped.",
+      "factors": [3.5, 2.0, 4.0, 3.5, 1.0],
+      "expectedScore": 59.5,
+      "category": "High",
+      "uncertaintyFlags": ["POTENTIAL_DUPLICATE"],
+      "coordinates": [24.9160, 67.1400],
+      "targetResource": "shallow_boat",
+      "targetShelter": "SHL-01"
+    },
+    {
+      "id": "inc-111",
+      "code": "NG-111",
+      "sectorId": "sector-3a",
+      "reporterType": "citizen",
+      "phoneAccess": "network_down",
+      "timestamp": "2026-10-18T07:00:00Z",
+      "phaseArrival": "T3",
+      "reportText": "Help! Water rising fast in school compound, 20 children stranded.",
+      "factors": [4.0, 1.5, 3.5, 4.0, 5.0],
+      "expectedScore": 67.5,
+      "category": "High",
+      "uncertaintyFlags": ["STALE_REPORT"],
+      "coordinates": [24.9450, 67.1680],
+      "targetResource": "shallow_boat",
+      "targetShelter": "SHL-01"
+    },
+    {
+      "id": "inc-112",
+      "code": "NG-112",
+      "sectorId": "sector-2",
+      "reporterType": "citizen",
+      "phoneAccess": "unknown",
+      "timestamp": "2026-10-18T14:10:00Z",
+      "phaseArrival": "T12",
+      "reportText": "Someone screaming for help in dark alley near flood canal, cannot see exact location.",
+      "factors": [3.0, null, null, 3.0, null],
+      "expectedScore": 60.0,
+      "category": "High",
+      "uncertaintyFlags": ["MISSING_LOCATION"],
+      "coordinates": null,
+      "targetResource": "recon_patrol",
+      "targetShelter": "SHL-01"
+    }
+  ]
+}

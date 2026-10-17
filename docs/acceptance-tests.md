@@ -23,8 +23,26 @@
 
 ---
 
-### Test 1.2: Unknown Factor Renormalization — Missing Headcount & Medical Data
-- **Given:** A panicked distress report for Incident `NG-112`:
+### Test 1.2: Unknown Factor Renormalization — Missing Location Incident NG-112
+- **Given:** A panicked distress report for Incident `NG-112` in Sector 2:
+  - Life Threat: `3.0`
+  - Environmental Danger: `3.0`
+  - Medical Urgency: `null`
+  - Evacuation Inability: `null`
+  - Population Affected: `null`
+- **When:** The scoring engine executes `calculatePriorityScore(factors)`.
+- **Then:**
+  - Known weight sum is $0.30 + 0.15 = 0.45$.
+  - Renormalized score is $100 \times \frac{0.30 \cdot (3.0/5) + 0.15 \cdot (3.0/5)}{0.45} = \mathbf{60.0}$.
+  - Category is **`High`**.
+  - Confidence metric is **`0.45`** (45%).
+  - UI displays *"3 of 5 factors unknown — weights renormalized"*.
+  - An Uncertainty Radar flag `MISSING_LOCATION` is raised; urgency is **not** reduced.
+
+---
+
+### Test 1.2b: Critical Unknown Factor Renormalization — Panicked Dropped Call
+- **Given:** A panicked distress report from a dropped call:
   - Life Threat: `4.5`
   - Environmental Danger: `4.5`
   - Medical Urgency: `null`
@@ -37,7 +55,7 @@
   - Category is **`Critical`**.
   - Confidence metric is **`0.45`** (45%).
   - UI displays *"3 of 5 factors unknown — weights renormalized"*.
-  - An Uncertainty Radar flag `MISSING_FACTORS` is raised; urgency is **not** reduced.
+  - An Uncertainty Radar flag `MISSING_FACTORS` is raised.
 
 ---
 

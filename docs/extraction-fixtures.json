@@ -1,0 +1,182 @@
+[
+  {
+    "code": "NG-101",
+    "reportText": "My father Syed Iqbal is on hemodialysis. Water is chest-deep inside our house. Generator submerged. Need boat immediately.",
+    "phoneAccess": "has_phone",
+    "extractedFacts": {
+      "waterDepth": "chest_deep",
+      "medicalUrgency": "hemodialysis_critical",
+      "evacuationMobility": "bedridden_or_wheelchair",
+      "environmentalCondition": "chest_deep_water",
+      "headcount": 2
+    },
+    "expectedFactors": [4.5, 5.0, 4.0, 4.5, 2.5],
+    "expectedScore": 86.5,
+    "expectedCategory": "Critical"
+  },
+  {
+    "code": "NG-102",
+    "reportText": "چھت پر بیٹھے ہیں پانی بڑھ رہا ہے۔ دو چھوٹے بچے ساتھ ہیں چھت سے آوازیں آ رہی ہیں۔",
+    "phoneAccess": "has_phone",
+    "extractedFacts": {
+      "waterDepth": "roof_submerged",
+      "medicalUrgency": "infant_hypothermia_risk",
+      "evacuationMobility": "infants_dependent",
+      "environmentalCondition": "structural_collapse_imminent",
+      "headcount": 6
+    },
+    "expectedFactors": [5.0, 2.0, 4.5, 5.0, 4.0],
+    "expectedScore": 81.0,
+    "expectedCategory": "Critical"
+  },
+  {
+    "code": "NG-103",
+    "reportText": "[SYNTHESIZED BLIND SPOT] Sector 3A silent >90m. Cell tower offline. Flood gauge 1.9m. Requires immediate welfare check.",
+    "phoneAccess": "network_down",
+    "extractedFacts": {
+      "presumedThreat": "moderate_hazard",
+      "medicalUrgency": null,
+      "infrastructureCutoff": true,
+      "sectorGaugeLevel": 1.9,
+      "sectorPopulationPrior": "high_density"
+    },
+    "expectedFactors": [2.5, null, 4.0, 4.5, 3.5],
+    "expectedScore": 68.7,
+    "expectedCategory": "High"
+  },
+  {
+    "code": "NG-104",
+    "reportText": "Reporting for neighbor: Auntie Khadija lives alone at House 14. She has no phone, water waist-deep, cannot walk.",
+    "phoneAccess": "no_phone",
+    "extractedFacts": {
+      "waterDepth": "waist_deep",
+      "medicalUrgency": "chronic_mobility_impairment",
+      "evacuationMobility": "bedridden_isolated",
+      "environmentalCondition": "waist_deep_current",
+      "headcount": 1
+    },
+    "expectedFactors": [3.0, 2.0, 4.0, 3.5, 1.0],
+    "expectedScore": 56.5,
+    "expectedCategory": "High"
+  },
+  {
+    "code": "NG-105",
+    "reportText": "Industrial area junction flooded. 14 factory workers stranded on container roof. No injuries, food running out.",
+    "phoneAccess": "has_phone",
+    "extractedFacts": {
+      "waterDepth": "junction_flooded",
+      "medicalUrgency": "none",
+      "evacuationMobility": "able_bodied_adults",
+      "environmentalCondition": "deep_surrounding_water",
+      "headcount": 14
+    },
+    "expectedFactors": [2.5, 0.0, 1.0, 3.5, 5.0],
+    "expectedScore": 39.5,
+    "expectedCategory": "Moderate"
+  },
+  {
+    "code": "NG-106",
+    "reportText": "Knee-deep water in street near market. 3 adults at home, dry inside, power cut off. We are okay for now.",
+    "phoneAccess": "has_phone",
+    "extractedFacts": {
+      "waterDepth": "street_knee_deep",
+      "medicalUrgency": "none",
+      "evacuationMobility": "able_bodied_adults",
+      "environmentalCondition": "knee_deep_water",
+      "headcount": 3
+    },
+    "expectedFactors": [1.0, 0.0, 0.0, 2.0, 2.5],
+    "expectedScore": 17.0,
+    "expectedCategory": "Low"
+  },
+  {
+    "code": "NG-107",
+    "reportText": "Water entered basement storage. Some furniture damaged. Looking for municipal pump.",
+    "phoneAccess": "has_phone",
+    "extractedFacts": {
+      "waterDepth": "basement_puddle",
+      "medicalUrgency": "none",
+      "evacuationMobility": "unaffected",
+      "environmentalCondition": "puddle",
+      "headcount": 1
+    },
+    "expectedFactors": [0.0, 0.0, 0.0, 1.0, 1.0],
+    "expectedScore": 5.0,
+    "expectedCategory": "Low"
+  },
+  {
+    "code": "NG-108",
+    "reportText": "Main Highway Bridge is completely open and safe to cross.",
+    "phoneAccess": "has_phone",
+    "extractedFacts": {
+      "routeCondition": "bridge_open",
+      "medicalUrgency": "none",
+      "evacuationMobility": "unaffected",
+      "environmentalCondition": "minor_surface_water",
+      "headcount": 3
+    },
+    "expectedFactors": [0.5, 0.0, 0.0, 1.0, 2.5],
+    "expectedScore": 11.0,
+    "expectedCategory": "Low"
+  },
+  {
+    "code": "NG-109",
+    "reportText": "Warning: Main Highway Bridge washed out, 3 cars stalled in flood water!",
+    "phoneAccess": "has_phone",
+    "extractedFacts": {
+      "routeCondition": "bridge_washed_out",
+      "medicalUrgency": "minor_injury_risk",
+      "evacuationMobility": "stalled_vehicles",
+      "environmentalCondition": "fast_surge_water",
+      "headcount": 4
+    },
+    "expectedFactors": [3.5, 1.0, 1.5, 4.0, 3.0],
+    "expectedScore": 50.0,
+    "expectedCategory": "Moderate"
+  },
+  {
+    "code": "NG-110",
+    "reportText": "Emergency: house surrounded by water near Gadap canal, elderly woman trapped.",
+    "phoneAccess": "has_phone",
+    "extractedFacts": {
+      "waterDepth": "house_surrounded",
+      "medicalUrgency": "elderly_frail",
+      "evacuationMobility": "trapped_alone",
+      "environmentalCondition": "canal_overflow",
+      "headcount": 1
+    },
+    "expectedFactors": [3.5, 2.0, 4.0, 3.5, 1.0],
+    "expectedScore": 59.5,
+    "expectedCategory": "High"
+  },
+  {
+    "code": "NG-111",
+    "reportText": "Help! Water rising fast in school compound, 20 children stranded.",
+    "phoneAccess": "network_down",
+    "extractedFacts": {
+      "waterDepth": "rising_fast",
+      "medicalUrgency": "children_at_risk",
+      "evacuationMobility": "children_group_stranded",
+      "environmentalCondition": "fast_current",
+      "headcount": 20
+    },
+    "expectedFactors": [4.0, 1.5, 3.5, 4.0, 5.0],
+    "expectedScore": 67.5,
+    "expectedCategory": "High"
+  },
+  {
+    "code": "NG-112",
+    "reportText": "Someone screaming for help in dark alley near flood canal, cannot see exact location.",
+    "phoneAccess": "unknown",
+    "extractedFacts": {
+      "waterDepth": "canal_surge",
+      "medicalUrgency": null,
+      "evacuationMobility": null,
+      "environmentalCondition": "dark_flood_canal",
+      "headcount": null
+    },
+    "expectedFactors": [3.0, null, null, 3.0, null],
+    "expectedScore": 60.0,
+    "expectedCategory": "High"
+  }
+]

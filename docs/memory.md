@@ -65,6 +65,25 @@ The following architectural and product decisions were formally established and 
   - Headline: *"Nigehbaan finds the people the system can't hear."*
   - The Uncertainty Radar and silent-sector blind-spot synthesis are the central competitive differentiators.
 
+- **D8. Mathematical Determinism of Seed Data:**
+  - All 12 seed incident scores are strictly derived from the 5-factor mathematical formula:
+    $$\text{Score} = 100 \times \frac{\sum_{\text{known}} (w_i \cdot f_i / 5.0)}{\sum_{\text{known}} w_i}$$
+  - Removed manual fudge factor in `scoring-spec.md` Example 5 (`Adjusted Baseline: 41.0` replaced with true calculation for `NG-105` = 39.5).
+  - All 12 scores in `seed-data.md` corrected and verified: `NG-101` 86.5, `NG-102` 81.0, `NG-103` 68.7, `NG-104` 56.5, `NG-105` 39.5, `NG-106` 17.0, `NG-107` 5.0, `NG-108` 11.0, `NG-109` 50.0, `NG-110` 59.5, `NG-111` 67.5, `NG-112` 60.0.
+
+- **D9. Scarcity & Opportunity Cost Geographic Alignment:**
+  - `RES-01` (Shallow Jet-Boat 01) is stationed in Sector 2 (the only shallow boat in Sector 2); `RES-02` (Shallow Jet-Boat 02) is stationed in Sector 3A. Shallow-draft assets are sector-bound by launch ramp bathymetry.
+  - When `RES-01` is assigned to `NG-101` in Sector 2, 0 shallow boats remain in Sector 2, triggering a deterministic $+35\text{ min}$ turnaround delay warning for the next queued Sector 2 incident `NG-104` (Score 56.5).
+  - All cross-file references ("Sector 3", "[Score 78]") purged and aligned to Sector 2 / `NG-104` (Score 56.5).
+
+- **D10. Simulation Clock & Telemetry Progression:**
+  - Defined scenario wall clock: $T-0 = 04:30$, $T+3 = 07:30$, $T+6 = 10:30$, $T+12 = 16:30$.
+  - Tower-Alpha-3 collapses at 08:55. At $T+6$ (10:30), Sector 3A silence reaches 110 min ($\ge 90$ min threshold) with rising flood gauge ($1.9\text{m}$), deterministically triggering `COVERAGE_BLIND_SPOT` synthesis for `NG-103`.
+
+- **D11. Machine-Readable Seed & Automated Verifier:**
+  - Created `src/lib/simulation/seed.json` as the runtime and documentation single source of truth.
+  - Built `scripts/verify-docs.mjs` verifying all 12 scores against the formula with 100% precision.
+
 ---
 
 ## 3. Contradictions Identified & Resolved
@@ -130,4 +149,18 @@ The following architectural and product decisions were formally established and 
   4. *Gemini Model:* Assumed `gemini-2.5-flash` or current stable Gemini model via `@google/genai` is the primary LLM adapter target.
 - **Next Smallest Coding Task:**
   - Milestone 0: Initialize Next.js 14/15 skeleton with TypeScript (Strict) and Tailwind CSS using `DESIGN.md` tokens, verify clean build, and deploy empty skeleton to Vercel.
+
+### Session --- 2026-10-17 16:25 PKT (Mathematical Audit & Seed Synchronization Pass)
+- **Phase/Task:** Mathematical Rigor & Seed Data Alignment (D8–D11).
+- **Accomplishments:**
+  - Audited all 12 incident scores against the 5-factor deterministic formula. Fixed manual hand-typed inaccuracies in `docs/seed-data.md` and removed the Example 5 fudge (`Adjusted Baseline: 41.0`) in `docs/scoring-spec.md`.
+  - Re-stationed `RES-01` to Sector 2 and `RES-02` to Sector 3A, eliminating geographic contradictions in the Opportunity Cost warning scenario (+35 min delay for `NG-104`).
+  - Purged all stale references to "Sector 3" and "[Score 78]" across `README.md`, `docs/PRD.md`, `docs/trade-offs.md`, and `DESIGN.md`.
+  - Built `src/lib/simulation/seed.json` with exact scenario clock timestamps, sectors, resources, shelters, and incidents.
+  - Built and executed `scripts/verify-docs.mjs`: verified 12/12 seed incidents with 100% mathematical consistency.
+  - Aligned `docs/acceptance-tests.md` Test 1.2 with `NG-112`'s actual factor inputs and added Test 1.2b for critical missing factor calculation.
+  - Added deterministic queue tie-break protocol to `docs/scoring-spec.md`.
+- **Next Smallest Coding Task:**
+  - Milestone 0: Scaffold Next.js 14/15 with TypeScript (Strict), Tailwind CSS (`DESIGN.md` tokens), Zustand, and deploy initial skeleton to Vercel.
+
 

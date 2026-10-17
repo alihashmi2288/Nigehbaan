@@ -69,7 +69,7 @@ In a fast-paced 36-hour hackathon, the most dangerous failure mode is building a
 - **Why:** A caller in chest-deep water should never be penalized with a lower score simply because they were too panicked to report how many people were in the room. Low confidence triggers an Uncertainty Radar review flag, never deprioritizing the victim.
 
 ### What We Chose: Deterministic Opportunity Cost & Competing Priority Warnings
-- **Choice:** Calculating and displaying an explicit, auditable trade-off card whenever a coordinator prepares to assign a scarce asset (*"Assigning Shallow Jet-Boat 01 leaves 0 shallow assets in Sector 3; Incident #4 [Score 78] will incur an estimated +35 min delay"*).
+- **Choice:** Calculating and displaying an explicit, auditable trade-off card whenever a coordinator prepares to assign a scarce asset (*"Assigning Shallow Jet-Boat 01 leaves 0 shallow-draft assets in Sector 2; Incident NG-104 [Score 56.5] will incur an estimated +35 min delay"*).
 - **Why:**
   - Emergency coordination is fundamentally about **competing priorities under extreme resource scarcity**.
   - Provides commanders with the true cost of their decision before they hit "Approve".

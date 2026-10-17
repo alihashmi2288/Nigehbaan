@@ -34,6 +34,12 @@ $$\text{Priority Score} = 100 \times \sum_{i=1}^5 \left(w_i \cdot \frac{\text{fa
 | **Moderate** | **$35.0 - 54.9$** | **Stable Evacuation / Relief.** Non-life-threatening flooding; scheduled for evacuation when urgent queue clears. |
 | **Low** | **$< 35.0$** | **Monitoring / Property Inquiry.** Minor puddling, property damage reports with zero injury or entrapment. |
 
+### Deterministic Queue Ordering & Tie-Break Protocol
+When ranking incidents in the triage dispatcher queue:
+1. **Primary Sort:** Priority Score (descending: highest score ranks first).
+2. **Secondary Tie-Break (Confidence Inversion):** If scores are tied within $\pm 0.1$, the incident with **lower Information Confidence** ($C = \sum_{\text{known}} w_i$) is placed higher to immediately surface high-uncertainty risks for human review.
+3. **Tertiary Tie-Break (FIFO / Seniority):** If both score and confidence are identical, the incident with the **earlier report timestamp** ranks first.
+
 ---
 
 ## 3. Factor Lookup Tables (0.0 to 5.0 Scale)
@@ -185,7 +191,7 @@ When a monitored geographical sector exhibits **zero incoming communications pas
   $$\text{Renormalized Score} = 100 \times \frac{0.515}{0.75} = \mathbf{68.7}$$
   $$\text{Enforced Floor: } \max(68.7, 60.0) = \mathbf{68.7}$$
 - **Result:** **68.7 / 100 (High)** • Labeled: *"Physical Welfare Recon / Field Sweep"* • Confidence: 75% (1 unknown).  
-  *Operational Ranking: Ranks below Critical dialysis case (86.5) but above Moderate confirmed incident (41.0).*
+  *Operational Ranking: Ranks below Critical dialysis case (86.5) but above Moderate confirmed incident (39.5).*
 
 ---
 
@@ -204,19 +210,18 @@ When a monitored geographical sector exhibits **zero incoming communications pas
 
 ---
 
-### Example 5: Moderate — Able-bodied Adults, Stable House (Incident #5)
-- **Input Text:** *"Water in courtyard up to knees, 3 adults, food available, no power, need boat tomorrow."*
+### Example 5: Moderate — Stranded Factory Workers (Incident #5 / NG-105)
+- **Input Text:** *"Industrial area junction flooded. 14 factory workers stranded on container roof. No injuries, food running out."*
 - **Factor Scores:**
-  - $f_1 = 1.5$ (Water in courtyard, structure stable)
+  - $f_1 = 2.5$ (Water rising around container; stable roof)
   - $f_2 = 0.0$ (No medical conditions)
-  - $f_3 = 0.5$ (Able-bodied adults)
-  - $f_4 = 2.0$ (Knee-deep water)
-  - $f_5 = 2.5$ (3 people)
+  - $f_3 = 1.0$ (Able-bodied adults, safe on high container)
+  - $f_4 = 3.5$ (Flooded junction, deep water surrounds)
+  - $f_5 = 5.0$ (14 people stranded; institutional/large group)
 - **Calculation:**
-  $$\text{Score} = 100 \times \left(0.30 \times \frac{1.5}{5} + 0.25 \times \frac{0.0}{5} + 0.20 \times \frac{0.5}{5} + 0.15 \times \frac{2.0}{5} + 0.10 \times \frac{2.5}{5}\right)$$
-  $$\text{Score} = 100 \times (0.090 + 0.000 + 0.020 + 0.060 + 0.050) = 100 \times 0.220 = \mathbf{22.0} \to \text{Adjusted Baseline: } \mathbf{41.0}$$
-  *(With sector water surge factor $= 3.0$: Score $= \mathbf{41.0}$).*
-- **Result:** **41.0 / 100 (Moderate)** • Confidence: 100%.
+  $$\text{Score} = 100 \times \left(0.30 \times \frac{2.5}{5} + 0.25 \times \frac{0.0}{5} + 0.20 \times \frac{1.0}{5} + 0.15 \times \frac{3.5}{5} + 0.10 \times \frac{5.0}{5}\right)$$
+  $$\text{Score} = 100 \times (0.150 + 0.000 + 0.040 + 0.105 + 0.100) = 100 \times 0.395 = \mathbf{39.5}$$
+- **Result:** **39.5 / 100 (Moderate)** • Confidence: 100%.
 
 ---
 

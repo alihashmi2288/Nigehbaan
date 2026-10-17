@@ -122,8 +122,8 @@ Monospace: `JetBrains Mono`, `Fira Code`, `monospace` (used for coordinates, cod
 ### 5. `opportunity-cost-warning`
 - **Container:** Background `rgba(146, 64, 14, 0.12)`, border `1px solid #D97706`, rounded 8px, padding 14px.
 - **Layout:** Two-column tactical warning alert displayed inside the assignment modal:
-  - Left: Sector asset depletion status (*"Leaves 0 shallow-draft boats in Sector 3"*).
-  - Right: Queue delay impact (*"Incident #4 [Score 78] will incur an estimated +35 min delay"*).
+  - Left: Sector asset depletion status (*"Leaves 0 shallow-draft boats in Sector 2"*).
+  - Right: Queue delay impact (*"Incident NG-104 [Score 56.5 — High] will incur an estimated +35 min delay"*).
 
 ### 6. `shelter-capacity-gauge` (Tier 2)
 - **Container:** Background `--surface-2`, border `1px --hairline`, rounded 6px, padding 8px 12px.

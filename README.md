@@ -60,7 +60,7 @@ graph TD
 
 ### 3. Smart Resource Allocation with Opportunity Cost
 - Evaluates asset terrain compatibility (shallow jet-boats vs. 4x4s) and destination shelter capacities.
-- Computes deterministic **Opportunity Cost Warnings** before approval (*"Assigning Shallow Jet-Boat 01 to Incident #1 leaves 0 shallow-draft assets in Sector 3; Incident #4 [Score 78] will incur an estimated +35 min delay"*).
+- Computes deterministic **Opportunity Cost Warnings** before approval (*"Assigning Shallow Jet-Boat 01 to NG-101 leaves 0 shallow-draft assets in Sector 2; Incident NG-104 [Score 56.5 — High] will incur an estimated +35 min delay"*).
 - Requires explicit **Human Coordinator Approval** (no autonomous dispatch).
 
 ### 4. Multi-Phase Disaster Timeline Scrubber
@@ -121,8 +121,8 @@ In compliance with hackathon regulations:
 ## 🧪 Quick 3-Minute Demo Flow for Evaluators
 
 1. **Dashboard & Map:** View District Alpha situational overview with active incidents and resource markers (`SIMULATED DATA`).
-2. **Timeline Scrubber ($T-0 \to T+6$):** Advance to `T+6 Grid Blackout`; observe cell tower collapse and the Uncertainty Radar triggering a `coverage_blind_spot` incident (Score 62.5, High) for Sector 3A.
-3. **Deterministic Triage & Explanation:** Open Incident #1 (Dialysis, Score 88, Critical) and inspect the transparent factor contribution breakdown card.
-4. **Opportunity Cost Warning:** Click "Assign Resource" -> select Shallow Jet-Boat 01 -> review the explicit warning (*leaves 0 boats in Sector 3; +35 min delay for next incident*) -> approve assignment.
+2. **Timeline Scrubber ($T-0 \to T+6$):** Advance to `T+6 Grid Blackout`; observe cell tower collapse and the Uncertainty Radar triggering a `coverage_blind_spot` incident (Score 68.7, High) for Sector 3A.
+3. **Deterministic Triage & Explanation:** Open Incident NG-101 (Dialysis, Score 86.5, Critical) and inspect the transparent factor contribution breakdown card.
+4. **Opportunity Cost Warning:** Click "Assign Resource" -> select Shallow Jet-Boat 01 -> review the explicit warning (*leaves 0 boats in Sector 2; +35 min delay for next incident NG-104*) -> approve assignment.
 5. **Report Intake & Fallback Honesty:** Submit a new distress report; observe structured fact extraction and clear labeling if operating under offline heuristic fallback.
 6. **Scenario Reset:** Click "Reset Simulation" to instantly restore baseline state in `localStorage`.
