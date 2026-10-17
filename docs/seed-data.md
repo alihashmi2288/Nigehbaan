@@ -76,7 +76,83 @@ Data sourced from pre-disaster community health registrations (Lady Health Worke
 
 ---
 
-## 6. Disaster Timeline Event Table (T-0 to T-12)
+## 6. Simulation Clock, Incident Timestamps & Visibility Rules
+
+
+### 6.1 Scenario Wall Clock
+The District Alpha simulation runs on a fixed wall-clock scenario. A phase is "active" when the simulator clock equals the phase time.
+
+| Phase ID | Label | Wall Clock (PKT) |
+| :---: | :--- | :---: |
+| `T0` | T-0 Early Warning | **04:30** |
+| `T3` | T+3 Flood Surge | **07:30** |
+| `T6` | T+6 Grid Blackout | **10:30** |
+| `T12` | T+12 Peak Crisis | **16:30** |
+
+**Reset returns the simulator clock to T-0 (04:30) and restores all seed data.**
+
+### 6.2 Incident Timestamp & Visibility Table
+An incident is visible in the queue only when `incident.timestamp <= currentPhaseClock`.
+
+| Code | ISO Timestamp (PKT) | Visible from Phase | Notes |
+| :--- | :---: | :---: | :--- |
+| `NG-106` | 04:15 | T-0 | Baseline Low — stable house |
+| `NG-107` | 04:20 | T-0 | Baseline Low — property pump |
+| `NG-101` | 06:45 | T+3 | Dialysis Critical |
+| `NG-111` | 07:00 | T+3 | School stranded — last sector-3A voice before tower drops |
+| `NG-104` | 07:15 | T+3 | Proxy elderly — `no_phone` floor |
+| `NG-102` | 08:40 | T+6 | Voice hotline — **last report from sector-3A before silence** |
+| `NG-110` | 10:10 | T+6 | Potential duplicate of NG-104 (same sector, <180 min apart) |
+| `NG-108` | 10:14 | T+6 | Bridge open claim — conflict pair |
+| `NG-109` | 10:22 | T+6 | Bridge washed out claim — conflict pair |
+| `NG-103` | 10:30 | T+6 | **SYNTHESIZED** — blind-spot detector fires at exactly T+6 clock |
+| `NG-105` | 13:20 | T+12 | Factory workers stranded |
+| `NG-112` | 14:10 | T+12 | Missing location — sector-2 |
+
+### 6.3 Tower-Alpha-3 & Blind-Spot Firing Rule
+
+- **Tower-Alpha-3 goes offline at:** `08:55` (between T+3 and T+6).
+- **Last report received from sector-3A:** `NG-102` at `08:40` (the voice call).
+- **Blind-spot fires when ALL conditions hold simultaneously:**
+  1. Sector tower is `offline`.
+  2. `now - last_report_at >= 90 minutes` (sector communication blackout).
+  3. Sector flood gauge trend is `rising`.
+  4. Sector gauge level `>= hazardThresholdMeters` (sector-3A threshold: 1.2m).
+
+| Evaluation Time | Silence Since 08:40 | Gauge Level | Fires? |
+| :---: | :---: | :---: | :---: |
+| T+3 (07:30) | Tower still online at 07:30 | 1.3m (threshold not yet breached in 3A) | **NO** |
+| T+6 (10:30) | 110 min ≥ 90 min ✓ | 1.9m ≥ 1.2m ✓ | **YES** → synthesize NG-103 |
+
+### 6.4 Stale Report Rule
+An incident is flagged `STALE_REPORT` when `age > 60 minutes` with no status change or assignment.
+
+- At T+6 (10:30): `NG-111` was reported at 07:00 → age = **210 minutes** → **Stale**.
+
+### 6.5 Potential Duplicate Rule
+Flag `POTENTIAL_DUPLICATE` when: same sector + text similarity ≥ 0.75 within 180 minutes, OR identical caller phone number.
+
+- `NG-104` (07:15, sector-2, proxy elderly woman) and `NG-110` (10:10, sector-2, elderly woman near canal): same sector, 175 min apart (< 180 min), high text similarity → **flagged as potential duplicate at T+6** (the phase when both are visible). **Never auto-merged or deleted.**
+
+### 6.6 Shallow-Boat Sector-Bound Assumption
+Shallow jet-boats are launched from fixed ramp sites and **cannot provide cross-sector reinforcement within a single turnaround cycle**. They are operationally sector-bound.
+
+**Opportunity Cost Algorithm:**
+```
+function opportunityCost(asset, incidentSector, assetType):
+  remaining = count(available assets of assetType in incidentSector, excluding asset)
+  if remaining == 0:
+    delay = asset.turnaroundMinutes  // 35 for shallow_boat
+    label = "0 shallow-draft assets left in <sector>"
+  else:
+    delay = 0
+    label = "No scarcity — <N> asset(s) remain"
+  return { delay, label }
+```
+
+---
+
+## 7. Disaster Timeline Event Table (T-0 to T-12)
 
 | Timeline Phase | Environmental Flood Level | Infrastructure & Telemetry Events | Newly Arrived Incidents | Expected Queue Rankings (Top 3) |
 | :--- | :--- | :--- | :--- | :--- |
@@ -87,7 +163,7 @@ Data sourced from pre-disaster community health registrations (Lady Health Worke
 
 ---
 
-## 7. Opportunity Cost Calculator & Worked Example
+## 8. Opportunity Cost Calculator & Worked Examples
 
 ### Mathematical Model
 When assigning a scarce asset $R$ of type $k$ in Sector $S$:

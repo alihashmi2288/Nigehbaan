@@ -84,6 +84,17 @@ The following architectural and product decisions were formally established and 
   - Created `src/lib/simulation/seed.json` as the runtime and documentation single source of truth.
   - Built `scripts/verify-docs.mjs` verifying all 12 scores against the formula with 100% precision.
 
+- **D12. AI Safety Invariants & Untrusted Citizen Input:**
+  - Citizen report text is strictly untrusted data: wrapped in `<citizen_report>` tags with explicit anti-injection instructions.
+  - Serverless output is validated with Zod against `ExtractedFactsSchema` (clamping depth 0.0–10.0m, headcount 1–500). Any validation failure rejects the LLM output and triggers deterministic heuristic fallback parser.
+  - Coordinates are null unless explicit numeric lat/long is given; sector hints are derived strictly from known landmarks.
+  - Heuristic fallback regexes use word boundaries (`\b`) and case-insensitivity (`/i`).
+  - System prompt dynamically resolves model name from `process.env.GEMINI_MODEL || 'gemini-2.5-flash'`.
+
+- **D13. Strict Hackathon Cut-Line Rule:**
+  - If Tier 1 is not deployed on Vercel by **18 Oct 12:00 PM (Asia/Karachi)** (10 hours before the final deadline), drop all Tier 2 features immediately and focus 100% on Tier 1 polish, demo video recording, and submission compliance.
+  - The 3-minute pitch walkthrough script in `docs/demo-script.md` is 100% Tier-1-only so the demo succeeds regardless of whether Tier 2 is built.
+
 ---
 
 ## 3. Contradictions Identified & Resolved
@@ -102,65 +113,38 @@ The following architectural and product decisions were formally established and 
    *Resolution:* Reorganized all requirements into strict Tier 1 (launch blockers), Tier 2 (post-Tier 1 stretch), and Tier 3 (explicit cuts).
 7. **SaaS Template Remnants in `DESIGN.md`:** [DESIGN.md](file:///c:/Users/umerh/Desktop/Nigehbaan/DESIGN.md) contained leftover SaaS marketing components (pricing cards, pricing tabs, testimonials, partner logos).  
    *Resolution:* Stripped all SaaS junk; retained strictly operational crisis components, added WCAG AA contrast validation, and integrated Urdu RTL specifications.
+8. **Geographic Inconsistency in Opportunity Cost Scenario:** Earlier files claimed RES-01 was in Sector 3 or warned about Sector 3, whereas NG-101 and NG-104 are in Sector 2.  
+   *Resolution:* Re-stationed RES-01 to Sector 2 and RES-02 to Sector 3A. Because shallow boats are sector-bound by bathymetry, assigning RES-01 leaves 0 boats in Sector 2, cleanly producing the +35 min delay warning for NG-104 (Score 56.5).
 
 ---
 
-## 4. Current Milestone Status (Milestone 0: Bootstrap)
+## 4. Authoritative Implementation Roadmap & Backlog
 
-- [ ] **Milestone 0 --- Skeleton & Vercel Pipeline (Current)**
-  - [ ] Initialize Next.js 14/15 App Router with TypeScript (Strict)
-  - [ ] Configure Tailwind CSS with `DESIGN.md` tokens
-  - [ ] Deploy empty skeleton to Vercel and verify public URL
-- [ ] **Milestone 1 --- Tier 1 Core: State Store, Scorer & Map**
-- [ ] **Milestone 2 --- Tier 1 Core: Ingestion & Uncertainty Radar**
-- [ ] **Milestone 3 --- Tier 1 Core: Opportunity Cost, Timeline & Reset**
-- [ ] **Milestone 4 --- Tier 1 Hardening & Public Deploy Verification**
-- [ ] **Milestone 5 --- Tier 2: Shelter Matching & T-0 Staging**
-- [ ] **Milestone 6 --- Tier 2: Voice Hotline & Community Proxy**
-- [ ] **Milestone 7 --- Tier 2: PWA Offline Queue & FCFS Comparison**
-- [ ] **Milestone 8 --- Final Freeze & Submission Package**
+See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation checklist.
+
+- **Current Active Milestone:** **Milestone 0 --- Bootstrap & Project Setup**
+- **Next Smallest Coding Task:** **`T0.1`** (Initialize Next.js 14/15 App Router skeleton with TypeScript strict mode).
 
 ---
 
 ## 5. Granular Session Changelog
 
 ### Session --- 2026-10-17 15:20 PKT (Documentation Overhaul Pass)
-- **Phase/Task:** Comprehensive Documentation Alignment & Specification Authoring.
-- **Changed Files:**
-  - [`README.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/README.md) --- Refocused headline to *"Nigehbaan finds the people the system can't hear"*; corrected formula to 0–100 scale; marked live URL as TBD; added team details, AI disclosure, and spec cross-links.
-  - [`AGENTS.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/AGENTS.md) --- Shrunk to 1 page max; documented 10 non-negotiable rules, tier discipline, reading order, and conflict handling.
-  - [`DESIGN.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/DESIGN.md) --- Stripped all SaaS template junk (pricing cards, testimonials, logos); documented crisis components; added WCAG AA contrast standards and Urdu RTL support; adjusted `ink-tertiary` to `#858a93` for contrast compliance.
-  - [`docs/PRD.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/docs/PRD.md) --- Rewrote Scope and FR matrix around Tier 1 / Tier 2 / Tier 3; marked user journeys with tiers; updated Section 8 to 0–100 scale with unknown renormalization and blind-spot floors.
-  - [`docs/architecture.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/docs/architecture.md) --- Removed Supabase from runtime path; drew client store + pure TS engines data flow; updated folder structure; specified Tier 2 PWA offline queue.
-  - [`docs/rules.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/docs/rules.md) --- Replaced schedule with 9 milestone checklists aligned to tiers; embedded D1–D7 invariants; documented strict 10:00 PM 18 Oct deadline and 6:00 PM code freeze.
-  - [`docs/trade-offs.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/docs/trade-offs.md) --- Documented client-store vs DB trade-off, unknown factor renormalization rationale, and explicit "What we cut and why" section for Tier 3.
-  - [`docs/memory.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/docs/memory.md) --- Reset to Milestone 0; added Decisions log (D1–D7), contradiction resolutions, milestone checklist, and team metadata.
-- **Created Files:**
-  - [`docs/scoring-spec.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/docs/scoring-spec.md) --- Factor lookup tables (0–5), MCDA formula (0–100), unknown renormalization math, vulnerability floors, and 6 worked calculation examples.
-  - [`docs/seed-data.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/docs/seed-data.md) --- Complete District Alpha dataset: 4 sectors (Karachi bounding polygons), 6 rescue resources, 3 shelters, 12 incidents, pre-disaster baseline, timeline event progression table, and worked opportunity cost example (+35 min).
-  - [`docs/acceptance-tests.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/docs/acceptance-tests.md) --- Given/When/Then test criteria for all Tier 1 and Tier 2 features doubling as unit tests.
-  - [`docs/ai-prompts.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/docs/ai-prompts.md) --- Exact Gemini extraction prompt, Zod schemas, rationale generation prompt, audio transcription prompt, and keyword heuristic fallback rules.
-  - [`docs/demo-script.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/docs/demo-script.md) --- 90-second rapid pitch, 3-minute click-by-click walkthrough script, and contingency fallback plan.
-  - [`docs/submission-checklist.md`](file:///c:/Users/umerh/Desktop/Nigehbaan/docs/submission-checklist.md) --- Official team submission metadata, technical stack disclosure, pre-submission verification checklist, and deadline freeze timeline.
-- **Assumptions Made for Review:**
-  1. *Turnaround cycle time:* Shallow jet-boat turnaround baseline cycle is assumed to be 35 minutes round-trip for Sector 2.
-  2. *Karachi bounding coordinates:* Approximate fictional coordinates around 24.89–24.98 N, 67.11–67.19 E (Malir basin) are used for District Alpha map sectors.
-  3. *Client Store Implementation:* Assumed Zustand or React Context + localStorage is acceptable for client store management.
-  4. *Gemini Model:* Assumed `gemini-2.5-flash` or current stable Gemini model via `@google/genai` is the primary LLM adapter target.
-- **Next Smallest Coding Task:**
-  - Milestone 0: Initialize Next.js 14/15 skeleton with TypeScript (Strict) and Tailwind CSS using `DESIGN.md` tokens, verify clean build, and deploy empty skeleton to Vercel.
+- Comprehensive Documentation Alignment & Specification Authoring across all repo specs.
 
 ### Session --- 2026-10-17 16:25 PKT (Mathematical Audit & Seed Synchronization Pass)
-- **Phase/Task:** Mathematical Rigor & Seed Data Alignment (D8–D11).
+- Audited all 12 incident scores; generated `seed.json` and `verify-docs.mjs` (12/12 pass); aligned opportunity cost geography.
+
+### Session --- 2026-10-17 16:40 PKT (Safety, Timeline Clock, & TASKS.md Backlog Pass)
+- **Phase/Task:** Prompt Safety Invariants, Simulation Clock, 100% Tier-1 Demo Script, and TASKS.md Creation.
 - **Accomplishments:**
-  - Audited all 12 incident scores against the 5-factor deterministic formula. Fixed manual hand-typed inaccuracies in `docs/seed-data.md` and removed the Example 5 fudge (`Adjusted Baseline: 41.0`) in `docs/scoring-spec.md`.
-  - Re-stationed `RES-01` to Sector 2 and `RES-02` to Sector 3A, eliminating geographic contradictions in the Opportunity Cost warning scenario (+35 min delay for `NG-104`).
-  - Purged all stale references to "Sector 3" and "[Score 78]" across `README.md`, `docs/PRD.md`, `docs/trade-offs.md`, and `DESIGN.md`.
-  - Built `src/lib/simulation/seed.json` with exact scenario clock timestamps, sectors, resources, shelters, and incidents.
-  - Built and executed `scripts/verify-docs.mjs`: verified 12/12 seed incidents with 100% mathematical consistency.
-  - Aligned `docs/acceptance-tests.md` Test 1.2 with `NG-112`'s actual factor inputs and added Test 1.2b for critical missing factor calculation.
-  - Added deterministic queue tie-break protocol to `docs/scoring-spec.md`.
+  - Enriched `docs/seed-data.md` with Section 6 Simulation Clock (wall clock hours 04:30 to 16:30), Tower-Alpha-3 collapse timing (08:55), and sector-bound shallow boat rationale.
+  - Updated `docs/ai-prompts.md` with untrusted `<citizen_report>` containment, anti-injection directives, Zod depth/headcount bounds, word-boundary regexes, and dynamic model configuration (`GEMINI_MODEL`).
+  - Added strict Hackathon Cut-Line Rule (18 Oct 12:00 PM) to `docs/rules.md` and `AGENTS.md`.
+  - Refined `docs/demo-script.md` to be 100% Tier-1-only resilient, clearly separating Tier 2 extensions.
+  - Authored `TASKS.md` containing 35 atomic, dependency-tracked tasks across all milestones with strict acceptance criteria.
 - **Next Smallest Coding Task:**
-  - Milestone 0: Scaffold Next.js 14/15 with TypeScript (Strict), Tailwind CSS (`DESIGN.md` tokens), Zustand, and deploy initial skeleton to Vercel.
+  - Follow `TASKS.md` starting at task **`T0.1`** (Initialize Next.js 14/15 App Router skeleton with TypeScript).
+
 
 

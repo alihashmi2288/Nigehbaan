@@ -98,7 +98,11 @@ Must work & be deployed         Build only after Tier 1 deployed        Delibera
 
 ---
 
-*(Only proceed to Tier 2 after Milestone 4 is 100% verified and deployed)*
+> [!CAUTION]
+> **Strict Hackathon Cut-Line Rule:**  
+> If Tier 1 is not deployed on Vercel by **18 Oct 12:00 PM (Asia/Karachi)** (10 hours before the final deadline), **drop all Tier 2 features** immediately. Spend the remaining time polishing Tier 1, recording the demo video, and packaging the submission. Never risk an incomplete Tier 2 deploy jeopardizing a rock-solid Tier 1 submission.
+
+*(Only proceed to Tier 2 if Milestone 4 is 100% verified, deployed, and the clock is before 18 Oct 12:00 PM)*
 
 ---
 

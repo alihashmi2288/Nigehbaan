@@ -14,6 +14,7 @@ Read these authoritative specification files before touching code:
 4. **[`DESIGN.md`](./DESIGN.md)** --- Authoritative visual design tokens (`#010102` canvas, `#0f1011` surface, `#5e6ad2` primary, crisis semantic badges), typography, and WCAG AA contrast standards.
 5. **[`docs/rules.md`](./docs/rules.md)** --- Engineering standards, milestone checklist, and deadline rules.
 6. **[`docs/memory.md`](./docs/memory.md)** --- Living project state, active decisions, and session changelog.
+7. **[`TASKS.md`](./TASKS.md)** --- Authoritative atomic task backlog grouped by milestone with dependencies and acceptance criteria.
 
 > **RULE ON CONFLICTS:** If any specification documents conflict, **STOP IMMEDIATELY**, do not guess, and log the conflict in `docs/memory.md`.
 
@@ -35,12 +36,13 @@ Read these authoritative specification files before touching code:
    - **Never disguise fallbacks as live AI.**
 8. **1-Click Reset:** The UI must include a Reset button that restores the pristine baseline seed data in `localStorage` completely.
 9. **Strict Tier Discipline:** Agents must complete and verify Tier 1 entirely before touching Tier 2 features. Tier 3 features (Supabase, Auth, What-If routing sandbox, turn-by-turn navigation) are cut.
-10. **Strict Hackathon Deadline:** All work must be completed and pushed well before **10:00 PM on 18 October 2026 (Asia/Karachi)**. Commits after this timestamp result in disqualification. Target code freeze is **6:00 PM on 18 October 2026**.
+10. **Strict Hackathon Deadline & Cut-Line:** All work must be completed and pushed well before **10:00 PM on 18 October 2026 (Asia/Karachi)**. Commits after this timestamp result in disqualification. Target code freeze is **6:00 PM on 18 October 2026**. **Strict Cut-Line:** If Tier 1 is not deployed on Vercel by **18 Oct 12:00 PM**, drop all Tier 2 features and polish Tier 1.
 
 ---
 
 ## 3. Current Implementation Status
 
 - **Current Tier:** **Milestone 0 --- Bootstrap & Project Setup**
-- **Next Smallest Coding Task:** Initialize Next.js 14/15 skeleton with Tailwind and `DESIGN.md` tokens, verify clean build, and deploy empty skeleton to Vercel.
-- **Reference:** See [`docs/memory.md`](./docs/memory.md) for full session logs.
+- **Next Smallest Coding Task:** Follow `TASKS.md` starting at task **`T0.1`** (Initialize Next.js App Router skeleton with TypeScript and Tailwind).
+- **Reference:** See [`docs/memory.md`](./docs/memory.md) for full session logs and [`TASKS.md`](./TASKS.md) for task tracking.
+
