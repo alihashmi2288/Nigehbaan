@@ -40,9 +40,9 @@ If you cannot resolve a conflict, **STOP IMMEDIATELY**, do not guess, and log th
 
 ## 3. Current Implementation Status
 
-- **Current Tier:** **Milestone 6 --- Uncertainty Radar & Blind-Spot Engine (Tier 1)**
-- **Completed:** Milestone 0 (T0.1–T0.4), Milestone 1 (T1.1–T1.4), Milestone 2 (T2.1–T2.3), Milestone 3 (T3.1–T3.4), Milestone 4 (T4.1–T4.3), Milestone 5 (T5.1–T5.4)
-- **Next Smallest Coding Task:** Follow `TASKS.md` starting at task **`T6.1`** (Uncertainty Radar Detection Engine).
+- **Current Tier:** **Milestone 7 --- Opportunity Cost & Human Dispatch (Tier 1)**
+- **Completed:** Milestone 0 (T0.1–T0.4), Milestone 1 (T1.1–T1.4), Milestone 2 (T2.1–T2.3), Milestone 3 (T3.1–T3.4), Milestone 4 (T4.1–T4.3), Milestone 5 (T5.1–T5.4), Milestone 6 (T6.1–T6.3)
+- **Next Smallest Coding Task:** Follow `TASKS.md` starting at task **`T7.1`** (Deterministic Opportunity Cost Calculator).
 - **Reference:** See [`docs/memory.md`](./docs/memory.md) for full session logs and [`TASKS.md`](./TASKS.md) for task tracking.
 
 

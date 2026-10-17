@@ -205,6 +205,31 @@ See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation che
 - **Next Smallest Coding Task:**
   - Task **`T6.1`** (Uncertainty Radar Detection Engine in Milestone 6).
 
+### Session --- 2026-10-17 19:20 PKT (Milestone 6: Uncertainty Radar & Blind-Spot Engine)
+- **Phase/Task:** Milestone 6 (Tasks T6.1, T6.2, T6.3)
+- **Accomplishments:**
+  - **T6.1 (Uncertainty Radar Detection Engine):** Created `src/lib/uncertainty/radarDetector.ts` implementing 4 deterministic flag rules:
+    - `MISSING_LOCATION`: accurately identifies `NG-112` (`coordinates === null`).
+    - `STALE_REPORT`: unassigned incidents with age $> 60$ minutes relative to simulation clock (flags `NG-111` at T+6 where age = 210m; correctly does not flag at T+3 where age = 30m; ignores assigned incidents).
+    - `CONFLICTING_REPORT`: detects contradictory route status assertions on identical landmarks (identifies `NG-108` open vs `NG-109` washed out on Main Highway Bridge).
+    - `POTENTIAL_DUPLICATE`: calculates concept and term Sorensen-Dice similarity ($\ge 0.75$) within same sector and $\le 180$ minutes (flags `NG-104` and `NG-110` in Sector 2, 175m apart; distinguishes unrelated incidents).
+    - `evaluateUncertaintyRadar`: computes comprehensive radar report with category counts across all active incidents.
+  - **T6.2 (Sector Blind-Spot Detector & Incident Synthesizer):** Created `src/lib/uncertainty/blindSpotDetector.ts` implementing:
+    - Multi-condition sector health check: tower status offline, silence duration $\ge 90$ minutes, flood gauge trend rising, level $\ge$ hazard threshold.
+    - Confirmed Sector 3A remains normal at T+0 and T+3, and deterministically triggers at T+6 (110m silence, gauge 1.9m $\ge 1.2$m threshold).
+    - Synthesizes `NG-103` with exact deterministic MCDA score **`68.7`** (enforcing $\ge 60.0$ floor), Category **`High`** (never auto-Critical per Invariant 3), label *"Physical Welfare Recon / Field Sweep"*, and recommended reconnaissance asset (`recon_patrol` / `RES-06`).
+  - **T6.3 (Uncertainty Radar UI Panel & Conflict Modal):** Created `src/components/uncertainty/UncertaintyRadarPanel.tsx`, `src/components/uncertainty/ConflictModal.tsx`, and `src/components/uncertainty/index.ts`:
+    - Renders tactical HUD panel with live counter pills for unmapped, stale, conflicting, duplicate, and blind-spot incidents.
+    - Built accessible side-by-side modal displaying `NG-108` and `NG-109` with full factor/report comparison and prominent Invariant 5 Coordinator Warning: *"Conflicting reports are preserved side-by-side. The automated system NEVER auto-merges, suppresses, or deletes conflicting reports."*
+    - Integrated modal trigger into `IncidentInspector.tsx` and mounted `UncertaintyRadarPanel` into `src/app/page.tsx`.
+    - Enhanced `useAppStore.setTimelinePhase` to automatically evaluate blind spots and append immutable `BLIND_SPOT_SYNTHESIS` audit logs.
+  - **Unit & Integration Tests:** Created `tests/uncertaintyAndBlindSpots.test.ts` with 21 comprehensive tests covering all 4 radar rules, blind-spot sector health evaluations, synthetic incident properties, and store integration.
+  - **Verification:** Ran `npm test` (88/88 tests passing across 7 test files), `node scripts/verify-docs.mjs` (12/12 seed pass), and `npm run build` (clean Next.js 14 production build, 0 errors/warnings).
+- **Suggested Commit Name:**
+  - `feat(milestone-6): uncertainty radar detection engine, blind-spot synthesizer, and conflict comparison modal`
+- **Next Smallest Coding Task:**
+  - Task **`T7.1`** (Deterministic Opportunity Cost Calculator in Milestone 7).
+
 
 ### Session --- 2026-10-17 18:05 PKT (Milestone 4: Triage Queue & Incident Inspector)
 - **Phase/Task:** Milestone 4 (Tasks T4.1, T4.2, T4.3)

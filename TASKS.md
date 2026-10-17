@@ -445,7 +445,7 @@
 
 ## Milestone 6: Uncertainty Radar & Blind-Spot Engine (Tier 1)
 
-### [ ] Task T6.1: Uncertainty Radar Detection Engine
+### [x] Task T6.1: Uncertainty Radar Detection Engine
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T1.1, T2.2
 - **Files to create/edit:**
@@ -464,7 +464,7 @@
 
 ---
 
-### [ ] Task T6.2: Sector Blind-Spot Detector & Incident Synthesizer
+### [x] Task T6.2: Sector Blind-Spot Detector & Incident Synthesizer
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T6.1, T1.2
 - **Files to create/edit:**
@@ -487,7 +487,7 @@
 
 ---
 
-### [ ] Task T6.3: Uncertainty Radar UI Panel & Conflict Modal
+### [x] Task T6.3: Uncertainty Radar UI Panel & Conflict Modal
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T6.1, T6.2
 - **Files to create/edit:**

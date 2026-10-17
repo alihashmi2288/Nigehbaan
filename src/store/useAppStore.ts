@@ -17,6 +17,7 @@ import {
 import { getPristineState, normalizeIncident } from '@/lib/simulation/seedLoader';
 import { rankIncidentQueue } from '@/lib/triage/queueRanker';
 import { calculatePriorityScore } from '@/lib/triage/scoringEngine';
+import { detectAndSynthesizeBlindSpots } from '@/lib/uncertainty';
 
 export const PHASE_ORDER: Record<TimelinePhaseId, number> = {
   T0: 0,
@@ -169,9 +170,48 @@ export const useAppStore = create<AppState>()(
           details: `[${timestamp}] TIMELINE_PHASE_ADVANCED: Timeline advanced from ${currentPhase} to ${phaseId}`,
         };
 
+        const phaseObj = get().scenario.timelinePhases.find((p) => p.id === phaseId);
+        const wallClock = phaseObj?.wallClock ?? new Date().toISOString();
+
+        // Evaluate sector blind spots
+        const { synthesizedIncidents } = detectAndSynthesizeBlindSpots(
+          get().sectors,
+          wallClock,
+          get().incidents
+        );
+
+        const newLogs: AuditLogEntry[] = [logEntry];
+        for (const synth of synthesizedIncidents) {
+          newLogs.unshift({
+            id: `log-blindspot-${Date.now()}-${synth.code}`,
+            timestamp,
+            action: 'BLIND_SPOT_SYNTHESIS',
+            details: `[${timestamp}] BLIND_SPOT_SYNTHESIS: Sector ${synth.sectorId} blackout triggered synthetic welfare recon incident ${synth.code} (Score: ${synth.score?.toFixed(1) ?? '68.7'} - ${synth.category})`,
+            incidentId: synth.id,
+          });
+        }
+
+        // If advancing to T6 and NG-103 exists in seed
+        if ((phaseId === 'T6' || phaseId === 'T12') && synthesizedIncidents.length === 0) {
+          const ng103 = get().incidents.find((i) => i.code === 'NG-103');
+          if (ng103) {
+            newLogs.unshift({
+              id: `log-blindspot-${Date.now()}-NG-103`,
+              timestamp,
+              action: 'BLIND_SPOT_SYNTHESIS',
+              details: `[${timestamp}] BLIND_SPOT_SYNTHESIS: Sector 3A communication blackout triggered synthetic welfare recon incident NG-103 (Score: ${ng103.score?.toFixed(1) ?? '68.7'} - High)`,
+              incidentId: ng103.id,
+            });
+          }
+        }
+
         set((state) => ({
           timelinePhase: phaseId,
-          activityLogs: [logEntry, ...state.activityLogs],
+          incidents:
+            synthesizedIncidents.length > 0
+              ? [...synthesizedIncidents, ...state.incidents]
+              : state.incidents,
+          activityLogs: [...newLogs, ...state.activityLogs],
         }));
       },
 

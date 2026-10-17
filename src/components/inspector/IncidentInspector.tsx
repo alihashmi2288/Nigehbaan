@@ -5,6 +5,7 @@ import { useAppStore } from '@/store';
 import { FactorBreakdownCard } from './FactorBreakdownCard';
 import { ExplainabilityCard } from './ExplainabilityCard';
 import { formatTimestamp, getCategoryBadgeStyles } from '../queue/IncidentCard';
+import { ConflictModal } from '../uncertainty/ConflictModal';
 import {
   X,
   ShieldAlert,
@@ -34,6 +35,7 @@ export const IncidentInspector: React.FC = () => {
   const unassignResource = useAppStore((state) => state.unassignResource);
 
   const [selectedResourceId, setSelectedResourceId] = useState<string>('');
+  const [isConflictModalOpen, setIsConflictModalOpen] = useState(false);
 
   const incident = incidents.find((i) => i.id === selectedIncidentId);
 
@@ -307,10 +309,21 @@ export const IncidentInspector: React.FC = () => {
         {/* Uncertainty Radar Flags */}
         {incident.uncertaintyFlags.length > 0 && (
           <div className="bg-semantic-warning/10 border border-semantic-warning-border/30 rounded-lg p-3 space-y-2">
-            <span className="text-xs font-mono font-bold text-semantic-warning-text uppercase flex items-center gap-1.5">
-              <AlertTriangle className="w-3.5 h-3.5" />
-              Active Uncertainty Radar Flags
-            </span>
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-mono font-bold text-semantic-warning-text uppercase flex items-center gap-1.5">
+                <AlertTriangle className="w-3.5 h-3.5" />
+                Active Uncertainty Radar Flags
+              </span>
+              {incident.uncertaintyFlags.includes('CONFLICTING_REPORT') && (
+                <button
+                  type="button"
+                  onClick={() => setIsConflictModalOpen(true)}
+                  className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-semantic-warning text-white hover:bg-semantic-warning-border transition-colors flex items-center gap-1"
+                >
+                  <span>Compare Reports</span>
+                </button>
+              )}
+            </div>
             <div className="flex flex-wrap gap-1.5">
               {incident.uncertaintyFlags.map((flag) => (
                 <span
@@ -323,6 +336,14 @@ export const IncidentInspector: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* Conflict Modal for Conflicting Reports */}
+        <ConflictModal
+          isOpen={isConflictModalOpen}
+          onClose={() => setIsConflictModalOpen(false)}
+          incidentA={incident.code === 'NG-109' ? incidents.find((i) => i.code === 'NG-108') : incident}
+          incidentB={incident.code === 'NG-108' ? incidents.find((i) => i.code === 'NG-109') : incident}
+        />
 
         {/* MCDA Factor Breakdown Card (Task T4.2) */}
         <FactorBreakdownCard incident={incident} />

@@ -18,6 +18,7 @@ import { MapWrapper } from '@/components/map';
 import { IncidentQueue } from '@/components/queue';
 import { IncidentInspector } from '@/components/inspector';
 import { IntakeModal } from '@/components/intake';
+import { UncertaintyRadarPanel } from '@/components/uncertainty';
 import { useAppStore, selectVisibleIncidents } from '@/store';
 import { TimelinePhaseId } from '@/types';
 
@@ -87,7 +88,7 @@ export default function Home() {
           </span>
           <span className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono bg-surface-2 border border-hairline text-brand">
             <Terminal className="w-3.5 h-3.5" />
-            Milestone 5: Intake & Extraction Active
+            Milestone 6: Uncertainty Radar &amp; Blind-Spot Engine Active
           </span>
         </div>
       </header>
@@ -189,6 +190,9 @@ export default function Home() {
             )}
           </div>
         </section>
+
+        {/* Tactical Uncertainty Radar Panel (Milestone 6: Tasks T6.1 & T6.3) */}
+        <UncertaintyRadarPanel />
 
         {/* Tactical 3-Panel Operations Command Cockpit (Milestone 4 Integration) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">

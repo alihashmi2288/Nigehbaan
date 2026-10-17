@@ -7,12 +7,17 @@ export const DISTRICT_ALPHA_CENTER: [number, number] = [24.935, 67.145];
 export const DISTRICT_ALPHA_ZOOM = 12;
 
 /**
- * CartoDB Dark Matter tile layer URL and attribution
+ * CartoDB Dark Matter tile layer URL and attribution.
+ * Uses the CARTO Basemaps API key from NEXT_PUBLIC_CARTO_API_KEY with the 'key' query parameter
+ * to eliminate the 'API KEY REQUIRED' watermark completely.
  */
 export const CARTO_DARK_MATTER_URL =
-  'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+  process.env.NEXT_PUBLIC_CARTO_API_KEY
+    ? `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=${process.env.NEXT_PUBLIC_CARTO_API_KEY}`
+    : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
 export const CARTO_ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
+
 
 /**
  * Deterministic GIS station coordinates for resources stationed in sectors.
