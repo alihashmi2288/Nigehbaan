@@ -12,6 +12,7 @@ import {
   MapPin,
   Sliders,
   PlusCircle,
+  History,
 } from 'lucide-react';
 import { ResetButton } from '@/components/layout';
 import { MapWrapper } from '@/components/map';
@@ -19,6 +20,7 @@ import { IncidentQueue } from '@/components/queue';
 import { IncidentInspector } from '@/components/inspector';
 import { IntakeModal } from '@/components/intake';
 import { UncertaintyRadarPanel } from '@/components/uncertainty';
+import { AuditLogDrawer } from '@/components/audit';
 import { useAppStore, selectVisibleIncidents } from '@/store';
 import { TimelinePhaseId } from '@/types';
 
@@ -30,8 +32,10 @@ export default function Home() {
   const scenario = useAppStore((state) => state.scenario);
   const incidents = useAppStore((state) => state.incidents);
   const resources = useAppStore((state) => state.resources);
+  const activityLogs = useAppStore((state) => state.activityLogs);
 
   const [isIntakeModalOpen, setIsIntakeModalOpen] = useState(false);
+  const [isAuditModalOpen, setIsAuditModalOpen] = useState(false);
 
   useEffect(() => {
     setHydrated(true);
@@ -81,6 +85,22 @@ export default function Home() {
             <span>Emergency Intake</span>
           </button>
 
+          {/* Activity Audit Log Drawer Trigger (Task T7.3) */}
+          <button
+            type="button"
+            data-testid="open-audit-drawer-button"
+            onClick={() => setIsAuditModalOpen(true)}
+            className="px-3 py-1.5 rounded text-xs font-mono font-semibold bg-surface-2 hover:bg-surface-3 text-ink-muted hover:text-ink border border-hairline flex items-center gap-1.5 transition-all shadow-sm"
+          >
+            <History className="w-3.5 h-3.5 text-brand" />
+            <span>Audit Log</span>
+            {activityLogs.length > 0 && (
+              <span className="px-1.5 py-0.2 rounded bg-surface-3 text-[10px] text-ink-subtle">
+                {activityLogs.length}
+              </span>
+            )}
+          </button>
+
           <ResetButton />
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono bg-surface-2 border border-hairline text-ink-muted">
             <span className="w-2 h-2 rounded-full bg-semantic-success animate-ping" />
@@ -88,7 +108,7 @@ export default function Home() {
           </span>
           <span className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono bg-surface-2 border border-hairline text-brand">
             <Terminal className="w-3.5 h-3.5" />
-            Milestone 6: Uncertainty Radar &amp; Blind-Spot Engine Active
+            Milestone 7: Opportunity Cost &amp; Human Dispatch Active
           </span>
         </div>
       </header>
@@ -97,6 +117,12 @@ export default function Home() {
       <IntakeModal
         isOpen={isIntakeModalOpen}
         onClose={() => setIsIntakeModalOpen(false)}
+      />
+
+      {/* Operational Activity Audit Log Drawer (Task T7.3) */}
+      <AuditLogDrawer
+        isOpen={isAuditModalOpen}
+        onClose={() => setIsAuditModalOpen(false)}
       />
 
       {/* Main Operational Container */}

@@ -6,6 +6,7 @@ import { FactorBreakdownCard } from './FactorBreakdownCard';
 import { ExplainabilityCard } from './ExplainabilityCard';
 import { formatTimestamp, getCategoryBadgeStyles } from '../queue/IncidentCard';
 import { ConflictModal } from '../uncertainty/ConflictModal';
+import { AssignmentModal } from '../dispatch/AssignmentModal';
 import {
   X,
   ShieldAlert,
@@ -23,6 +24,7 @@ import {
   EyeOff,
   Crosshair,
   Building2,
+  Truck,
 } from 'lucide-react';
 
 export const IncidentInspector: React.FC = () => {
@@ -34,7 +36,7 @@ export const IncidentInspector: React.FC = () => {
   const assignResource = useAppStore((state) => state.assignResource);
   const unassignResource = useAppStore((state) => state.unassignResource);
 
-  const [selectedResourceId, setSelectedResourceId] = useState<string>('');
+  const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
   const [isConflictModalOpen, setIsConflictModalOpen] = useState(false);
 
   const incident = incidents.find((i) => i.id === selectedIncidentId);
@@ -51,12 +53,6 @@ export const IncidentInspector: React.FC = () => {
   const matchedShelter = incident?.targetShelter
     ? shelters.find((s) => s.id === incident.targetShelter)
     : null;
-
-  const handleAssign = () => {
-    if (!incident || !selectedResourceId) return;
-    assignResource(incident.id, selectedResourceId);
-    setSelectedResourceId('');
-  };
 
   const handleUnassign = () => {
     if (!incident) return;
@@ -200,28 +196,24 @@ export const IncidentInspector: React.FC = () => {
             </div>
           ) : (
             <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <select
-                  value={selectedResourceId}
-                  onChange={(e) => setSelectedResourceId(e.target.value)}
-                  className="flex-1 px-2.5 py-1.5 rounded text-xs font-mono bg-surface-1 border border-hairline text-ink focus:border-brand focus:outline-none"
-                >
-                  <option value="">Select available rescue resource...</option>
-                  {availableResources.map((res) => (
-                    <option key={res.id} value={res.id}>
-                      {res.callsign} ({res.type}) • Cap: {res.seatCapacity} • {res.stationSector}
-                    </option>
-                  ))}
-                </select>
+              <div className="flex items-center justify-between p-2.5 rounded bg-surface-1 border border-hairline">
+                <div className="space-y-0.5">
+                  <span className="text-xs font-mono font-bold text-ink">
+                    Resource Allocation Gate
+                  </span>
+                  <span className="text-[11px] font-mono text-ink-subtle block">
+                    {availableResources.length} rescue asset(s) active in system
+                  </span>
+                </div>
 
                 <button
                   type="button"
-                  disabled={!selectedResourceId}
-                  onClick={handleAssign}
-                  className="px-3 py-1.5 rounded text-xs font-mono font-bold text-white bg-brand hover:bg-brand-hover disabled:opacity-40 disabled:pointer-events-none transition-colors flex items-center gap-1.5 shrink-0"
+                  data-testid="assign-resource-button"
+                  onClick={() => setIsAssignModalOpen(true)}
+                  className="px-3.5 py-1.5 rounded text-xs font-mono font-bold text-white bg-brand hover:bg-brand-hover transition-colors flex items-center gap-1.5 shadow-sm"
                 >
-                  <Send className="w-3 h-3" />
-                  Approve Dispatch
+                  <Send className="w-3.5 h-3.5" />
+                  Assign Resource
                 </button>
               </div>
 
@@ -343,6 +335,13 @@ export const IncidentInspector: React.FC = () => {
           onClose={() => setIsConflictModalOpen(false)}
           incidentA={incident.code === 'NG-109' ? incidents.find((i) => i.code === 'NG-108') : incident}
           incidentB={incident.code === 'NG-108' ? incidents.find((i) => i.code === 'NG-109') : incident}
+        />
+
+        {/* Human Coordinator Resource Assignment Modal (Task T7.2, T7.3) */}
+        <AssignmentModal
+          isOpen={isAssignModalOpen}
+          onClose={() => setIsAssignModalOpen(false)}
+          incident={incident}
         />
 
         {/* MCDA Factor Breakdown Card (Task T4.2) */}

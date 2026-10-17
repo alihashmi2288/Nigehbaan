@@ -122,13 +122,17 @@ The following architectural and product decisions were formally established and 
 
 See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation checklist.
 
-- **Current Active Milestone:** **Milestone 4 --- Triage Queue & Incident Inspector (Tier 1)**
+- **Current Active Milestone:** **Milestone 8 --- Disaster Timeline Scrubber (Tier 1)**
 - **Completed Milestones:**
   - **Milestone 0 --- Bootstrap & Project Setup** (Tasks T0.1, T0.2, T0.3, T0.4 verified)
   - **Milestone 1 --- Deterministic Scoring Engine & Tests** (Tasks T1.1, T1.2, T1.3, T1.4 verified)
   - **Milestone 2 --- State Store & Seed Data** (Tasks T2.1, T2.2, T2.3 verified)
   - **Milestone 3 --- GIS Map & Sector Polygons** (Tasks T3.1, T3.2, T3.3, T3.4 verified)
-- **Next Smallest Coding Task:** **`T4.1`** (Filterable Triage Incident Queue).
+  - **Milestone 4 --- Triage Queue & Incident Inspector** (Tasks T4.1, T4.2, T4.3 verified)
+  - **Milestone 5 --- Emergency Citizen Intake & AI Assistant** (Tasks T5.1, T5.2, T5.3, T5.4 verified)
+  - **Milestone 6 --- Uncertainty Radar & Blind-Spot Engine** (Tasks T6.1, T6.2, T6.3 verified)
+  - **Milestone 7 --- Opportunity Cost & Human Dispatch** (Tasks T7.1, T7.2, T7.3 verified)
+- **Next Smallest Coding Task:** **`T8.1`** (Interactive Disaster Timeline Scrubber Component).
 
 ---
 
@@ -241,10 +245,15 @@ See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation che
   - **Unit & Integration Tests:** Created `tests/queueAndInspector.test.ts` with 12 comprehensive tests verifying queue sorting, factor values for `NG-101` and `NG-112`, explainability bullets, and coordinator dispatch.
   - **Verification:** Ran `npm test` (55/55 tests passing across 5 test files), `npm run build` (clean Next.js 14 production build, 0 errors/warnings).
 - **Next Smallest Coding Task:**
-  - Task **`T5.1`** (Emergency Intake Report Form Modal in Milestone 5).
-
-
-
-
-
-
+### Session --- 2026-10-17 19:40 PKT (Milestone 7: Opportunity Cost & Human Dispatch)
+- **Phase/Task:** Milestone 7 (Tasks T7.1, T7.2, T7.3)
+- **Accomplishments:**
+  - **T7.1 (Deterministic Opportunity Cost Calculator):** Created `src/lib/resources/opportunityCost.ts` and `src/lib/resources/index.ts`. Enforces Invariant 4 by computing asset scarcity and queue turnaround delay penalties (+35 min) strictly through deterministic arithmetic. Implements bathymetric sector-bound constraint for shallow boats (cannot reinforce across sectors within a single cycle). Evaluates queued incidents deterministically; when assigning `RES-01` to `NG-101`, accurately identifies next queued incident `NG-104` (Score 56.5 — High) incurring +35 min delay and produces exact consequence text: *"Leaves 0 shallow-draft assets available in Sector 2"*.
+  - **T7.2 (Resource Assignment Modal & Warning Card):** Created `src/components/dispatch/OpportunityCostWarningCard.tsx`, `src/components/dispatch/AssignmentModal.tsx`, and `src/components/dispatch/index.ts`. Styled with `--semantic-high` / `--semantic-warning` crisis tokens. Displays active scarcity alert, turnaround penalty tag (`+35 min delay`), and matched staging shelter (`District Civil Hospital Annexe` • Dialysis Ready).
+  - **T7.3 (Human Approval Gate & Activity Audit Log):** Enforces Invariant 5 (No Autonomous Dispatch) by blocking dispatches until explicit human coordinator click on "Approve Assignment". Automatically updates resource and incident statuses to `assigned`, excludes assigned resources from other candidate lists, and appends immutable audit log entry: `[TIMESTAMP] COORDINATOR_ASSIGN: Shallow Jet-Boat 01 assigned to NG-101`. Created `src/components/audit/AuditLogDrawer.tsx` and `src/components/audit/index.ts` with action filtering, keyword search, and badge semantics. Integrated drawer trigger and count in main HUD header (`src/app/page.tsx`).
+  - **Unit & Integration Tests:** Created `tests/opportunityCostAndDispatch.test.ts` with 14 comprehensive tests verifying opportunity cost arithmetic, sector isolation, candidate filtering, human approval gate, and audit logging.
+  - **Verification:** Ran `npm test` (102/102 tests passing across 8 test files) and `npm run build` (clean Next.js 14 production build, 0 errors/warnings).
+- **Suggested Commit Name:**
+  - `feat(milestone-7): opportunity cost calculator, resource assignment modal, and activity audit log drawer`
+- **Next Smallest Coding Task:**
+  - Task **`T8.1`** (Interactive Disaster Timeline Scrubber Component in Milestone 8).

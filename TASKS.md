@@ -507,7 +507,7 @@
 
 ## Milestone 7: Opportunity Cost & Human Dispatch (Tier 1)
 
-### [ ] Task T7.1: Deterministic Opportunity Cost Calculator
+### [x] Task T7.1: Deterministic Opportunity Cost Calculator
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T1.1
 - **Files to create/edit:**
@@ -528,7 +528,7 @@
 
 ---
 
-### [ ] Task T7.2: Resource Assignment Modal & Warning Card
+### [x] Task T7.2: Resource Assignment Modal & Warning Card
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T7.1, T2.2
 - **Files to create/edit:**
@@ -547,7 +547,7 @@
 
 ---
 
-### [ ] Task T7.3: Human Approval Gate & Activity Audit Log
+### [x] Task T7.3: Human Approval Gate & Activity Audit Log
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T7.2, T2.2
 - **Files to create/edit:**
