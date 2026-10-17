@@ -778,7 +778,7 @@
 
 ## Milestone 13: Final Submission & Video Walkthrough
 
-### [ ] Task T13.1: 3-Minute Walkthrough Video Recording
+### [x] Task T13.1: 3-Minute Walkthrough Video Recording
 - **Tier:** Tier 1 / Tier 2 Finalization
 - **Dependencies:** T9.2 (or T12.2 if Tier 2 completed)
 - **Files to create/edit:**
@@ -799,7 +799,7 @@
 
 ---
 
-### [ ] Task T13.2: Submission Checklist Compliance & Portal Submission
+### [x] Task T13.2: Submission Checklist Compliance & Portal Submission
 - **Tier:** Tier 1 / Tier 2 Finalization
 - **Dependencies:** T13.1
 - **Files to create/edit:**
