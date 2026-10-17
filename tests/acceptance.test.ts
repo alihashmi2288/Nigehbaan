@@ -47,6 +47,13 @@ import {
   getSimulatedAudioFallback,
   SCRIPTED_AUDIO_FALLBACK_BADGE,
 } from '@/lib/ai/audioFallback';
+import {
+  enqueueOfflineSubmission,
+  getOfflineQueue,
+  clearOfflineQueue,
+  syncOfflineQueue,
+  OFFLINE_QUEUED_MESSAGE,
+} from '@/lib/pwa';
 
 /**
  * Tier 1 Acceptance Test Suite
@@ -592,6 +599,67 @@ describe('Tier 1 Acceptance Test Suite (Tests 1.1 – 1.9)', () => {
 
         // 4. Store state updates selection to NG-102
         expect(useAppStore.getState().selectedIncidentId).toBe(incident.id);
+      });
+    });
+
+    // ------------------------------------------------------------------------
+    // Test 2.4: Installable PWA Offline Queue (Milestone 12)
+    // ------------------------------------------------------------------------
+    describe('Test 2.4: Installable PWA Offline Queue', () => {
+      it('intercepts submissions in offline mode, queues locally, displays "Report queued locally (offline mode)", and syncs on reconnect', () => {
+        // Given: The app is installed as a PWA and the browser network is toggled to Offline
+        clearOfflineQueue();
+        const store = useAppStore.getState();
+        const initialIncidentCount = store.incidents.length;
+
+        // When: A volunteer submits a report via /incidents/new in offline mode
+        const queuedReport = enqueueOfflineSubmission({
+          reportText: 'Volunteer field report: 5 families cut off on canal levee without phone access.',
+          sectorId: 'sector-2',
+          reporterType: 'community_proxy',
+          phoneAccess: 'no_phone',
+          factors: [3.5, 2.0, 4.0, 3.5, 3.0],
+          reportTranslation: '5 families stranded on canal levee without phone',
+          coordinates: null,
+        });
+
+        // Then:
+        // 1. The submission is intercepted and queued in local storage
+        const queue = getOfflineQueue();
+        expect(queue.length).toBe(1);
+        expect(queue[0].id).toBe(queuedReport.id);
+        expect(queue[0].phoneAccess).toBe('no_phone');
+
+        // 2. UI displays: "Report queued locally (offline mode)"
+        expect(OFFLINE_QUEUED_MESSAGE).toBe('Report queued locally (offline mode)');
+
+        // 3. When network is toggled to Online, the queue automatically syncs and populates the dashboard
+        const syncResult = syncOfflineQueue((submission) => {
+          store.submitIncident({
+            reportText: submission.reportText,
+            sectorId: submission.sectorId,
+            reporterType: submission.reporterType,
+            phoneAccess: submission.phoneAccess,
+            factors: submission.factors,
+            reportTranslation: submission.reportTranslation,
+            coordinates: submission.coordinates,
+          });
+        });
+
+        expect(syncResult.syncedCount).toBe(1);
+        expect(getOfflineQueue().length).toBe(0);
+
+        const updatedStore = useAppStore.getState();
+        expect(updatedStore.incidents.length).toBe(initialIncidentCount + 1);
+
+        const syncedIncident = updatedStore.incidents.find((i) =>
+          i.reportText.includes('5 families cut off on canal levee')
+        );
+        expect(syncedIncident).toBeDefined();
+        expect(syncedIncident?.sectorId).toBe('sector-2');
+        expect(syncedIncident?.reporterType).toBe('community_proxy');
+        expect(syncedIncident?.phoneAccess).toBe('no_phone');
+        expect(syncedIncident?.score).toBeGreaterThan(0);
       });
     });
   });

@@ -357,3 +357,38 @@ See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation che
 - **Next Smallest Coding Task:**
   - Task **`T12.1`** (PWA Manifest & Service Worker Offline Submission Queue in Milestone 12).
 
+### Session --- 2026-10-17 21:35 PKT (Milestone 12: PWA Offline Queue & FCFS Comparison Panel)
+- **Phase/Task:** Milestone 12 (Tasks T12.1, T12.2) --- Tier 2 Extension
+- **Accomplishments:**
+  - **T12.1 (PWA Manifest & Service Worker Offline Submission Queue):**
+    - Created `public/manifest.json` conforming to tactical theme tokens (`#010102` deep canvas background and theme color, standalone display mode, categories, and icon configurations).
+    - Created `public/icons/icon.svg` displaying tactical radar shield emblem.
+    - Created `public/sw.js` pre-caching core shell routes (`/`, `/incidents/new`, `/manifest.json`, `/icons/icon.svg`) with offline fetch interception and fallback.
+    - Created `src/lib/pwa/serviceWorkerRegistration.ts` providing safe client-side registration of the service worker with SSR guards.
+    - Created `src/lib/pwa/offlineQueue.ts` implementing a deterministic offline queue persisted in `localStorage` (`nigehbaan_offline_queue`) with a memoryStorage fallback for Node test environments. Implemented `enqueueOfflineSubmission`, `getOfflineQueue`, `removeOfflineSubmission`, `clearOfflineQueue`, `syncOfflineQueue`, `isOnline`, `subscribeOnlineStatus`, and `subscribeOfflineQueue`.
+    - Enforced Acceptance Test 2.4 specification: `OFFLINE_QUEUED_MESSAGE = 'Report queued locally (offline mode)'`.
+    - Created `src/components/pwa/PwaOfflineBanner.tsx` and exported via `src/components/pwa/index.ts`. Displays online/offline status, pending report counters, auto-synchronization upon network reconnect, and manual "Sync Now" trigger.
+    - Enhanced `src/components/intake/IntakeModal.tsx` and `/incidents/new` route to detect offline status, perform deterministic heuristic extraction locally, intercept submissions into the offline queue, display `"Report queued locally (offline mode)"`, and auto-sync on reconnect.
+    - Updated `src/app/layout.tsx` to include `/manifest.json` link and theme metadata.
+  - **T12.2 ("FCFS vs. Nigehbaan" Retrospective Dashboard Panel):**
+    - Created `src/lib/analytics/fcfsComparison.ts` calculating deterministic comparisons for all 9 visible disaster cases at T+12 Peak Crisis.
+    - Proves mathematical superiority of Nigehbaan Multi-Criteria Triage over naive arrival order (FCFS):
+      - Naive FCFS commits Shallow Jet-Boat 01 to minor basement pump request `NG-107` (Score 5.0) at 04:25, delaying Critical dialysis emergency `NG-101` (Score 86.5) by +155 minutes. Under Nigehbaan, `NG-101` is dispatched in 5 minutes and `NG-107` deferred.
+      - Naive FCFS completely neglects silent blackout zone Sector 3A (`NG-103`, 12,400 residents, 0 calls received); Nigehbaan synthesizes `NG-103` (Score 68.7) at T+6 and dispatches recon patrol in 5 minutes (100% coverage vs 0% in FCFS).
+      - Computes aggregate metrics: Critical latency reduced from 212m to 7m (-97%), fleet misallocation reduced from 40% to 0%, and preventable casualties reduced from 4 to 0.
+    - Created `src/components/analytics/FcfsComparisonPanel.tsx` and exported via `src/components/analytics/index.ts`. Built accessible modal with 4 executive delta cards, split paradigm contrast view, interactive filtering ("Key Divergence Cases", "Critical & High Only", "All Visible"), and detailed incident chronology table.
+    - Integrated trigger button ("FCFS Analysis") in HUD header with T+12 highlight pulse badge and mounted panel into `src/app/page.tsx`.
+  - **Testing & Acceptance Verification:**
+    - Created `tests/milestone12.test.ts` with 6 comprehensive tests verifying manifest configuration, offline queue storage in localStorage, reconnect auto-sync, FCFS vs Nigehbaan comparison calculations, blind spot detection, and summary metrics.
+    - Updated `tests/acceptance.test.ts` with **Acceptance Test 2.4** verifying:
+      1. Submission intercepted and queued in local storage in offline mode.
+      2. UI displays `"Report queued locally (offline mode)"`.
+      3. Automatic synchronization when toggled back to Online populates the live dashboard.
+    - Ran full test suite: **13/13 test files passed, 139/139 tests passed (100% pass rate)**.
+  - **Production Build Verification:**
+    - Executed `npm run build`: Clean Next.js 14 production build generating all 5/5 static pages and dynamic API routes with 0 errors and 0 warnings.
+  - **Suggested Commit Name:**
+    - `feat(milestone-12): PWA offline submission queue, service worker, and FCFS retrospective comparison panel`
+  - **Next Smallest Coding Task:**
+    - Task **`T13.1`** (3-Minute Walkthrough Video Recording in Milestone 13).
+

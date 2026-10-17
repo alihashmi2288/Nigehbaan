@@ -739,7 +739,7 @@
 
 ## Milestone 12: PWA Offline Queue & FCFS Comparison (Tier 2)
 
-### [ ] Task T12.1: PWA Manifest & Service Worker Offline Submission Queue
+### [x] Task T12.1: PWA Manifest & Service Worker Offline Submission Queue
 - **Tier:** Tier 2 (Post-Tier 1 Extension)
 - **Dependencies:** T9.3
 - **Files to create/edit:**
@@ -758,7 +758,7 @@
 
 ---
 
-### [ ] Task T12.2: "FCFS vs. Nigehbaan" Retrospective Dashboard Panel
+### [x] Task T12.2: "FCFS vs. Nigehbaan" Retrospective Dashboard Panel
 - **Tier:** Tier 2 (Post-Tier 1 Extension)
 - **Dependencies:** T9.3
 - **Files to create/edit:**

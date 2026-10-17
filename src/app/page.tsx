@@ -14,6 +14,7 @@ import {
   PlusCircle,
   History,
   PhoneCall,
+  BarChart3,
 } from 'lucide-react';
 import { ResetButton } from '@/components/layout';
 import { MapWrapper } from '@/components/map';
@@ -24,6 +25,8 @@ import { VoiceDistressPlayer } from '@/components/voice';
 import { UncertaintyRadarPanel } from '@/components/uncertainty';
 import { AuditLogDrawer } from '@/components/audit';
 import { TimelineScrubber } from '@/components/timeline';
+import { FcfsComparisonPanel } from '@/components/analytics';
+import { PwaOfflineBanner } from '@/components/pwa';
 import { useAppStore, selectVisibleIncidents } from '@/store';
 import { TimelinePhaseId } from '@/types';
 
@@ -41,6 +44,7 @@ export default function Home() {
   const [isIntakeModalOpen, setIsIntakeModalOpen] = useState(false);
   const [isAuditModalOpen, setIsAuditModalOpen] = useState(false);
   const [isVoiceHotlineOpen, setIsVoiceHotlineOpen] = useState(false);
+  const [isFcfsModalOpen, setIsFcfsModalOpen] = useState(false);
 
   useEffect(() => {
     setHydrated(true);
@@ -110,6 +114,26 @@ export default function Home() {
             )}
           </button>
 
+          {/* FCFS vs. Nigehbaan Retrospective Panel Trigger (Task T12.2) */}
+          <button
+            type="button"
+            data-testid="open-fcfs-comparison-button"
+            onClick={() => setIsFcfsModalOpen(true)}
+            className={`px-3 py-1.5 rounded text-xs font-mono font-bold flex items-center gap-1.5 transition-all shadow-sm ${
+              timelinePhase === 'T12'
+                ? 'bg-brand text-white border border-brand ring-2 ring-brand/30 animate-pulse'
+                : 'bg-surface-2 hover:bg-surface-3 text-ink-muted hover:text-ink border border-hairline'
+            }`}
+          >
+            <BarChart3 className="w-3.5 h-3.5 text-brand" />
+            <span>FCFS Analysis</span>
+            {timelinePhase === 'T12' && (
+              <span className="px-1.5 py-0.2 rounded bg-white text-brand text-[9px] font-bold">
+                T+12
+              </span>
+            )}
+          </button>
+
           <ResetButton />
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono bg-surface-2 border border-hairline text-ink-muted">
             <span className="w-2 h-2 rounded-full bg-semantic-success animate-ping" />
@@ -117,7 +141,7 @@ export default function Home() {
           </span>
           <span className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono bg-surface-2 border border-hairline text-brand">
             <Terminal className="w-3.5 h-3.5" />
-            Milestone 11: Bilingual Voice Distress Hotline Active
+            Milestone 12: PWA Offline Queue &amp; FCFS Analysis Active
           </span>
         </div>
       </header>
@@ -140,8 +164,17 @@ export default function Home() {
         onClose={() => setIsAuditModalOpen(false)}
       />
 
+      {/* FCFS vs Nigehbaan Retrospective Dashboard Panel (Task T12.2) */}
+      <FcfsComparisonPanel
+        isOpen={isFcfsModalOpen}
+        onClose={() => setIsFcfsModalOpen(false)}
+      />
+
       {/* Main Operational Container */}
       <div className="flex-1 p-4 lg:p-6 w-full max-w-[1720px] mx-auto flex flex-col gap-5">
+        {/* PWA Offline Synchronization Ribbon (Task T12.1) */}
+        <PwaOfflineBanner />
+
         {/* Disaster Timeline Scrubber & Phase Controller (Task T8.1 & T8.2) */}
         <TimelineScrubber />
 

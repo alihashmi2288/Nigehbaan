@@ -26,6 +26,13 @@ import {
 import { useAppStore } from '@/store';
 import { extractFactsWithHeuristics, OFFLINE_FALLBACK_BADGE } from '@/lib/ai/heuristicExtractor';
 import { calculatePriorityScore } from '@/lib/triage/scoringEngine';
+import {
+  isOnline,
+  enqueueOfflineSubmission,
+  OFFLINE_QUEUED_MESSAGE,
+  subscribeOnlineStatus,
+  syncOfflineQueue,
+} from '@/lib/pwa';
 
 interface IntakeModalProps {
   isOpen: boolean;
@@ -93,6 +100,30 @@ export function IntakeModal({ isOpen, onClose }: IntakeModalProps) {
     category: string;
     noPhoneFloorApplied: boolean;
   } | null>(null);
+  const [networkOnline, setNetworkOnline] = useState(true);
+  const [offlineStatusMessage, setOfflineStatusMessage] = useState<string | null>(null);
+
+  // Monitor network online/offline status & auto-sync on reconnect
+  useEffect(() => {
+    setNetworkOnline(isOnline());
+    const unsub = subscribeOnlineStatus((status) => {
+      setNetworkOnline(status);
+      if (status) {
+        syncOfflineQueue((item) => {
+          submitIncident({
+            reportText: item.reportText,
+            sectorId: item.sectorId,
+            reporterType: item.reporterType,
+            phoneAccess: item.phoneAccess,
+            factors: item.factors,
+            reportTranslation: item.reportTranslation,
+            coordinates: item.coordinates,
+          });
+        });
+      }
+    });
+    return unsub;
+  }, [submitIncident]);
 
   // Close on Escape key
   useEffect(() => {
@@ -115,6 +146,7 @@ export function IntakeModal({ isOpen, onClose }: IntakeModalProps) {
       setProxyName('');
       setExtractionResult(null);
       setCalculatedPreview(null);
+      setOfflineStatusMessage(null);
     }
   }, [isOpen]);
 
@@ -210,6 +242,29 @@ export function IntakeModal({ isOpen, onClose }: IntakeModalProps) {
       isAI = false;
     }
 
+    const online = isOnline();
+
+    if (!online) {
+      // Offline mode: queue locally in localStorage (Acceptance Test 2.4)
+      enqueueOfflineSubmission({
+        reportText: reportText.trim(),
+        sectorId: (extractionResult?.facts?.sectorHint as string) || sectorId,
+        reporterType,
+        phoneAccess,
+        factors,
+        reportTranslation: extractionResult?.facts?.englishTranslation,
+        coordinates: null,
+      });
+
+      setOfflineStatusMessage(OFFLINE_QUEUED_MESSAGE);
+
+      setTimeout(() => {
+        setOfflineStatusMessage(null);
+        onClose();
+      }, 1200);
+      return;
+    }
+
     const created = submitIncident({
       reportText: reportText.trim(),
       sectorId: (extractionResult?.facts?.sectorHint as string) || sectorId,
@@ -252,18 +307,52 @@ export function IntakeModal({ isOpen, onClose }: IntakeModalProps) {
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={onClose}
-            className="w-7 h-7 rounded flex items-center justify-center text-ink-muted hover:text-ink hover:bg-surface-3 transition-colors"
-            aria-label="Close modal"
-          >
-            <X className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-2">
+            {!networkOnline && (
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-semantic-warning/20 text-semantic-warning-text border border-semantic-warning-border/40">
+                OFFLINE
+              </span>
+            )}
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-7 h-7 rounded flex items-center justify-center text-ink-muted hover:text-ink hover:bg-surface-3 transition-colors"
+              aria-label="Close modal"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* Modal Scrollable Body */}
         <div className="p-5 overflow-y-auto space-y-4 text-xs">
+          {/* Offline Status Alert Message (Acceptance Test 2.4) */}
+          {offlineStatusMessage && (
+            <div
+              data-testid="offline-queue-alert"
+              className="p-3 rounded-lg bg-semantic-warning/20 border border-semantic-warning-border text-semantic-warning-text font-mono text-xs flex items-center gap-2.5 animate-in fade-in"
+            >
+              <AlertCircle className="w-4 h-4 text-semantic-warning shrink-0 animate-bounce" />
+              <div className="flex-1">
+                <span className="font-bold block">{offlineStatusMessage}</span>
+                <span className="text-[10px] text-ink-muted">
+                  Report will automatically sync to active dashboard when connection is restored.
+                </span>
+              </div>
+            </div>
+          )}
+
+          {!networkOnline && !offlineStatusMessage && (
+            <div className="p-2.5 rounded bg-surface-2 border border-semantic-warning-border/40 text-semantic-warning-text font-mono text-[11px] flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <AlertCircle className="w-3.5 h-3.5 text-semantic-warning" />
+                OFFLINE MODE ACTIVE (PWA)
+              </span>
+              <span className="text-[10px] text-ink-muted">
+                Submissions will be saved locally &amp; queued
+              </span>
+            </div>
+          )}
           {/* Quick Pre-fill Presets */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">

@@ -1,0 +1,20 @@
+{
+  "name": "Nigehbaan (نگہبان) --- Tactical Disaster Triage",
+  "short_name": "Nigehbaan",
+  "description": "Tactical emergency coordination and deterministic disaster triage platform",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#010102",
+  "theme_color": "#010102",
+  "categories": ["government", "utilities", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
