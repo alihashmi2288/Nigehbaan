@@ -21,6 +21,8 @@ import {
   Building2,
   BarChart3,
   ExternalLink,
+  ShieldCheck,
+  HelpCircle,
 } from 'lucide-react';
 import { LinearNav, LinearFooter } from '@/components/layout';
 
@@ -38,15 +40,15 @@ export default function GuidePage() {
         <section className="text-center sm:text-left border-b border-hairline pb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-2 border border-hairline text-[13px] font-medium tracking-[0.4px] text-ink-muted mb-5">
             <BookOpen className="w-3.5 h-3.5 text-brand" />
-            <span>OPERATIONAL PROTOCOL &amp; EVALUATOR BLUEPRINT</span>
+            <span>HOW IT WORKS // JUDGE &amp; OPERATOR BLUEPRINT</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-semibold leading-[1.1] tracking-[-1.8px] text-ink mb-4">
-            Platform Guide &amp; Technical Dossier
+            Platform Guide &amp; How to Use
           </h1>
 
           <p className="text-base sm:text-lg font-normal leading-[1.5] text-ink-muted max-w-3xl">
-            A step-by-step handbook for hackathon judges, disaster coordinators, and field responders. Understand how Nigehbaan calculates deterministic priorities, synthesizes silent sector blind spots, and routes evacuees during catastrophic flood emergencies.
+            A plain-language guide for hackathon judges and emergency teams. Learn how Nigehbaan calculates fair priority scores without AI hallucinations, how it spots silent blackout neighborhoods, and how to test the platform in 3 minutes.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -62,7 +64,7 @@ export default function GuidePage() {
               href="/"
               className="px-4 py-2 text-[14px] font-medium text-ink bg-surface-1 border border-hairline hover:bg-surface-2 rounded-[8px] transition-colors"
             >
-              <span>Product Overview</span>
+              <span>Back to Overview</span>
             </NextLink>
           </div>
         </section>
@@ -73,13 +75,13 @@ export default function GuidePage() {
         <section className="space-y-6">
           <div>
             <span className="text-[12px] font-mono uppercase tracking-[0.4px] text-brand block mb-1">
-              Section 01 // Judging &amp; Demonstration
+              Section 01 // Interactive Walkthrough
             </span>
             <h2 className="text-2xl sm:text-3xl font-semibold tracking-[-0.6px] text-ink">
-              3-Minute Evaluator Quickstart
+              The 3-Minute Quickstart (What to Click)
             </h2>
             <p className="text-sm text-ink-subtle mt-1">
-              Follow these 6 chronological steps inside the Command Cockpit to verify all core capabilities in under 3 minutes.
+              Follow these 6 simple steps in the Command Cockpit to see all the breakthroughs in action.
             </p>
           </div>
 
@@ -88,11 +90,11 @@ export default function GuidePage() {
             <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold text-brand">STEP 1 • 0:00 – 0:30</span>
-                <span className="text-[11px] font-mono text-ink-subtle">Phase T-0</span>
+                <span className="text-[11px] font-mono text-ink-subtle">Baseline (T-0)</span>
               </div>
-              <h3 className="text-base font-medium text-ink">Inspect Baseline Command HUD</h3>
+              <h3 className="text-base font-medium text-ink">Open the Flood Map at T-0</h3>
               <p className="text-[13px] text-ink-subtle leading-[1.5]">
-                Launch the Cockpit. Observe the dark GIS map centered on District Alpha (`24.935, 67.145`). Notice the persistent `SIMULATED DATA` badge, live telemetry counters, and Sector 3A proactive staging alert.
+                Launch the Cockpit. Look at the interactive dark GIS map showing District Alpha. You will see 4 flood sectors, rescue boat depots, and emergency shelters with live capacity gauges.
               </p>
             </div>
 
@@ -100,11 +102,11 @@ export default function GuidePage() {
             <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold text-semantic-critical-text">STEP 2 • 0:30 – 1:00</span>
-                <span className="text-[11px] font-mono text-ink-subtle">Phase T+3</span>
+                <span className="text-[11px] font-mono text-ink-subtle">Advance to T+3</span>
               </div>
               <h3 className="text-base font-medium text-ink">Inspect Critical Case NG-101</h3>
               <p className="text-[13px] text-ink-subtle leading-[1.5]">
-                Advance the scrubber to <span className="text-ink font-mono font-medium">T+3 Flood Surge</span>. Click top-ranked incident <span className="text-semantic-critical-text font-mono font-medium">NG-101</span> (Score 86.5 — Critical). Inspect the Explainability Card and the 5-factor mathematical progress meters.
+                Click <span className="text-ink font-mono font-medium">T+3</span> on the timeline bar. The top emergency is <span className="text-semantic-critical-text font-mono font-medium">NG-101</span> (Score 86.5 — Critical): a dialysis patient trapped in deep water. Click the card to see the 5-factor math card explaining exactly why it is ranked #1.
               </p>
             </div>
 
@@ -112,11 +114,11 @@ export default function GuidePage() {
             <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold text-semantic-blind-spot-text">STEP 3 • 1:00 – 1:30</span>
-                <span className="text-[11px] font-mono text-ink-subtle">Phase T+6</span>
+                <span className="text-[11px] font-mono text-ink-subtle">Advance to T+6</span>
               </div>
-              <h3 className="text-base font-medium text-ink">Trigger Sector 3A Blind Spot</h3>
+              <h3 className="text-base font-medium text-ink">Watch the Silent Sector Trigger</h3>
               <p className="text-[13px] text-ink-subtle leading-[1.5]">
-                Advance scrubber to <span className="text-ink font-mono font-medium">T+6 Grid Blackout</span>. Tower-Alpha-3 collapses and Sector 3A goes silent for 110m. Watch Nigehbaan automatically synthesize <span className="text-semantic-blind-spot-text font-mono font-medium">NG-103</span> (Score 68.7, High) for field sweep recon.
+                Click <span className="text-ink font-mono font-medium">T+6</span> on the timeline. Tower-Alpha-3 collapses and Sector 3A goes totally silent for 110 minutes. Nigehbaan spots the silence and automatically generates <span className="text-semantic-blind-spot-text font-mono font-medium">NG-103</span> (Score 68.7, High Priority) so boats are sent immediately.
               </p>
             </div>
 
@@ -124,11 +126,11 @@ export default function GuidePage() {
             <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold text-semantic-warning-text">STEP 4 • 1:30 – 2:00</span>
-                <span className="text-[11px] font-mono text-ink-subtle">Opportunity Cost</span>
+                <span className="text-[11px] font-mono text-ink-subtle">Smart Resource Warning</span>
               </div>
-              <h3 className="text-base font-medium text-ink">Test Opportunity Cost Warning</h3>
+              <h3 className="text-base font-medium text-ink">Send a Boat &amp; See the Warning</h3>
               <p className="text-[13px] text-ink-subtle leading-[1.5]">
-                Select NG-101 $\to$ Click <span className="text-ink font-medium">&quot;Assign Resource&quot;</span> $\to$ Select <span className="text-ink font-medium">Shallow Jet-Boat 01</span>. The modal alerts: *Leaves 0 boats in Sector 2; +35 min delay for NG-104*. Click <span className="text-brand font-medium">&quot;Approve Assignment&quot;</span>.
+                Click NG-101 $\to$ Click <span className="text-ink font-medium">&quot;Assign Resource&quot;</span> $\to$ Select <span className="text-ink font-medium">Shallow Jet-Boat 01</span>. The modal warns: *&quot;Sending this leaves 0 boats in Sector 2; the next patient NG-104 will wait +35 minutes longer.&quot;* A human must click to approve.
               </p>
             </div>
 
@@ -136,11 +138,11 @@ export default function GuidePage() {
             <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold text-semantic-critical-text">STEP 5 • 2:00 – 2:30</span>
-                <span className="text-[11px] font-mono text-ink-subtle">Voice &amp; Offline PWA</span>
+                <span className="text-[11px] font-mono text-ink-subtle">Voice &amp; Offline Mode</span>
               </div>
-              <h3 className="text-base font-medium text-ink">Test Voice Hotline &amp; Offline Queue</h3>
+              <h3 className="text-base font-medium text-ink">Play the Urdu Voice Call &amp; Test Offline</h3>
               <p className="text-[13px] text-ink-subtle leading-[1.5]">
-                Click <span className="text-semantic-critical-text font-medium">&quot;Voice Hotline&quot;</span> in the header to view the real-time Web Audio waveform and bilingual Urdu RTL + English translation. Toggle browser offline mode to see reports queue locally with instant heuristic extraction.
+                Click <span className="text-semantic-critical-text font-medium">&quot;Voice Hotline&quot;</span> in the header to play real simulated audio with animated soundwaves and Urdu/English subtitles. Then toggle browser offline mode: reports queue locally and auto-upload when reconnected.
               </p>
             </div>
 
@@ -148,88 +150,89 @@ export default function GuidePage() {
             <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline relative space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold text-brand">STEP 6 • 2:30 – 3:00</span>
-                <span className="text-[11px] font-mono text-ink-subtle">Phase T+12 &amp; Reset</span>
+                <span className="text-[11px] font-mono text-ink-subtle">Advance to T+12 &amp; Reset</span>
               </div>
-              <h3 className="text-base font-medium text-ink">FCFS Retrospective &amp; 1-Click Reset</h3>
+              <h3 className="text-base font-medium text-ink">View Lives Saved &amp; 1-Click Reset</h3>
               <p className="text-[13px] text-ink-subtle leading-[1.5]">
-                Advance to <span className="text-ink font-mono font-medium">T+12 Peak Crisis</span> $\to$ Click <span className="text-brand font-medium">&quot;FCFS Analysis&quot;</span> to review the -97% critical latency reduction and 4 casualties prevented. Then click <span className="text-ink font-medium">&quot;Reset Simulation&quot;</span> to restore baseline state in &lt;10ms.
+                Click <span className="text-ink font-mono font-medium">T+12</span> $\to$ Click <span className="text-brand font-medium">&quot;FCFS Analysis&quot;</span> to see how Nigehbaan cut critical wait time by 97% and saved 4 lives. Then click <span className="text-ink font-medium">&quot;Reset Simulation&quot;</span> in the top bar to instantly restore the pristine baseline.
               </p>
             </div>
           </div>
         </section>
 
         {/* ================================================================= */}
-        {/* SECTION 2: MATHEMATICAL TRIAGE FORMULA                            */}
+        {/* SECTION 2: HOW THE PRIORITY FORMULA WORKS                         */}
         {/* ================================================================= */}
         <section className="space-y-6 border-t border-hairline pt-12">
           <div>
             <span className="text-[12px] font-mono uppercase tracking-[0.4px] text-brand block mb-1">
-              Section 02 // Mathematical Spec
+              Section 02 // The Mathematics
             </span>
             <h2 className="text-2xl sm:text-3xl font-semibold tracking-[-0.6px] text-ink">
-              Deterministic 5-Factor MCDA Engine
+              How the Priority Score (0–100) is Calculated
             </h2>
             <p className="text-sm text-ink-subtle mt-1">
-              Priority scores are 100% deterministic arithmetic in TypeScript (`src/lib/triage/scoringEngine.ts`). The LLM never computes scores.
+              In simple terms: we score emergencies like a fair report card across 5 factors, using pure math. The AI is never allowed to guess numbers.
             </p>
           </div>
 
-          {/* Formula Display Box */}
-          <div className="p-6 rounded-[12px] bg-surface-1 border border-hairline space-y-4">
+          {/* Plain English Analogy Box */}
+          <div className="p-5 rounded-[12px] bg-surface-2 border border-brand/40 space-y-2">
+            <div className="flex items-center gap-2 text-brand font-medium text-sm">
+              <HelpCircle className="w-4 h-4" />
+              <span>How Missing Information is Handled (In Plain English)</span>
+            </div>
+            <p className="text-xs sm:text-[13px] text-ink-muted leading-[1.6]">
+              If someone&apos;s phone died mid-call and we only know their water depth (1.5m) but not their medical history, <strong>we do not give them a zero for medical</strong>. Giving a zero would push them to the bottom of the queue. Instead, we calculate their score purely based on the flood danger we know for sure. Missing information raises an <span className="text-brand font-mono font-semibold">Uncertainty Flag</span> to get verified, but it never deprioritizes the victim.
+            </p>
+          </div>
+
+          {/* The Formula */}
+          <div className="p-6 rounded-[12px] bg-surface-1 border border-hairline space-y-3">
             <div className="text-xs font-mono text-ink-muted uppercase tracking-wider">
-              Authoritative MCDA Equation with Weight Renormalization
+              The 5-Factor Mathematical Formula
             </div>
 
-            <div className="p-4 rounded-[8px] bg-surface-2 border border-hairline font-mono text-sm sm:text-base text-ink overflow-x-auto text-center">
-              Score = 100 × [ Σ (wᵢ · fᵢ / 5.0) ] / Σ wᵢ
+            <div className="p-3.5 rounded-[8px] bg-surface-2 border border-hairline font-mono text-sm sm:text-base text-ink overflow-x-auto text-center">
+              Score = 100 × [ (0.30 · f₁) + (0.25 · f₂) + (0.20 · f₃) + (0.15 · f₄) + (0.10 · f₅) ] / 5.0
             </div>
-
-            <p className="text-[13px] text-ink-subtle leading-[1.5]">
-              Where each factor <span className="text-ink font-mono">fᵢ ∈ [0.0, 5.0]</span> is evaluated against known empirical evidence. When factor data is missing, the denominator sums strictly across known weights. <strong className="text-ink font-medium">Missing data never penalizes the victim with a zero.</strong>
-            </p>
           </div>
 
-          {/* Factor Table */}
+          {/* 5 Factors Table */}
           <div className="border border-hairline rounded-[12px] overflow-hidden bg-surface-1">
             <table className="w-full text-left text-xs sm:text-sm font-sans">
               <thead className="bg-surface-2 border-b border-hairline text-ink-muted font-mono uppercase text-[11px]">
                 <tr>
                   <th className="p-3.5">Factor</th>
-                  <th className="p-3.5">Weight (wᵢ)</th>
-                  <th className="p-3.5">Scale (0.0 to 5.0)</th>
-                  <th className="p-3.5 hidden sm:table-cell">Key Operational Indicators</th>
+                  <th className="p-3.5">Importance</th>
+                  <th className="p-3.5">What We Look For</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-hairline text-ink-subtle">
                 <tr>
-                  <td className="p-3.5 font-medium text-ink">f₁: Immediate Life Threat</td>
-                  <td className="p-3.5 font-mono text-brand font-bold">0.30</td>
-                  <td className="p-3.5 font-mono">0.0 – 5.0</td>
-                  <td className="p-3.5 hidden sm:table-cell">Drowning, swept by current, roof submerging (&gt;1.5m water)</td>
+                  <td className="p-3.5 font-medium text-ink">1. Life Threat (f₁)</td>
+                  <td className="p-3.5 font-mono text-brand font-bold">30% of Score</td>
+                  <td className="p-3.5">Drowning, strong current, water above chest level (&gt;1.5m), roof collapsing</td>
                 </tr>
                 <tr>
-                  <td className="p-3.5 font-medium text-ink">f₂: Medical Urgency</td>
-                  <td className="p-3.5 font-mono text-brand font-bold">0.25</td>
-                  <td className="p-3.5 font-mono">0.0 – 5.0</td>
-                  <td className="p-3.5 hidden sm:table-cell">Missed hemodialysis, ventilator failure, severe hemorrhage</td>
+                  <td className="p-3.5 font-medium text-ink">2. Medical Urgency (f₂)</td>
+                  <td className="p-3.5 font-mono text-brand font-bold">25% of Score</td>
+                  <td className="p-3.5">Missed hemodialysis, heart attack, insulin or ventilator outage, severe bleeding</td>
                 </tr>
                 <tr>
-                  <td className="p-3.5 font-medium text-ink">f₃: Evacuation Inability</td>
-                  <td className="p-3.5 font-mono text-brand font-bold">0.20</td>
-                  <td className="p-3.5 font-mono">0.0 – 5.0</td>
-                  <td className="p-3.5 hidden sm:table-cell">Non-ambulatory elderly, infants, dead phone (`no_phone` enforces ≥4.0)</td>
+                  <td className="p-3.5 font-medium text-ink">3. Escape Inability (f₃)</td>
+                  <td className="p-3.5 font-mono text-brand font-bold">20% of Score</td>
+                  <td className="p-3.5">Bedridden elderly, infants, paralyzed, or broken phone (dead phone enforces ≥4.0)</td>
                 </tr>
                 <tr>
-                  <td className="p-3.5 font-medium text-ink">f₄: Environmental Danger</td>
-                  <td className="p-3.5 font-mono text-brand font-bold">0.15</td>
-                  <td className="p-3.5 font-mono">0.0 – 5.0</td>
-                  <td className="p-3.5 hidden sm:table-cell">River water gauge rising, mudslide corridor, live downed cables</td>
+                  <td className="p-3.5 font-medium text-ink">4. Flood Danger (f₄)</td>
+                  <td className="p-3.5 font-mono text-brand font-bold">15% of Score</td>
+                  <td className="p-3.5">River gauge rising rapidly, mudslides, live submerged electrical wires</td>
                 </tr>
                 <tr>
-                  <td className="p-3.5 font-medium text-ink">f₅: Population Exposed</td>
-                  <td className="p-3.5 font-mono text-brand font-bold">0.10</td>
-                  <td className="p-3.5 font-mono">0.0 – 5.0</td>
-                  <td className="p-3.5 hidden sm:table-cell">Headcount: 1–2 (1.0), 3–10 (2.5), 11–50 (4.0), &gt;50 (5.0)</td>
+                  <td className="p-3.5 font-medium text-ink">5. Number of People (f₅)</td>
+                  <td className="p-3.5 font-mono text-brand font-bold">10% of Score</td>
+                  <td className="p-3.5">Headcount trapped: 1–2 people, 3–10 family members, 11–50 group, 50+ community</td>
                 </tr>
               </tbody>
             </table>
@@ -237,51 +240,49 @@ export default function GuidePage() {
         </section>
 
         {/* ================================================================= */}
-        {/* SECTION 3: DISTRICT ALPHA SCENARIO & CLOCK                        */}
+        {/* SECTION 3: 3 GOLDEN SAFETY RULES                                  */}
         {/* ================================================================= */}
         <section className="space-y-6 border-t border-hairline pt-12">
           <div>
             <span className="text-[12px] font-mono uppercase tracking-[0.4px] text-brand block mb-1">
-              Section 03 // Scenario Context
+              Section 03 // Safety &amp; Trust
             </span>
             <h2 className="text-2xl sm:text-3xl font-semibold tracking-[-0.6px] text-ink">
-              District Alpha Telemetry Chronology
+              Our 3 Golden Safety Rules
             </h2>
             <p className="text-sm text-ink-subtle mt-1">
-              The standardized benchmark scenario simulating 12 hours of catastrophic river surge progression in District Alpha.
+              Why emergency coordinators and government agencies can trust Nigehbaan in a real crisis.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <div className="p-4 rounded-[8px] bg-surface-1 border border-hairline space-y-1.5">
-              <span className="text-xs font-mono font-bold text-semantic-success-text">T-0 • 04:30</span>
-              <div className="text-sm font-medium text-ink">Early Warning</div>
-              <p className="text-[12px] text-ink-subtle">
-                Flood gauge 0.6m. Pre-disaster baseline. Staging advisor recommends pre-positioning Jet-Boat 01 for Sector 3A.
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline space-y-2">
+              <div className="w-7 h-7 rounded-[6px] bg-surface-2 border border-hairline flex items-center justify-center text-brand mb-1">
+                <ShieldCheck className="w-4 h-4" />
+              </div>
+              <h3 className="text-base font-medium text-ink">1. Zero AI Guesswork</h3>
+              <p className="text-[13px] text-ink-subtle leading-[1.5]">
+                AI is only used to extract text and transcribe voice. Priority scores are calculated by verified math. The AI is never allowed to invent or alter a score.
               </p>
             </div>
 
-            <div className="p-4 rounded-[8px] bg-surface-1 border border-hairline space-y-1.5">
-              <span className="text-xs font-mono font-bold text-semantic-warning-text">T+3 • 07:30</span>
-              <div className="text-sm font-medium text-ink">Flood Surge</div>
-              <p className="text-[12px] text-ink-subtle">
-                Gauge reaches 1.3m. Arterial road cut off. Dialysis emergency NG-101 (Score 86.5) appears in Sector 2.
+            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline space-y-2">
+              <div className="w-7 h-7 rounded-[6px] bg-surface-2 border border-hairline flex items-center justify-center text-brand mb-1">
+                <CheckCircle2 className="w-4 h-4" />
+              </div>
+              <h3 className="text-base font-medium text-ink">2. Humans Always Approve</h3>
+              <p className="text-[13px] text-ink-subtle leading-[1.5]">
+                The software recommends resources and warns of delays, but it never dispatches a boat on its own. A human commander must click &quot;Approve Assignment&quot;.
               </p>
             </div>
 
-            <div className="p-4 rounded-[8px] bg-surface-1 border border-hairline space-y-1.5">
-              <span className="text-xs font-mono font-bold text-semantic-blind-spot-text">T+6 • 10:30</span>
-              <div className="text-sm font-medium text-ink">Grid Blackout</div>
-              <p className="text-[12px] text-ink-subtle">
-                Tower-Alpha-3 collapses at 08:55. Gauge hits 1.9m. Silence reaches 110m. Synthetic incident NG-103 generated.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-[8px] bg-surface-1 border border-hairline space-y-1.5">
-              <span className="text-xs font-mono font-bold text-semantic-critical-text">T+12 • 16:30</span>
-              <div className="text-sm font-medium text-ink">Peak Crisis</div>
-              <p className="text-[12px] text-ink-subtle">
-                Gauge at 2.4m. SHL-03 loses generator (97% capacity). All 12 incidents active. FCFS retrospective unlock.
+            <div className="p-5 rounded-[12px] bg-surface-1 border border-hairline space-y-2">
+              <div className="w-7 h-7 rounded-[6px] bg-surface-2 border border-hairline flex items-center justify-center text-brand mb-1">
+                <Terminal className="w-4 h-4" />
+              </div>
+              <h3 className="text-base font-medium text-ink">3. Honest Offline Fallbacks</h3>
+              <p className="text-[13px] text-ink-subtle leading-[1.5]">
+                If the internet goes down or the Gemini API is unreachable, we never fake AI responses. We explicitly label the output: <span className="text-ink font-mono text-xs">&quot;Offline heuristic extraction (not AI)&quot;</span>.
               </p>
             </div>
           </div>
@@ -292,10 +293,10 @@ export default function GuidePage() {
         {/* ================================================================= */}
         <section className="p-8 sm:p-10 rounded-[16px] bg-surface-1 border border-hairline text-center space-y-4 relative overflow-hidden before:absolute before:inset-x-0 before:top-0 before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent">
           <h2 className="text-xl sm:text-3xl font-semibold tracking-[-0.6px] text-ink">
-            Experience the Operational Command Cockpit
+            Ready to test the live disaster command center?
           </h2>
           <p className="text-sm text-ink-muted max-w-lg mx-auto">
-            Interact with live Leaflet map polygons, test resource assignments, view real-time Urdu waveforms, and verify the offline PWA queue.
+            Open the Command Cockpit to interact with live flood maps, advance the timeline scrubber, listen to Urdu voice calls, and test the offline queue.
           </p>
           <div className="pt-2">
             <NextLink
