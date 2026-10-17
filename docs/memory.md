@@ -122,11 +122,12 @@ The following architectural and product decisions were formally established and 
 
 See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation checklist.
 
-- **Current Active Milestone:** **Milestone 2 --- State Store & Seed Data (Tier 1)**
+- **Current Active Milestone:** **Milestone 3 --- GIS Map & Sector Polygons (Tier 1)**
 - **Completed Milestones:**
   - **Milestone 0 --- Bootstrap & Project Setup** (Tasks T0.1, T0.2, T0.3, T0.4 verified)
   - **Milestone 1 --- Deterministic Scoring Engine & Tests** (Tasks T1.1, T1.2, T1.3, T1.4 verified)
-- **Next Smallest Coding Task:** **`T2.1`** (Seed Data Loader & Scenario Normalizer).
+  - **Milestone 2 --- State Store & Seed Data** (Tasks T2.1, T2.2, T2.3 verified)
+- **Next Smallest Coding Task:** **`T3.1`** (Leaflet GIS Map Container & Dark Matter Tiles).
 
 ---
 
@@ -163,8 +164,18 @@ See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation che
   - **T1.2 (5-Factor MCDA Scoring Engine):** Created `src/lib/triage/scoringEngine.ts` implementing deterministic MCDA formula `Score = 100 * sum(w_i * f_i / 5.0) / sum(w_i)`, unknown factor weight renormalization, vulnerability floors (`no_phone` enforces $f_3 \ge 4.0$, `system_blind_spot` enforces $\min(\text{score}) \ge 60.0$, category High, never auto-Critical), factor contribution breakdowns, and discrete lookup helpers.
   - **T1.3 (Queue Ranker & Tie-Breaker):** Created `src/lib/triage/queueRanker.ts` implementing 3-tier deterministic sorting: Primary (score descending), Secondary Tie-Break within $\pm 0.1$ (Confidence Inversion: lower confidence ranks higher to surface high uncertainty), and Tertiary Tie-Break (FIFO earlier timestamp).
   - **T1.4 (Automated Unit Tests):** Created `tests/scoring.test.ts` covering all 12 District Alpha seed incidents, Acceptance Tests 1.1, 1.2, 1.2b, 1.3, 1.4, tie-break confidence inversion, factor lookups, and Zod bounds. Verified with `npm test` (19/19 tests green in 2 files), `node scripts/verify-docs.mjs` (12/12 pass), and `npm run build` (clean compilation, 0 warnings/errors).
+
+### Session --- 2026-10-17 17:45 PKT (Milestone 2: State Store & Seed Data)
+- **Phase/Task:** Milestone 2 (Tasks T2.1, T2.2, T2.3)
+- **Accomplishments:**
+  - Installed `zustand` (`^5.0.15`) dependency.
+  - **T2.1 (Seed Data Loader & Scenario Normalizer):** Created `src/lib/simulation/seedLoader.ts` loading and validating `seed.json` with Zod schemas (`IncidentSchema`, `ResourceSchema`, `ShelterSchema`, `SectorSchema`, `ScenarioSchema`), calculating deterministic MCDA scores, confidence, and categories, and exporting typed getters (`getPristineIncidents`, `getPristineResources`, `getPristineShelters`, `getPristineSectors`, `getPristineScenario`, `getPristineState`).
+  - **T2.2 (Reactive Client State Store with LocalStorage Persistence):** Created `src/store/useAppStore.ts` and `src/store/index.ts` with Zustand and `persist` middleware (`nigehbaan-state-v1`), safe storage fallbacks for SSR/node test environments, and reactive actions (`assignResource`, `unassignResource`, `submitIncident`, `setTimelinePhase`, `updateIncident`, `updateResource`). Strict adherence to Acceptance Test 1.6 (`[TIMESTAMP] COORDINATOR_ASSIGN: Shallow Jet-Boat 01 assigned to NG-101`). Added phase-based visibility selectors (`selectVisibleIncidents`, `selectRankedVisibleIncidents`).
+  - **T2.3 (1-Click Simulation Reset Function & Activity Log):** Implemented synchronous `resetSimulation()` restoring pristine baseline seed data in <10ms, resetting timeline to `T-0`, clearing dirty assignments, and logging audit entries. Created `src/components/layout/ResetButton.tsx` and `src/components/layout/index.ts` styled with `DESIGN.md` tokens, mounted in `src/app/page.tsx` tactical HUD.
+  - **Unit & Integration Tests:** Created `tests/stateStore.test.ts` with 12 comprehensive tests covering T2.1, T2.2, and T2.3.
+  - **Verification:** Ran `npm test` (31/31 assertions green across 3 test files), and `npm run build` (clean Next.js production build, 0 warnings/errors).
 - **Next Smallest Coding Task:**
-  - Task **`T2.1`** (Seed Data Loader & Scenario Normalizer).
+  - Task **`T3.1`** (Leaflet GIS Map Container & Dark Matter Tiles).
 
 
 

@@ -10,6 +10,7 @@ import {
   CheckCircle2,
   HelpCircle,
 } from 'lucide-react';
+import { ResetButton } from '@/components/layout';
 
 export default function Home() {
   return (
@@ -34,13 +35,14 @@ export default function Home() {
         </div>
 
         <div className="flex items-center gap-3">
+          <ResetButton />
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono bg-surface-2 border border-hairline text-ink-muted">
             <span className="w-2 h-2 rounded-full bg-semantic-success animate-ping" />
             LIVE PIPELINE READY
           </span>
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono bg-surface-2 border border-hairline text-brand">
             <Terminal className="w-3.5 h-3.5" />
-            Milestone 0: Skeleton Active
+            Milestone 2: State Store Active
           </span>
         </div>
       </header>

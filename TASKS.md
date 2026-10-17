@@ -174,7 +174,7 @@
 
 ## Milestone 2: State Store & Seed Data (Tier 1)
 
-### [ ] Task T2.1: Seed Data Loader & Scenario Normalizer
+### [x] Task T2.1: Seed Data Loader & Scenario Normalizer
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T1.1
 - **Files to create/edit:**
@@ -190,7 +190,7 @@
 
 ---
 
-### [ ] Task T2.2: Reactive Client State Store with LocalStorage Persistence
+### [x] Task T2.2: Reactive Client State Store with LocalStorage Persistence
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T2.1, T1.2
 - **Files to create/edit:**
@@ -208,7 +208,7 @@
 
 ---
 
-### [ ] Task T2.3: 1-Click Simulation Reset Function & Activity Log
+### [x] Task T2.3: 1-Click Simulation Reset Function & Activity Log
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T2.2
 - **Files to create/edit:**
