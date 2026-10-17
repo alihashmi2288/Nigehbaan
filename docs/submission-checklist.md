@@ -62,7 +62,7 @@ Run through this checklist 4 hours before the deadline (at 6:00 PM on 18 Oct 202
 - [ ] **Console Errors:** Chrome DevTools console displays 0 red runtime errors.
 - [ ] **TypeScript Typecheck:** `npx tsc --noEmit` exits with status `0`.
 - [ ] **Build Verification:** `npm run build` compiles with zero errors.
-- [ ] **1-Click Reset:** Clicking "Reset Simulation" restores District Alpha baseline in $< 10\text{ms}$.
+- [ ] **1-Click Reset:** Clicking "Reset Simulation" restores District Alpha baseline immediately.
 - [ ] **No Secrets in Repo:** Verified that `.env.local` is ignored and no API keys are committed in Git history.
 
 ### Feature & Demonstration Checks

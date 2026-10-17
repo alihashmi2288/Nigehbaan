@@ -185,7 +185,7 @@ graph TD
 | **FR-19** | Bilingual Voice Distress Hotline | **Tier 2** | Plays simulated audio, renders waveform, and displays Urdu/English transcription. |
 | **FR-20** | Community Proxy Intake Mode | **Tier 2** | Allows reporting on behalf of others; tracks phone access (`has_phone`, `no_phone`, `network_down`). |
 | **FR-21** | Installable PWA with Offline Queue | **Tier 2** | Caches shell and queues offline report submissions for background sync. |
-| **FR-22** | FCFS vs. Nigehbaan Impact Panel | **Tier 2** | Displays simulated comparative metrics on $T+12$ screen showing lives saved vs. FCFS. |
+| **FR-22** | FCFS vs. Nigehbaan Impact Panel | **Tier 2** | Displays simulated comparison: minutes to first assignment, FCFS vs score-based on $T+12$ screen. |
 
 ---
 

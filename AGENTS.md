@@ -7,16 +7,14 @@
 
 ## 1. Required Reading Order (Source of Truth)
 
-Read these authoritative specification files before touching code:
-1. **[`docs/scoring-spec.md`](./docs/scoring-spec.md)** --- Exact lookup tables, 0–5 factor scoring rules, MCDA formula (0–100 scale), unknown factor renormalization, and blind-spot floors.
-2. **[`docs/seed-data.md`](./docs/seed-data.md)** --- District Alpha scenario data: 12 incidents, 6 resources, 3 shelters, 4 sector polygons, and timeline events ($T-0, T+3, T+6, T+12$).
-3. **[`docs/acceptance-tests.md`](./docs/acceptance-tests.md)** --- Given/When/Then test criteria for every Tier 1 and Tier 2 feature.
-4. **[`DESIGN.md`](./DESIGN.md)** --- Authoritative visual design tokens (`#010102` canvas, `#0f1011` surface, `#5e6ad2` primary, crisis semantic badges), typography, and WCAG AA contrast standards.
-5. **[`docs/rules.md`](./docs/rules.md)** --- Engineering standards, milestone checklist, and deadline rules.
-6. **[`docs/memory.md`](./docs/memory.md)** --- Living project state, active decisions, and session changelog.
-7. **[`TASKS.md`](./TASKS.md)** --- Authoritative atomic task backlog grouped by milestone with dependencies and acceptance criteria.
+Read only your current task in [`TASKS.md`](./TASKS.md) (find it by ID) and the files in its "Read First" list, plus the 10 invariants below. Never read the whole `TASKS.md` or every doc.
 
-> **RULE ON CONFLICTS:** If any specification documents conflict, **STOP IMMEDIATELY**, do not guess, and log the conflict in `docs/memory.md`.
+Where files disagree:
+- **`src/lib/simulation/seed.json`** wins for data and field names.
+- **`DESIGN.md`** wins for colors and design tokens.
+- **`docs/scoring-spec.md`** wins for mathematical formulas and triage factor lookups.
+
+If you cannot resolve a conflict, **STOP IMMEDIATELY**, do not guess, and log the conflict in `docs/memory.md`.
 
 ---
 

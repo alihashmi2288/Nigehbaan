@@ -11,10 +11,10 @@ District Alpha is partitioned into four operational response sectors:
 
 | Sector ID | Sector Name | Terrain Characteristics | Bounding Coordinates (Approximate Fictional) |
 | :--- | :--- | :--- | :--- |
-| **`sector-1`** | **Central Command & Urban High-Ground** | Dense paved urban core, elevated ridge, government centers, central hospital. Staging depot. | `[[24.930, 67.110], [24.950, 67.110], [24.950, 67.140], [24.930, 67.140]]` |
-| **`sector-2`** | **Gadap Lowland Agriculture** | Alluvial farmland, scattered compounds, single-lane roads. Water 0.8m – 1.4m. | `[[24.950, 67.110], [24.980, 67.110], [24.980, 67.160], [24.950, 67.160]]` |
-| **`sector-3a`**| **Riverbank Settlement (*Katchi Abadi*)** | High-density informal settlement along Malir floodway, single-story mud/concrete homes. Extreme flood vulnerability. | `[[24.910, 67.130], [24.935, 67.130], [24.935, 67.170], [24.910, 67.170]]` |
-| **`sector-4`** | **Highway Arterial & Coastal Outskirts** | National highway bridge corridor, industrial warehouses, transit relief staging. | `[[24.890, 67.150], [24.910, 67.150], [24.910, 67.190], [24.890, 67.190]]` |
+| **`sector-1`** | **Central Command & Urban High-Ground** | Dense paved urban core, elevated ridge, government centers, central hospital. Staging depot. | `[[24.895, 67.110], [24.910, 67.110], [24.910, 67.135], [24.895, 67.135]]` |
+| **`sector-2`** | **Gadap Lowland Agriculture** | Alluvial farmland, scattered compounds, single-lane roads. Water 0.8m – 1.4m. | `[[24.908, 67.130], [24.935, 67.130], [24.935, 67.155], [24.908, 67.155]]` |
+| **`sector-3a`**| **Riverbank Settlement (*Katchi Abadi*)** | High-density informal settlement along Malir floodway, single-story mud/concrete homes. Extreme flood vulnerability. | `[[24.930, 67.150], [24.960, 67.150], [24.960, 67.175], [24.930, 67.175]]` |
+| **`sector-4`** | **Highway Arterial & Coastal Outskirts** | National highway bridge corridor, industrial warehouses, transit relief staging. | `[[24.955, 67.170], [24.985, 67.170], [24.985, 67.200], [24.955, 67.200]]` |
 
 ---
 

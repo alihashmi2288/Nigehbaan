@@ -42,15 +42,20 @@
 - **Read First:**
   - [`DESIGN.md`](./DESIGN.md)
 - **Implementation Details:**
-  - Define CSS custom properties and Tailwind color extensions for:
-    - Canvas: `#010102` (`--canvas-bg`)
-    - Surface Levels: `#08090a` (`--surface-1`), `#0f1011` (`--surface-2`), `#151618` (`--surface-3`)
-    - Hairline Borders: `#23252a` (`--border-subtle`), `#343840` (`--border-strong`)
-    - Primary Accent: `#5e6ad2` (`--primary-accent`)
-    - Crisis Semantics: Critical `#f43f5e`, High `#f97316`, Moderate `#eab308`, Low `#06b6d4`, Blind-spot Tangerine `#fb923c`
+  - Define CSS custom properties and Tailwind color extensions using DESIGN.md token names (never invent ad-hoc hex values):
+    - Canvas: `--canvas: #010102`
+    - Surface Levels: `--surface-1: #0f1011`, `--surface-2: #141516`, `--surface-3: #18191a`, `--surface-4: #191a1b`
+    - Hairline Borders: `--hairline: #23252a`, `--hairline-strong: #34343a`, `--hairline-tertiary: #3e3e44`
+    - Brand / Primary Accent: `--primary: #5e6ad2`, `--primary-hover: #828fff`, `--primary-focus: #5e69d1`
+    - Crisis Semantics:
+      - Critical: `--semantic-critical: #B42318`, text `--semantic-critical-text: #FDA29B`, border `--semantic-critical-border: #F04438`
+      - Warning / High: `--semantic-warning: #92400E`, text `--semantic-warning-text: #FDB022`, border `--semantic-warning-border: #D97706`
+      - Blind-Spot: `--semantic-blind-spot: #DB6D28`, text `--semantic-blind-spot-text: #F79009`, border `--semantic-blind-spot-border: #BD561D`
+      - Success: `--semantic-success: #27a644`, text `--semantic-success-text: #75E0A7`, border `--semantic-success-border: #12B76A`
+      - Unknown / Slate: `--semantic-unknown: #475569`, text `--semantic-unknown-text: #94A3B8`
   - Configure Inter / JetBrains Mono typography and WCAG AA contrast helpers.
 - **Acceptance Criteria:**
-  - Loading `src/app/page.tsx` exhibits deep black canvas (`#010102`) and hairline borders (`#23252a`).
+  - Loading `src/app/page.tsx` exhibits deep black canvas (`--canvas: #010102`) and hairline borders (`--hairline: #23252a`).
   - Dark mode styles apply without flashing or contrast regressions.
 
 ---
@@ -252,11 +257,11 @@
   - [`DESIGN.md`](./DESIGN.md) Crisis Semantic Badges & Tokens
 - **Implementation Details:**
   - Draw 4 sector polygons (`sector-1`, `sector-2`, `sector-3a`, `sector-4`).
-  - Default styling: subtle border `#23252a`, fill `#0f1011` with 0.3 opacity.
+  - Default styling: subtle border using `--hairline` (`#23252a`), fill using `--surface-1` (`#0f1011`) with 0.3 opacity.
   - When a sector is flagged as a blind spot (e.g. `sector-3a` at T+6):  
-    border turns `--semantic-blind-spot` (`#fb923c`), dashed stroke (`dashArray: '6, 6'`), pulsing glow.
+    border turns `--semantic-blind-spot` (`#DB6D28`), dashed stroke (`dashArray: '6, 6'`), pulsing glow. Reference DESIGN.md token names rather than hardcoding ad-hoc hex values.
 - **Acceptance Criteria:**
-  - Sectors render with crisp boundaries; Sector 3A highlights in tangerine when blind spot is active.
+  - Sectors render with crisp boundaries; Sector 3A highlights in tangerine (`--semantic-blind-spot`) when blind spot is active.
 
 ---
 
@@ -270,7 +275,11 @@
   - [`docs/acceptance-tests.md`](./docs/acceptance-tests.md) Test 1.2
 - **Implementation Details:**
   - Render SVG markers for incidents with known coordinates (`latitude !== null`).
-  - Color-code by category: Critical `#f43f5e`, High `#f97316`, Moderate `#eab308`, Low `#06b6d4`.
+  - Color-code using DESIGN.md semantic token names:
+    - Critical: `--semantic-critical` (`#B42318`)
+    - High: `--semantic-warning` (`#92400E`)
+    - Moderate: `--semantic-warning` / amber with reduced intensity
+    - Low: `--semantic-unknown` / slate (`#475569`) or low accent
   - Add pulsing ring animation around Critical incidents.
   - Clicking a marker selects the incident in the store and opens the inspector panel.
   - Omit markers for `NG-112` (missing coordinates) and display badge indicator instead.
@@ -760,9 +769,10 @@
 - **Implementation Details:**
   - Retrospective summary comparison available at $T+12$:
     - Naive First-Come First-Served: Prioritizes minor property damage (`NG-107`) over silent dialysis patients (`NG-101`).
-    - Nigehbaan Triage: Critical lives saved, blind-spot recon sweeps executed.
+    - Nigehbaan Triage: Critical priorities addressed first, blind-spot recon sweeps executed.
+    - Metrics: simulated comparison: minutes to first assignment, FCFS vs score-based.
 - **Acceptance Criteria:**
-  - Clear visual comparison illustrating lives saved by deterministic prioritization.
+  - Clear visual comparison showing simulated comparison: minutes to first assignment, FCFS vs score-based.
 
 ---
 
