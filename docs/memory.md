@@ -122,9 +122,11 @@ The following architectural and product decisions were formally established and 
 
 See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation checklist.
 
-- **Current Active Milestone:** **Milestone 1 --- Deterministic Scoring Engine & Tests (Tier 1)**
-- **Completed Milestones:** **Milestone 0 --- Bootstrap & Project Setup** (Tasks T0.1, T0.2, T0.3, T0.4 verified)
-- **Next Smallest Coding Task:** **`T1.1`** (Core TypeScript Data Types & Zod Schemas).
+- **Current Active Milestone:** **Milestone 2 --- State Store & Seed Data (Tier 1)**
+- **Completed Milestones:**
+  - **Milestone 0 --- Bootstrap & Project Setup** (Tasks T0.1, T0.2, T0.3, T0.4 verified)
+  - **Milestone 1 --- Deterministic Scoring Engine & Tests** (Tasks T1.1, T1.2, T1.3, T1.4 verified)
+- **Next Smallest Coding Task:** **`T2.1`** (Seed Data Loader & Scenario Normalizer).
 
 ---
 
@@ -152,8 +154,18 @@ See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation che
   - **T0.2 (Tailwind Tokens):** Created `tailwind.config.ts`, `postcss.config.mjs`, and `src/app/globals.css` with exact `DESIGN.md` tokens (Canvas `#010102`, Surfaces `#0f1011`–`#191a1b`, Hairlines `#23252a`–`#3e3e44`, Brand `#5e6ad2`, and all Crisis Semantics: Critical, Warning, Blind-Spot, Success, Unknown).
   - **T0.3 (Vitest Runner):** Created `vitest.config.ts`, added `"test": "vitest run"` to `package.json`, and added `tests/sanity.test.ts`. Verified with `npm test`: 4/4 tests passed with 0 failures.
   - **T0.4 (Build & Vercel Prep):** Verified production build with `npm run build`: zero errors, zero warnings, static page prerendering clean. Added `.gitignore` for node, Next.js, and Vitest artifacts. Formulated manual Vercel deployment guide.
+
+### Session --- 2026-10-17 17:35 PKT (Milestone 1: Deterministic Scoring Engine & Tests)
+- **Phase/Task:** Milestone 1 (Tasks T1.1, T1.2, T1.3, T1.4)
+- **Accomplishments:**
+  - Installed `zod` dependency.
+  - **T1.1 (Core TypeScript Types & Zod Schemas):** Created `src/types/incident.ts`, `src/types/resource.ts`, `src/types/shelter.ts`, `src/types/simulation.ts`, and `src/types/index.ts` with complete data models and strict Zod runtime schemas (including `ExtractedFactsSchema` with depth/headcount clamping).
+  - **T1.2 (5-Factor MCDA Scoring Engine):** Created `src/lib/triage/scoringEngine.ts` implementing deterministic MCDA formula `Score = 100 * sum(w_i * f_i / 5.0) / sum(w_i)`, unknown factor weight renormalization, vulnerability floors (`no_phone` enforces $f_3 \ge 4.0$, `system_blind_spot` enforces $\min(\text{score}) \ge 60.0$, category High, never auto-Critical), factor contribution breakdowns, and discrete lookup helpers.
+  - **T1.3 (Queue Ranker & Tie-Breaker):** Created `src/lib/triage/queueRanker.ts` implementing 3-tier deterministic sorting: Primary (score descending), Secondary Tie-Break within $\pm 0.1$ (Confidence Inversion: lower confidence ranks higher to surface high uncertainty), and Tertiary Tie-Break (FIFO earlier timestamp).
+  - **T1.4 (Automated Unit Tests):** Created `tests/scoring.test.ts` covering all 12 District Alpha seed incidents, Acceptance Tests 1.1, 1.2, 1.2b, 1.3, 1.4, tie-break confidence inversion, factor lookups, and Zod bounds. Verified with `npm test` (19/19 tests green in 2 files), `node scripts/verify-docs.mjs` (12/12 pass), and `npm run build` (clean compilation, 0 warnings/errors).
 - **Next Smallest Coding Task:**
-  - Task **`T1.1`** (Core TypeScript Data Types & Zod Schemas).
+  - Task **`T2.1`** (Seed Data Loader & Scenario Normalizer).
+
 
 
 

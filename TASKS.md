@@ -94,7 +94,7 @@
 
 ## Milestone 1: Deterministic Scoring Engine & Tests (Tier 1)
 
-### [ ] Task T1.1: Core TypeScript Data Types & Zod Schemas
+### [x] Task T1.1: Core TypeScript Data Types & Zod Schemas
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T0.1
 - **Files to create/edit:**
@@ -115,7 +115,7 @@
 
 ---
 
-### [ ] Task T1.2: Deterministic 5-Factor MCDA Scoring Engine
+### [x] Task T1.2: Deterministic 5-Factor MCDA Scoring Engine
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T1.1
 - **Files to create/edit:**
@@ -137,7 +137,7 @@
 
 ---
 
-### [ ] Task T1.3: Triage Queue Ranking & Tie-Break Logic
+### [x] Task T1.3: Triage Queue Ranking & Tie-Break Logic
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T1.2
 - **Files to create/edit:**
@@ -154,7 +154,7 @@
 
 ---
 
-### [ ] Task T1.4: Unit Tests for All 12 Seed Incidents
+### [x] Task T1.4: Unit Tests for All 12 Seed Incidents
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T1.2, T1.3
 - **Files to create/edit:**

@@ -40,8 +40,8 @@ If you cannot resolve a conflict, **STOP IMMEDIATELY**, do not guess, and log th
 
 ## 3. Current Implementation Status
 
-- **Current Tier:** **Milestone 1 --- Deterministic Scoring Engine & Tests (Tier 1)**
-- **Completed:** Milestone 0 (Tasks T0.1, T0.2, T0.3, T0.4)
-- **Next Smallest Coding Task:** Follow `TASKS.md` starting at task **`T1.1`** (Core TypeScript Data Types & Zod Schemas).
+- **Current Tier:** **Milestone 2 --- State Store & Seed Data (Tier 1)**
+- **Completed:** Milestone 0 (T0.1–T0.4), Milestone 1 (T1.1, T1.2, T1.3, T1.4)
+- **Next Smallest Coding Task:** Follow `TASKS.md` starting at task **`T2.1`** (Seed Data Loader & Scenario Normalizer).
 - **Reference:** See [`docs/memory.md`](./docs/memory.md) for full session logs and [`TASKS.md`](./TASKS.md) for task tracking.
 
