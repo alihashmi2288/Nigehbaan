@@ -307,7 +307,7 @@
 
 ## Milestone 4: Triage Queue & Incident Inspector (Tier 1)
 
-### [ ] Task T4.1: Filterable Triage Incident Queue
+### [x] Task T4.1: Filterable Triage Incident Queue
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T2.2, T1.3
 - **Files to create/edit:**
@@ -326,7 +326,7 @@
 
 ---
 
-### [ ] Task T4.2: Incident Detail Inspector & Factor Breakdown Card
+### [x] Task T4.2: Incident Detail Inspector & Factor Breakdown Card
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T4.1
 - **Files to create/edit:**
@@ -349,7 +349,7 @@
 
 ---
 
-### [ ] Task T4.3: Explainability Rationale Card Component
+### [x] Task T4.3: Explainability Rationale Card Component
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T4.2
 - **Files to create/edit:**

@@ -190,6 +190,19 @@ See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation che
 - **Next Smallest Coding Task:**
   - Task **`T4.1`** (Filterable Triage Incident Queue in Milestone 4).
 
+### Session --- 2026-10-17 18:05 PKT (Milestone 4: Triage Queue & Incident Inspector)
+- **Phase/Task:** Milestone 4 (Tasks T4.1, T4.2, T4.3)
+- **Accomplishments:**
+  - **T4.1 (Filterable Triage Incident Queue):** Created `src/components/queue/IncidentCard.tsx`, `src/components/queue/IncidentQueue.tsx`, and `src/components/queue/index.ts`. Implemented real-time deterministic queue ranking via `selectRankedVisibleIncidents` (`queueRanker.ts`), interactive multi-parameter filters (Sector, Priority Category, Flagged Uncertainty, Unmapped Location, and Search Query matching codes, text, and translations), with DESIGN.md crisis indicators, 3px indicator strips, and full keyboard accessibility.
+  - **T4.2 (Incident Detail Inspector & Factor Breakdown Card):** Created `src/components/inspector/FactorBreakdownCard.tsx`, `src/components/inspector/IncidentInspector.tsx`, and `src/components/inspector/index.ts`. Displays all 5 MCDA factor progress meters (0.0 to 5.0), exact formula substitution string (`100 × [ Σ (wᵢ · fᵢ / 5.0) ] / Σ wᵢ`), unknown factor weight renormalization alert banners, Information Confidence gauge, and human coordinator dispatch controls (`assignResource` / `unassignResource`) with audit logging.
+  - **T4.3 (Explainability Rationale Card Component):** Created `src/lib/triage/explainabilityGenerator.ts`, `src/lib/triage/index.ts`, and `src/components/inspector/ExplainabilityCard.tsx`. Pure deterministic TypeScript engine generating 2–3 concise, human-auditable rationale bullet points identifying primary drivers (hemodialysis, chest-deep current, isolated elderly), explicit unknown weight renormalization notes (`confidence: 45%`), no-phone vulnerability floor enforcement ($f_3 \ge 4.0$), and system blind-spot recon sweeps ($\ge 60.0$), with honest provenance badge (`Deterministic Rule Engine`).
+  - **Command Cockpit Integration:** Integrated Queue, Map, and Inspector into a responsive 3-panel command layout in `src/app/page.tsx` with full bi-directional state synchronization (Map marker click $\leftrightarrow$ Store `selectedIncidentId` $\leftrightarrow$ Queue item active styling $\leftrightarrow$ Inspector detail panel).
+  - **Unit & Integration Tests:** Created `tests/queueAndInspector.test.ts` with 12 comprehensive tests verifying queue sorting, factor values for `NG-101` and `NG-112`, explainability bullets, and coordinator dispatch.
+  - **Verification:** Ran `npm test` (55/55 tests passing across 5 test files), `npm run build` (clean Next.js 14 production build, 0 errors/warnings).
+- **Next Smallest Coding Task:**
+  - Task **`T5.1`** (Emergency Intake Report Form Modal in Milestone 5).
+
+
 
 
 

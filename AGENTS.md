@@ -40,9 +40,9 @@ If you cannot resolve a conflict, **STOP IMMEDIATELY**, do not guess, and log th
 
 ## 3. Current Implementation Status
 
-- **Current Tier:** **Milestone 4 --- Triage Queue & Incident Inspector (Tier 1)**
-- **Completed:** Milestone 0 (T0.1–T0.4), Milestone 1 (T1.1–T1.4), Milestone 2 (T2.1–T2.3), Milestone 3 (T3.1–T3.4)
-- **Next Smallest Coding Task:** Follow `TASKS.md` starting at task **`T4.1`** (Filterable Triage Incident Queue).
+- **Current Tier:** **Milestone 5 --- Intake & Extraction (Tier 1)**
+- **Completed:** Milestone 0 (T0.1–T0.4), Milestone 1 (T1.1–T1.4), Milestone 2 (T2.1–T2.3), Milestone 3 (T3.1–T3.4), Milestone 4 (T4.1–T4.3)
+- **Next Smallest Coding Task:** Follow `TASKS.md` starting at task **`T5.1`** (Emergency Intake Report Form Modal).
 - **Reference:** See [`docs/memory.md`](./docs/memory.md) for full session logs and [`TASKS.md`](./TASKS.md) for task tracking.
 
 
