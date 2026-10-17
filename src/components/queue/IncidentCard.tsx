@@ -104,7 +104,7 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
       tabIndex={0}
       onClick={onSelect}
       onKeyDown={handleKeyDown}
-      aria-selected={isSelected}
+      aria-pressed={isSelected}
       className={`relative w-full rounded-md p-3.5 transition-all cursor-pointer text-left select-none border ${
         isSelected
           ? 'bg-surface-2 border-brand shadow-[0_0_0_1px_#5e6ad2,0_4px_16px_rgba(94,106,210,0.25)]'

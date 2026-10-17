@@ -40,9 +40,10 @@ If you cannot resolve a conflict, **STOP IMMEDIATELY**, do not guess, and log th
 
 ## 3. Current Implementation Status
 
-- **Current Tier:** **Milestone 9 --- Tier 1 Hardening & Production Deploy (Tier 1)**
-- **Completed:** Milestone 0 (T0.1–T0.4), Milestone 1 (T1.1–T1.4), Milestone 2 (T2.1–T2.3), Milestone 3 (T3.1–T3.4), Milestone 4 (T4.1–T4.3), Milestone 5 (T5.1–T5.4), Milestone 6 (T6.1–T6.3), Milestone 7 (T7.1–T7.3), Milestone 8 (T8.1–T8.2)
-- **Next Smallest Coding Task:** Follow `TASKS.md` starting at task **`T9.1`** (Acceptance Test Suite Verification).
+- **Current Tier:** **Milestone 10 --- Shelter Matching & Evacuee Routing (Tier 2)**
+- **Completed:** Milestone 0 (T0.1–T0.4), Milestone 1 (T1.1–T1.4), Milestone 2 (T2.1–T2.3), Milestone 3 (T3.1–T3.4), Milestone 4 (T4.1–T4.3), Milestone 5 (T5.1–T5.4), Milestone 6 (T6.1–T6.3), Milestone 7 (T7.1–T7.3), Milestone 8 (T8.1–T8.2), Milestone 9 (T9.1–T9.3)
+- **Tier 1 Status:** 100% Verified, Hardened, and Cut-Line Signed Off (all 9 acceptance criteria pass 100% in Vitest).
+- **Next Smallest Coding Task:** Follow `TASKS.md` starting at task **`T10.1`** (Capability-Based Shelter Matching Engine).
 - **Reference:** See [`docs/memory.md`](./docs/memory.md) for full session logs and [`TASKS.md`](./TASKS.md) for task tracking.
 
 

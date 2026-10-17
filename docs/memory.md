@@ -122,7 +122,7 @@ The following architectural and product decisions were formally established and 
 
 See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation checklist.
 
-- **Current Active Milestone:** **Milestone 8 --- Disaster Timeline Scrubber (Tier 1)**
+- **Current Active Milestone:** **Milestone 10 --- Shelter Matching & Evacuee Routing (Tier 2)**
 - **Completed Milestones:**
   - **Milestone 0 --- Bootstrap & Project Setup** (Tasks T0.1, T0.2, T0.3, T0.4 verified)
   - **Milestone 1 --- Deterministic Scoring Engine & Tests** (Tasks T1.1, T1.2, T1.3, T1.4 verified)
@@ -132,7 +132,9 @@ See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation che
   - **Milestone 5 --- Emergency Citizen Intake & AI Assistant** (Tasks T5.1, T5.2, T5.3, T5.4 verified)
   - **Milestone 6 --- Uncertainty Radar & Blind-Spot Engine** (Tasks T6.1, T6.2, T6.3 verified)
   - **Milestone 7 --- Opportunity Cost & Human Dispatch** (Tasks T7.1, T7.2, T7.3 verified)
-- **Next Smallest Coding Task:** **`T8.1`** (Interactive Disaster Timeline Scrubber Component).
+  - **Milestone 8 --- Disaster Timeline Scrubber** (Tasks T8.1, T8.2 verified)
+  - **Milestone 9 --- Tier 1 Hardening & Production Deploy** (Tasks T9.1, T9.2, T9.3 verified)
+- **Next Smallest Coding Task:** **`T10.1`** (Capability-Based Shelter Matching Engine in Milestone 10).
 
 ---
 
@@ -268,6 +270,35 @@ See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation che
   - **Verification:** Ran `npm test` (110/110 tests passing across 9 test files) and `npm run build` (clean Next.js 14 production build, 0 errors/warnings).
 - **Suggested Commit Name:**
   - `feat(milestone-8): implement interactive disaster timeline scrubber and dynamic telemetry`
+### Session --- 2026-10-17 20:25 PKT (Milestone 9: Tier 1 Hardening & Production Deploy)
+- **Phase/Task:** Milestone 9 (Tasks T9.1, T9.2, T9.3)
+- **Accomplishments:**
+  - **T9.1 (Acceptance Test Suite Verification):** Created `tests/acceptance.test.ts` implementing formal end-to-end programmatic verification for all 9 Tier 1 Acceptance Tests from `docs/acceptance-tests.md`:
+    - **Test 1.1:** Deterministic Scoring for Critical Dialysis Incident `NG-101` (Score 86.5, Category Critical, ranks #1 at T+3, generates Explainability Card with full formula coefficients).
+    - **Test 1.2:** Unknown Factor Renormalization for Missing Location Incident `NG-112` (Known weight sum 0.45, Score 60.0, Category High, Confidence 0.45, flags `MISSING_LOCATION` without reducing urgency).
+    - **Test 1.2b:** Critical Unknown Factor Renormalization for dropped call (Known weight sum 0.45, Score 90.0, Category Critical, Confidence 0.45).
+    - **Test 1.3:** Community Proxy & No-Phone Vulnerability Floor for `NG-104` ($f_3 = \max(2.0, 4.0)$, Score 56.5, Category High, flags `NO_PHONE_COMMUNITY_PROXY`).
+    - **Test 1.4:** Sector Blind-Spot Synthesis at T+6 (Tower-Alpha-3 collapse, Sector 3A silence $\ge 90$m, gauge $\ge 1.9$m, synthesizes `NG-103` with Score 68.7 $\ge 60.0$ floor, Category High, never auto-Critical).
+    - **Test 1.5:** Tactical Opportunity Cost Warning when assigning `RES-01` to `NG-101` in Sector 2 (leaves 0 shallow boats in Sector 2, warns next queued incident `NG-104` will incur $+35$ min turnaround delay).
+    - **Test 1.6:** Resource Assignment Consistency & Activity Audit Log (transitions `RES-01` and `NG-101` to `assigned`, excludes resource from candidate lists, appends immutable `COORDINATOR_ASSIGN` audit log).
+    - **Test 1.7:** Uncertainty Radar Flag Detection across all 4 rule categories (`MISSING_LOCATION` on `NG-112`, `STALE_REPORT` on `NG-111` at T+6, `CONFLICTING_REPORT` on `NG-108`/`NG-109`, `POTENTIAL_DUPLICATE` on `NG-104`/`NG-110`, strictly preserving reports side-by-side without auto-merging).
+    - **Test 1.8:** Honest AI Fallback Labeling (`isAI: false`, renders exact provenance badge `"Offline heuristic extraction (not AI)"`, validates against `ExtractedFactsSchema`).
+    - **Test 1.9:** Pristine 1-Click Simulation Reset (restores all 12 incidents, resources, T-0 clock `04:30`, and appends `SIMULATION_RESET` log).
+  - **T9.2 (Production Build Hardening & Lint Configuration):**
+    - Configured `.eslintrc.json` with `next/core-web-vitals` and installed `eslint` and `eslint-config-next@14.2.24`.
+    - Resolved ARIA button attribute warning (`aria-pressed` in `IncidentCard.tsx`).
+    - Verified `npm run lint` with 0 warnings and 0 errors (`✔ No ESLint warnings or errors`).
+    - Verified `npx tsc --noEmit` with 0 type errors.
+    - Verified Next.js 14 production build (`npm run build`) generates all 5/5 static pages with 0 errors.
+    - Verified mathematical seed consistency (`node scripts/verify-docs.mjs` — 12/12 seed pass 100%).
+    - Ran full repo test suite: **10/10 test files passed, 120/120 tests passed (100% pass rate)**.
+  - **T9.3 (Tier 1 Code Freeze & Cut-Line Sign-Off):**
+    - Evaluated wall-clock time against strict cut-line: Current time is **20:25 PKT on 17 October 2026**; Cut-line is **12:00 PM on 18 October 2026**.
+    - Over **15 hours 35 minutes** remain before the cut-line.
+    - Formally signed off on Tier 1 as complete, fully tested, and hardened.
+    - Authorized immediate advancement to **Milestone 10: Shelter Matching & Evacuee Routing (Tier 2)**.
+- **Suggested Commit Name:**
+  - `feat(milestone-9): acceptance test suite verification, production build hardening, and tier 1 cut-line sign-off`
 - **Next Smallest Coding Task:**
-  - Task **`T9.1`** (Acceptance Test Suite Verification in Milestone 9).
+  - Task **`T10.1`** (Capability-Based Shelter Matching Engine in Milestone 10).
 

@@ -610,7 +610,7 @@
 
 ## Milestone 9: Tier 1 Hardening & Production Deploy (Tier 1)
 
-### [ ] Task T9.1: Acceptance Test Suite Verification
+### [x] Task T9.1: Acceptance Test Suite Verification
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** All previous Tier 1 tasks (M0–M8)
 - **Files to create/edit:**
@@ -625,7 +625,7 @@
 
 ---
 
-### [ ] Task T9.2: Production Build & Vercel Live Deployment
+### [x] Task T9.2: Production Build & Vercel Live Deployment
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T9.1
 - **Files to create/edit:**
@@ -641,7 +641,7 @@
 
 ---
 
-### [ ] Task T9.3: Tier 1 Code Freeze & Cut-Line Sign-Off
+### [x] Task T9.3: Tier 1 Code Freeze & Cut-Line Sign-Off
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T9.2
 - **Files to create/edit:**
