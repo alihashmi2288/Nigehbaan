@@ -11,6 +11,8 @@ import {
   IncidentFactors,
   PhoneAccessStatus,
   ReporterType,
+  UncertaintyFlag,
+  ExtractedFacts,
 } from '@/types';
 import { getPristineState, normalizeIncident } from '@/lib/simulation/seedLoader';
 import { rankIncidentQueue } from '@/lib/triage/queueRanker';
@@ -86,6 +88,9 @@ export interface AppState {
       reportTranslation?: string | null;
       targetResource?: string;
       targetShelter?: string;
+      provenanceBadge?: string;
+      isAI?: boolean;
+      extractedFacts?: ExtractedFacts;
     }
   ) => Incident;
   updateIncident: (incidentId: string, updates: Partial<Incident>) => void;
@@ -259,6 +264,18 @@ export const useAppStore = create<AppState>()(
         const phoneAccess = report.phoneAccess ?? 'has_phone';
         const factors: IncidentFactors = report.factors ?? [2.5, null, null, 2.5, 1.0];
 
+        // Determine uncertainty flags automatically per Acceptance Tests 1.3 & 1.7
+        const flags: UncertaintyFlag[] = [];
+        if (phoneAccess === 'no_phone') {
+          flags.push('NO_PHONE_COMMUNITY_PROXY');
+        }
+        if (!report.coordinates) {
+          flags.push('MISSING_LOCATION');
+        }
+        if (factors.some((f) => f === null)) {
+          flags.push('MISSING_FACTORS');
+        }
+
         const raw = {
           id,
           code,
@@ -270,12 +287,15 @@ export const useAppStore = create<AppState>()(
           reportText: report.reportText,
           reportTranslation: report.reportTranslation ?? null,
           factors,
-          uncertaintyFlags: [],
+          uncertaintyFlags: flags,
           coordinates: report.coordinates ?? null,
           targetResource: report.targetResource,
           targetShelter: report.targetShelter,
           assignedResourceId: null,
           status: 'triaged' as const,
+          provenanceBadge: report.provenanceBadge,
+          isAI: report.isAI,
+          extractedFacts: report.extractedFacts,
         };
 
         const newIncident = normalizeIncident(raw);
@@ -289,7 +309,8 @@ export const useAppStore = create<AppState>()(
         };
 
         set({
-          incidents: [...state.incidents, newIncident],
+          incidents: [newIncident, ...state.incidents],
+          selectedIncidentId: newIncident.id,
           activityLogs: [logEntry, ...state.activityLogs],
         });
 

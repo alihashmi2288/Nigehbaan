@@ -130,6 +130,15 @@ export const ExtractedFactsSchema = z.object({
 
 export type ExtractedFacts = z.infer<typeof ExtractedFactsSchema>;
 
+export interface ExtractionResult {
+  success: boolean;
+  facts: ExtractedFacts;
+  factors: IncidentFactors;
+  isAI: boolean;
+  provenanceBadge: string;
+  error?: string;
+}
+
 /**
  * Core Incident interface strictly matching seed.json and runtime store state.
  */
@@ -155,6 +164,9 @@ export interface Incident {
   targetShelter?: string;
   assignedResourceId?: string | null;
   status?: IncidentStatus;
+  provenanceBadge?: string;
+  isAI?: boolean;
+  extractedFacts?: ExtractedFacts;
 }
 
 export const IncidentSchema = z.object({
@@ -179,4 +191,8 @@ export const IncidentSchema = z.object({
   targetShelter: z.string().optional(),
   assignedResourceId: z.string().nullable().optional(),
   status: IncidentStatusEnum.optional(),
+  provenanceBadge: z.string().optional(),
+  isAI: z.boolean().optional(),
+  extractedFacts: ExtractedFactsSchema.optional(),
 });
+

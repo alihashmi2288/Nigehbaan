@@ -368,7 +368,7 @@
 
 ## Milestone 5: Intake & Extraction (Tier 1)
 
-### [ ] Task T5.1: Emergency Intake Report Form Modal
+### [x] Task T5.1: Emergency Intake Report Form Modal
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T2.2
 - **Files to create/edit:**
@@ -385,7 +385,7 @@
 
 ---
 
-### [ ] Task T5.2: Gemini Fact Extraction API Route
+### [x] Task T5.2: Gemini Fact Extraction API Route
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T1.1
 - **Files to create/edit:**
@@ -404,7 +404,7 @@
 
 ---
 
-### [ ] Task T5.3: Deterministic Heuristic Fallback Extractor
+### [x] Task T5.3: Deterministic Heuristic Fallback Extractor
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T1.1
 - **Files to create/edit:**
@@ -425,7 +425,7 @@
 
 ---
 
-### [ ] Task T5.4: Wire Intake Submission to Scoring & State Store
+### [x] Task T5.4: Wire Intake Submission to Scoring & State Store
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T5.1, T5.2, T5.3, T1.2
 - **Files to create/edit:**

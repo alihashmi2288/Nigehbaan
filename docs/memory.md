@@ -188,7 +188,23 @@ See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation che
   - **Unit & Integration Tests:** Created `tests/tacticalMap.test.ts` with 12 tests covering all Milestone 3 acceptance criteria.
   - **Verification:** Ran `npm test` (43/43 assertions green across 4 test files), `npm run build` (clean Next.js production build with static prerendering, 0 errors/warnings), and `node scripts/verify-docs.mjs` (12/12 pass).
 - **Next Smallest Coding Task:**
-  - Task **`T4.1`** (Filterable Triage Incident Queue in Milestone 4).
+  - Task **`T5.1`** (Emergency Intake Report Form Modal in Milestone 5).
+
+### Session --- 2026-10-17 18:25 PKT (Milestone 5: Intake & Extraction)
+- **Phase/Task:** Milestone 5 (Tasks T5.1, T5.2, T5.3, T5.4)
+- **Accomplishments:**
+  - Installed `@google/genai` dependency for modern official Gemini SDK.
+  - **T5.1 (Emergency Intake Report Form Modal):** Created `src/components/intake/CommunityProxyToggle.tsx`, `src/components/intake/IntakeModal.tsx`, and `src/components/intake/index.ts`. Built full tactical dark-theme modal with keyboard accessibility (Escape to dismiss, focus trapping), distress report textarea with character counter, sector selector, 4 one-click crisis presets (`Dialysis Emergency NG-101`, `Urdu Family on Roof NG-102`, `No-Phone Proxy NG-104`, `Factory Workers NG-105`), Community Proxy mode with proxy reporter identification, and cellular connectivity toggle (`has_phone`, `no_phone`, `network_down`) highlighting Invariant 3 vulnerability floor warnings. Created dedicated route `/incidents/new` conforming to Acceptance Test 1.8.
+  - **T5.2 (Gemini Fact Extraction API Route):** Created `src/app/api/ai/extract/route.ts` using `@google/genai` and `process.env.GEMINI_MODEL || 'gemini-2.5-flash'`. Implemented untrusted `<citizen_report>` input sanitization prompt, 5-second timeout with at most 1 automatic retry, JSON output mode, `ExtractedFactsSchema` Zod validation, and automatic honest heuristic fallback when `GEMINI_API_KEY` is missing or fails.
+  - **T5.3 (Deterministic Heuristic Fallback Extractor):** Created `src/lib/ai/heuristicExtractor.ts` and `src/lib/triage/factorMapper.ts`. Strict adherence to `docs/ai-prompts.md` Section 4 and `docs/acceptance-tests.md` Test 1.8 with word-boundary case-insensitive regexes for dialysis (`/\b(dialysis|hemodialysis)\b|ڈائیلاسز|گردے/i`), chest-deep water (`1.5m`, $f_1=4.5, f_4=4.5$), elderly alone ($f_3=4.0$), and infants ($f_3=4.5$). Sets `isAI: false`, never hallucinates coordinates (`latitude: null, longitude: null`), and injects exact provenance badge: `"Offline heuristic extraction (not AI)"`.
+  - **T5.4 (Wire Intake Submission to Scoring & State Store):** Enhanced `useAppStore.submitIncident` to accept provenance metadata, automatically flag uncertainty (`NO_PHONE_COMMUNITY_PROXY`, `MISSING_LOCATION`, `MISSING_FACTORS`), prepend new incident to store, auto-select in inspector, and append immutable audit log (`INCIDENT_SUBMITTED`). Added "Emergency Intake" button to HUD header in `src/app/page.tsx` and displayed provenance badge in `src/components/inspector/IncidentInspector.tsx`.
+  - **Unit & Integration Tests:** Created `tests/intakeAndExtraction.test.ts` with 12 comprehensive tests: golden test oracle against `docs/extraction-fixtures.json` (NG-101, NG-102, NG-104, NG-105), No-Phone Community Proxy floor verification ($f_3 \ge 4.0$, score = 56.5 High), Zod boundary validation (clamping depth 0–10m, headcount 1–500), honest fallback badge assertion, and store integration.
+  - **Verification:** Ran `npm test` (67/67 tests passing across 6 test files), `npm run build` (clean Next.js production build with `/`, `/incidents/new`, `/api/ai/extract`, 0 errors/warnings), and `node scripts/verify-docs.mjs` (12/12 seed pass).
+- **Suggested Commit Name:**
+  - `feat(milestone-5): emergency intake modal, gemini fact extraction, and honest heuristic fallback`
+- **Next Smallest Coding Task:**
+  - Task **`T6.1`** (Uncertainty Radar Detection Engine in Milestone 6).
+
 
 ### Session --- 2026-10-17 18:05 PKT (Milestone 4: Triage Queue & Incident Inspector)
 - **Phase/Task:** Milestone 4 (Tasks T4.1, T4.2, T4.3)

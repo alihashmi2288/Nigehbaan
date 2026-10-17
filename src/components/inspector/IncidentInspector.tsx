@@ -265,6 +265,24 @@ export const IncidentInspector: React.FC = () => {
             </div>
           </div>
 
+          {/* Honest AI / Heuristic Extraction Provenance Badge (Invariant 7 & Test 1.8) */}
+          {incident.provenanceBadge && (
+            <div
+              className={`px-2.5 py-1.5 rounded text-[11px] font-mono flex items-center gap-2 border ${
+                incident.isAI
+                  ? 'bg-brand/15 text-brand border-brand/30 font-semibold'
+                  : 'bg-surface-3 text-semantic-unknown-text border-hairline'
+              }`}
+            >
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  incident.isAI ? 'bg-brand' : 'bg-semantic-unknown'
+                }`}
+              />
+              <span>{incident.provenanceBadge}</span>
+            </div>
+          )}
+
           {/* Primary Text */}
           <div className="p-3 rounded bg-surface-2 border border-hairline">
             <p className="text-xs text-ink leading-relaxed font-sans">

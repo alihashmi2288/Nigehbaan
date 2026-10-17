@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Radio,
   Terminal,
@@ -11,11 +11,13 @@ import {
   AlertTriangle,
   MapPin,
   Sliders,
+  PlusCircle,
 } from 'lucide-react';
 import { ResetButton } from '@/components/layout';
 import { MapWrapper } from '@/components/map';
 import { IncidentQueue } from '@/components/queue';
 import { IncidentInspector } from '@/components/inspector';
+import { IntakeModal } from '@/components/intake';
 import { useAppStore, selectVisibleIncidents } from '@/store';
 import { TimelinePhaseId } from '@/types';
 
@@ -27,6 +29,8 @@ export default function Home() {
   const scenario = useAppStore((state) => state.scenario);
   const incidents = useAppStore((state) => state.incidents);
   const resources = useAppStore((state) => state.resources);
+
+  const [isIntakeModalOpen, setIsIntakeModalOpen] = useState(false);
 
   useEffect(() => {
     setHydrated(true);
@@ -66,6 +70,16 @@ export default function Home() {
         </div>
 
         <div className="flex items-center gap-3">
+          {/* Emergency Intake Button (Task T5.1 & T5.4) */}
+          <button
+            type="button"
+            onClick={() => setIsIntakeModalOpen(true)}
+            className="px-3 py-1.5 rounded text-xs font-mono font-bold bg-brand hover:bg-brand-hover text-white flex items-center gap-1.5 transition-all shadow-sm"
+          >
+            <PlusCircle className="w-3.5 h-3.5" />
+            <span>Emergency Intake</span>
+          </button>
+
           <ResetButton />
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono bg-surface-2 border border-hairline text-ink-muted">
             <span className="w-2 h-2 rounded-full bg-semantic-success animate-ping" />
@@ -73,10 +87,16 @@ export default function Home() {
           </span>
           <span className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono bg-surface-2 border border-hairline text-brand">
             <Terminal className="w-3.5 h-3.5" />
-            Milestone 4: Triage Cockpit Active
+            Milestone 5: Intake & Extraction Active
           </span>
         </div>
       </header>
+
+      {/* Emergency Intake Report Modal */}
+      <IntakeModal
+        isOpen={isIntakeModalOpen}
+        onClose={() => setIsIntakeModalOpen(false)}
+      />
 
       {/* Main Operational Container */}
       <div className="flex-1 p-4 lg:p-6 w-full max-w-[1720px] mx-auto flex flex-col gap-5">

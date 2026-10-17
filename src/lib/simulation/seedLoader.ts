@@ -60,6 +60,9 @@ export function normalizeIncident(raw: any): Incident {
     targetShelter: raw.targetShelter,
     assignedResourceId: raw.assignedResourceId ?? null,
     status: raw.status ?? 'triaged',
+    provenanceBadge: raw.provenanceBadge,
+    isAI: raw.isAI,
+    extractedFacts: raw.extractedFacts,
   };
 
   return IncidentSchema.parse(normalized);
