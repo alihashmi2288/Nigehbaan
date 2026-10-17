@@ -40,11 +40,23 @@ export function isIncidentVisibleAtPhase(
 
 /**
  * Returns incidents that are visible at the active timeline phase.
+ * Filters strictly by simulation clock timestamp: incident.timestamp <= simulationClock,
+ * falling back to phaseArrival rank when simulationClock is omitted.
  */
 export function selectVisibleIncidents(
   incidents: Incident[],
-  currentPhase: TimelinePhaseId
+  currentPhase: TimelinePhaseId,
+  simulationClock?: string
 ): Incident[] {
+  if (simulationClock) {
+    const clockTime = new Date(simulationClock).getTime();
+    if (!isNaN(clockTime)) {
+      return incidents.filter((inc) => {
+        const incTime = new Date(inc.timestamp).getTime();
+        return !isNaN(incTime) && incTime <= clockTime;
+      });
+    }
+  }
   return incidents.filter((inc) => isIncidentVisibleAtPhase(inc.phaseArrival, currentPhase));
 }
 
@@ -54,9 +66,10 @@ export function selectVisibleIncidents(
  */
 export function selectRankedVisibleIncidents(
   incidents: Incident[],
-  currentPhase: TimelinePhaseId
+  currentPhase: TimelinePhaseId,
+  simulationClock?: string
 ): Incident[] {
-  const visible = selectVisibleIncidents(incidents, currentPhase);
+  const visible = selectVisibleIncidents(incidents, currentPhase, simulationClock);
   return rankIncidentQueue(visible);
 }
 
@@ -64,6 +77,7 @@ export interface AppState {
   // Core State
   scenario: Scenario;
   timelinePhase: TimelinePhaseId;
+  simulationClock: string;
   sectors: Sector[];
   resources: Resource[];
   shelters: Shelter[];
@@ -146,6 +160,7 @@ export const useAppStore = create<AppState>()(
     (set, get) => ({
       scenario: pristine.scenario,
       timelinePhase: pristine.timelinePhase,
+      simulationClock: pristine.scenario.timelinePhases[0]?.wallClock ?? '2026-10-18T04:30:00Z',
       sectors: pristine.sectors,
       resources: pristine.resources,
       shelters: pristine.shelters,
@@ -163,26 +178,67 @@ export const useAppStore = create<AppState>()(
         const currentPhase = get().timelinePhase;
         if (currentPhase === phaseId) return;
 
-        const logEntry: AuditLogEntry = {
-          id: `log-phase-${Date.now()}`,
-          timestamp,
-          action: 'TIMELINE_PHASE_ADVANCED',
-          details: `[${timestamp}] TIMELINE_PHASE_ADVANCED: Timeline advanced from ${currentPhase} to ${phaseId}`,
-        };
-
         const phaseObj = get().scenario.timelinePhases.find((p) => p.id === phaseId);
         const wallClock = phaseObj?.wallClock ?? new Date().toISOString();
 
-        // Evaluate sector blind spots
+        const newLogs: AuditLogEntry[] = [
+          {
+            id: `log-phase-${Date.now()}`,
+            timestamp,
+            action: 'TIMELINE_PHASE_ADVANCED',
+            details: `[${timestamp}] TIMELINE_PHASE_ADVANCED: Timeline advanced from ${currentPhase} to ${phaseId}`,
+          },
+        ];
+
+        // Dynamic sector infrastructure & flood gauge telemetry
+        const updatedSectors = get().sectors.map((s) => {
+          if (s.id === 'sector-3a') {
+            const isOffline = phaseId === 'T6' || phaseId === 'T12';
+            return {
+              ...s,
+              cellTower: {
+                ...s.cellTower,
+                status: (isOffline ? 'offline' : 'online') as 'online' | 'offline',
+                offlineSince: isOffline ? '2026-10-18T08:55:00Z' : null,
+              },
+              floodGauge: {
+                ...s.floodGauge,
+                levelMeters: phaseId === 'T0' ? 0.4 : phaseId === 'T3' ? 1.0 : phaseId === 'T6' ? 1.9 : 2.6,
+                trend: (phaseId === 'T0' ? 'stable' : 'rising') as 'stable' | 'rising' | 'falling',
+              },
+            };
+          }
+          if (s.id === 'sector-2') {
+            return {
+              ...s,
+              floodGauge: {
+                ...s.floodGauge,
+                levelMeters: phaseId === 'T0' ? 0.6 : phaseId === 'T3' ? 1.4 : phaseId === 'T6' ? 1.7 : 2.4,
+              },
+            };
+          }
+          return s;
+        });
+
+        // Cell tower collapse infrastructure event at T+6
+        if ((phaseId === 'T6' || phaseId === 'T12') && (currentPhase === 'T0' || currentPhase === 'T3')) {
+          newLogs.push({
+            id: `log-tower-${Date.now()}`,
+            timestamp,
+            action: 'INFRASTRUCTURE_ALERT',
+            details: `[${timestamp}] INFRASTRUCTURE_ALERT: Cell tower Tower-Alpha-3 collapsed in Sector 3A at 08:55 PKT. Telemetry signal lost.`,
+          });
+        }
+
+        // Evaluate sector blind spots with updated sector status and wall clock
         const { synthesizedIncidents } = detectAndSynthesizeBlindSpots(
-          get().sectors,
+          updatedSectors,
           wallClock,
           get().incidents
         );
 
-        const newLogs: AuditLogEntry[] = [logEntry];
         for (const synth of synthesizedIncidents) {
-          newLogs.unshift({
+          newLogs.push({
             id: `log-blindspot-${Date.now()}-${synth.code}`,
             timestamp,
             action: 'BLIND_SPOT_SYNTHESIS',
@@ -195,7 +251,7 @@ export const useAppStore = create<AppState>()(
         if ((phaseId === 'T6' || phaseId === 'T12') && synthesizedIncidents.length === 0) {
           const ng103 = get().incidents.find((i) => i.code === 'NG-103');
           if (ng103) {
-            newLogs.unshift({
+            newLogs.push({
               id: `log-blindspot-${Date.now()}-NG-103`,
               timestamp,
               action: 'BLIND_SPOT_SYNTHESIS',
@@ -205,8 +261,33 @@ export const useAppStore = create<AppState>()(
           }
         }
 
+        // Shelter generator failure event at T+12
+        const updatedShelters = get().shelters.map((shl) => {
+          if (shl.id === 'SHL-03') {
+            const isPeakCrisis = phaseId === 'T12';
+            return {
+              ...shl,
+              backupGenerator: false,
+              status: 'overcrowded' as const,
+            };
+          }
+          return shl;
+        });
+
+        if (phaseId === 'T12' && currentPhase !== 'T12') {
+          newLogs.push({
+            id: `log-shelter-${Date.now()}`,
+            timestamp,
+            action: 'INFRASTRUCTURE_ALERT',
+            details: `[${timestamp}] INFRASTRUCTURE_ALERT: Shelter SHL-03 (Highway Warehouse Relief Depot) generator failed; capacity breached 97%.`,
+          });
+        }
+
         set((state) => ({
           timelinePhase: phaseId,
+          simulationClock: wallClock,
+          sectors: updatedSectors,
+          shelters: updatedShelters,
           incidents:
             synthesizedIncidents.length > 0
               ? [...synthesizedIncidents, ...state.incidents]
@@ -387,6 +468,7 @@ export const useAppStore = create<AppState>()(
         set({
           scenario: fresh.scenario,
           timelinePhase: 'T0',
+          simulationClock: fresh.scenario.timelinePhases[0]?.wallClock ?? '2026-10-18T04:30:00Z',
           sectors: fresh.sectors,
           resources: fresh.resources,
           shelters: fresh.shelters,

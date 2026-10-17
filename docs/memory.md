@@ -257,3 +257,17 @@ See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation che
   - `feat(milestone-7): opportunity cost calculator, resource assignment modal, and activity audit log drawer`
 - **Next Smallest Coding Task:**
   - Task **`T8.1`** (Interactive Disaster Timeline Scrubber Component in Milestone 8).
+
+### Session --- 2026-10-17 20:00 PKT (Milestone 8: Disaster Timeline Scrubber & Dynamic Telemetry)
+- **Phase/Task:** Milestone 8 (Tasks T8.1, T8.2)
+- **Accomplishments:**
+  - **T8.1 (Interactive Disaster Timeline Scrubber Component):** Created `src/components/timeline/TimelineScrubber.tsx` and `src/components/timeline/index.ts`. Implemented 4-phase horizontal progress track (`T-0 Early Warning`, `T+3 Flood Surge`, `T+6 Grid Blackout`, `T+12 Peak Crisis`) with connecting filled progress bar, active phase highlight with `--primary` background, white text, and radar pulse dot. Displays environmental river gauge meters (`0.6m`, `1.3m`, `1.9m`, `2.4m`), hazard status pills (`Normal`, `High`, `Severe`, `Catastrophic`) adhering to DESIGN.md tokens, step forward/backward navigation controls, phase descriptions, and active infrastructure alert badges (`Tower-Alpha-3 Offline`, `SHL-03 Generator Lost`).
+  - **T8.2 (Dynamic Telemetry & Visibility Filter Integration):** Updated `src/store/useAppStore.ts` to manage `simulationClock: string` pre-warmed to T-0 (`2026-10-18T04:30:00Z`). Enhanced `selectVisibleIncidents` and `selectRankedVisibleIncidents` to filter strictly by `incident.timestamp <= simulationClock` (and `isIncidentVisibleAtPhase`). Advancing to T+3 reveals `NG-101`, `NG-111`, `NG-104`; advancing to T+6 reveals `NG-102`, `NG-103`, `NG-108`, `NG-109`, `NG-110`; advancing to T+12 reveals `NG-105`, `NG-112`. On transition to T+6, dynamically triggers `Tower-Alpha-3` collapse (`status: offline`), logs infrastructure alert, and activates blind spot detector synthesizing `NG-103` (Score 68.7, High). On transition to T+12, triggers `SHL-03` generator loss alert (`backupGenerator: false`, 97% capacity breach). Updated `resetSimulation()` to restore baseline clock and seed state.
+  - **Cockpit Page Integration:** Integrated `<TimelineScrubber />` into `src/app/page.tsx` replacing inline placeholder controls and wired up `simulationClock`.
+  - **Unit & Integration Tests:** Created `tests/timelineScrubber.test.ts` with 8 comprehensive tests verifying scrubber states, clock updates, phase metadata, Acceptance Criteria 1.4 visibility progression, priority ranking, infrastructure alerts, and 1-click reset.
+  - **Verification:** Ran `npm test` (110/110 tests passing across 9 test files) and `npm run build` (clean Next.js 14 production build, 0 errors/warnings).
+- **Suggested Commit Name:**
+  - `feat(milestone-8): implement interactive disaster timeline scrubber and dynamic telemetry`
+- **Next Smallest Coding Task:**
+  - Task **`T9.1`** (Acceptance Test Suite Verification in Milestone 9).
+

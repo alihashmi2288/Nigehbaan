@@ -21,6 +21,7 @@ import { IncidentInspector } from '@/components/inspector';
 import { IntakeModal } from '@/components/intake';
 import { UncertaintyRadarPanel } from '@/components/uncertainty';
 import { AuditLogDrawer } from '@/components/audit';
+import { TimelineScrubber } from '@/components/timeline';
 import { useAppStore, selectVisibleIncidents } from '@/store';
 import { TimelinePhaseId } from '@/types';
 
@@ -28,6 +29,7 @@ export default function Home() {
   const isHydrated = useAppStore((state) => state.isHydrated);
   const setHydrated = useAppStore((state) => state.setHydrated);
   const timelinePhase = useAppStore((state) => state.timelinePhase);
+  const simulationClock = useAppStore((state) => state.simulationClock);
   const setTimelinePhase = useAppStore((state) => state.setTimelinePhase);
   const scenario = useAppStore((state) => state.scenario);
   const incidents = useAppStore((state) => state.incidents);
@@ -41,17 +43,10 @@ export default function Home() {
     setHydrated(true);
   }, [setHydrated]);
 
-  const visibleIncidents = selectVisibleIncidents(incidents, timelinePhase);
+  const visibleIncidents = selectVisibleIncidents(incidents, timelinePhase, simulationClock);
   const criticalCount = visibleIncidents.filter((i) => i.category === 'Critical').length;
   const availableResources = resources.filter((r) => r.status === 'available').length;
   const isSector3ABlindSpot = timelinePhase === 'T6' || timelinePhase === 'T12';
-
-  const phases: { id: TimelinePhaseId; label: string; clock: string }[] = [
-    { id: 'T0', label: 'T-0 Early Warning', clock: '04:30' },
-    { id: 'T3', label: 'T+3 Flood Surge', clock: '07:30' },
-    { id: 'T6', label: 'T+6 Grid Blackout', clock: '10:30' },
-    { id: 'T12', label: 'T+12 Peak Crisis', clock: '16:30' },
-  ];
 
   return (
     <main className="min-h-screen bg-canvas text-ink flex flex-col font-sans">
@@ -108,7 +103,7 @@ export default function Home() {
           </span>
           <span className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono bg-surface-2 border border-hairline text-brand">
             <Terminal className="w-3.5 h-3.5" />
-            Milestone 7: Opportunity Cost &amp; Human Dispatch Active
+            Milestone 8: Disaster Timeline Scrubber &amp; Dynamic Telemetry Active
           </span>
         </div>
       </header>
@@ -127,46 +122,8 @@ export default function Home() {
 
       {/* Main Operational Container */}
       <div className="flex-1 p-4 lg:p-6 w-full max-w-[1720px] mx-auto flex flex-col gap-5">
-        {/* Disaster Timeline Scrubber & Phase Controller */}
-        <section className="bg-surface-1 border border-hairline rounded-lg p-3.5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[11px] font-mono uppercase tracking-wider bg-brand/15 text-brand border border-brand/30 flex items-center gap-1.5">
-                <Clock className="w-3 h-3" />
-                Scenario Wall Clock Controller
-              </span>
-              <span className="text-xs text-ink-subtle font-mono">
-                {scenario.name}
-              </span>
-            </div>
-            <p className="text-xs text-ink-muted">
-              Advance timeline to trigger dynamic disaster phases, cell tower collapse, and blind-spot synthesis.
-            </p>
-          </div>
-
-          {/* Phase Buttons */}
-          <div className="flex flex-wrap items-center gap-2">
-            {phases.map((p) => {
-              const isActive = timelinePhase === p.id;
-              return (
-                <button
-                  key={p.id}
-                  type="button"
-                  onClick={() => setTimelinePhase(p.id)}
-                  className={`px-3 py-1.5 rounded text-xs font-mono transition-all flex items-center gap-2 border ${
-                    isActive
-                      ? 'bg-brand text-white border-brand shadow-md font-bold'
-                      : 'bg-surface-2 hover:bg-surface-3 text-ink-muted border-hairline'
-                  }`}
-                >
-                  {isActive && <span className="w-2 h-2 rounded-full bg-white animate-pulse" />}
-                  <span>{p.label}</span>
-                  <span className="text-[10px] opacity-75">({p.clock})</span>
-                </button>
-              );
-            })}
-          </div>
-        </section>
+        {/* Disaster Timeline Scrubber & Phase Controller (Task T8.1 & T8.2) */}
+        <TimelineScrubber />
 
         {/* Tactical Telemetry Ribbon */}
         <section className="grid grid-cols-2 md:grid-cols-4 gap-3">

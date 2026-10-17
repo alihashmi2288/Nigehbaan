@@ -568,7 +568,7 @@
 
 ## Milestone 8: Disaster Timeline Scrubber (Tier 1)
 
-### [ ] Task T8.1: Interactive Disaster Timeline Scrubber Component
+### [x] Task T8.1: Interactive Disaster Timeline Scrubber Component
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T2.2
 - **Files to create/edit:**
@@ -589,7 +589,7 @@
 
 ---
 
-### [ ] Task T8.2: Dynamic Telemetry & Visibility Filter Integration
+### [x] Task T8.2: Dynamic Telemetry & Visibility Filter Integration
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T8.1, T6.2
 - **Files to create/edit:**
