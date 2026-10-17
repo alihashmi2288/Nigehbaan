@@ -15,7 +15,9 @@ import {
 import { Incident, Resource } from '@/types';
 import { useAppStore, selectVisibleIncidents } from '@/store';
 import { calculateOpportunityCost, formatSectorDisplay } from '@/lib/resources';
+import { matchShelterForIncident } from '@/lib/shelters';
 import { OpportunityCostWarningCard } from './OpportunityCostWarningCard';
+import { ShelterMatchCard } from './ShelterMatchCard';
 
 interface AssignmentModalProps {
   isOpen: boolean;
@@ -35,9 +37,10 @@ export const AssignmentModal: React.FC<AssignmentModalProps> = ({
   const assignResource = useAppStore((state) => state.assignResource);
 
   const [selectedResourceId, setSelectedResourceId] = useState<string>('');
+  const [selectedShelterId, setSelectedShelterId] = useState<string>('');
   const [showAllSectors, setShowAllSectors] = useState<boolean>(false);
 
-  // Reset selected resource whenever modal opens with a new incident
+  // Reset selected resource and matched destination whenever modal opens with a new incident
   useEffect(() => {
     if (isOpen && incident) {
       // Pre-select matching candidate if available in same sector
@@ -52,11 +55,23 @@ export const AssignmentModal: React.FC<AssignmentModalProps> = ({
       } else {
         setSelectedResourceId('');
       }
+
+      // Pre-select capability-matched shelter
+      const matchResult = matchShelterForIncident(incident, shelters);
+      if (matchResult.recommendedShelter) {
+        setSelectedShelterId(matchResult.recommendedShelter.id);
+      } else if (incident.targetShelter) {
+        setSelectedShelterId(incident.targetShelter);
+      } else {
+        setSelectedShelterId('');
+      }
+
       setShowAllSectors(false);
     } else {
       setSelectedResourceId('');
+      setSelectedShelterId('');
     }
-  }, [isOpen, incident, resources]);
+  }, [isOpen, incident, resources, shelters]);
 
   // Handle escape key
   useEffect(() => {
@@ -103,15 +118,22 @@ export const AssignmentModal: React.FC<AssignmentModalProps> = ({
 
   // Matched shelter lookup
   const matchedShelter = useMemo(() => {
+    if (selectedShelterId) {
+      return shelters.find((s) => s.id === selectedShelterId) ?? null;
+    }
     if (!incident?.targetShelter) return null;
     return shelters.find((s) => s.id === incident.targetShelter) ?? null;
-  }, [incident, shelters]);
+  }, [selectedShelterId, incident, shelters]);
 
   if (!isOpen || !incident) return null;
 
   const handleApprove = () => {
     if (!selectedResourceId) return;
-    const success = assignResource(incident.id, selectedResourceId);
+    const success = assignResource(
+      incident.id,
+      selectedResourceId,
+      selectedShelterId || undefined
+    );
     if (success) {
       onClose();
     }
@@ -256,6 +278,14 @@ export const AssignmentModal: React.FC<AssignmentModalProps> = ({
               </div>
             )}
           </div>
+
+          {/* Capability-Based Destination Shelter Allocation Card (Milestone 10: Task T10.1 & Test 2.1) */}
+          <ShelterMatchCard
+            incident={incident}
+            shelters={shelters}
+            selectedShelterId={selectedShelterId}
+            onSelectShelter={setSelectedShelterId}
+          />
 
           {/* Opportunity Cost Warning Card (Test 1.5) */}
           {selectedResource && costResult && (

@@ -100,7 +100,13 @@ export function getPristineSectors(): Sector[] {
  * Returns deep-cloned pristine Shelter entities validated against ShelterSchema.
  */
 export function getPristineShelters(): Shelter[] {
-  return seedDataJson.shelters.map((s) => ShelterSchema.parse(JSON.parse(JSON.stringify(s))));
+  return seedDataJson.shelters.map((s) => {
+    const cloned = JSON.parse(JSON.stringify(s));
+    if (cloned.capacityOccupied === undefined) {
+      cloned.capacityOccupied = cloned.capacityCurrent;
+    }
+    return ShelterSchema.parse(cloned);
+  });
 }
 
 /**

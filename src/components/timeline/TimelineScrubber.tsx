@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useAppStore, PHASE_ORDER } from '@/store';
 import { TimelinePhaseId } from '@/types';
+import { StagingAlertBadge } from './StagingAlertBadge';
 
 interface PhaseMeta {
   id: TimelinePhaseId;
@@ -287,6 +288,9 @@ export function TimelineScrubber() {
           </span>
         )}
       </div>
+
+      {/* Proactive Pre-Disaster Staging Alert Badge (Milestone 10: Task T10.2 & Test 2.2) */}
+      <StagingAlertBadge />
     </section>
   );
 }

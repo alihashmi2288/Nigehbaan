@@ -7,6 +7,7 @@ import { ExplainabilityCard } from './ExplainabilityCard';
 import { formatTimestamp, getCategoryBadgeStyles } from '../queue/IncidentCard';
 import { ConflictModal } from '../uncertainty/ConflictModal';
 import { AssignmentModal } from '../dispatch/AssignmentModal';
+import { StagingAlertBadge } from '../timeline/StagingAlertBadge';
 import {
   X,
   ShieldAlert,
@@ -240,6 +241,9 @@ export const IncidentInspector: React.FC = () => {
             </div>
           )}
         </div>
+
+        {/* Proactive Pre-Disaster Staging Alert (Milestone 10: Task T10.2 & Test 2.2) */}
+        <StagingAlertBadge sectorId={incident.sectorId} />
 
         {/* Distress Report & Citizen Ground Truth */}
         <div className="bg-surface-1 border border-hairline rounded-lg p-4 space-y-3">

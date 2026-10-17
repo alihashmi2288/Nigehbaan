@@ -302,3 +302,30 @@ See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation che
 - **Next Smallest Coding Task:**
   - Task **`T10.1`** (Capability-Based Shelter Matching Engine in Milestone 10).
 
+### Session --- 2026-10-17 20:50 PKT (Milestone 10: Shelter Matching & Evacuee Routing)
+- **Phase/Task:** Milestone 10 (Tasks T10.1, T10.2) --- Tier 2 Extension
+- **Accomplishments:**
+  - **T10.1 (Capability-Based Shelter Matching Engine):**
+    - Created `src/lib/shelters/shelterMatcher.ts` and `src/lib/shelters/index.ts`.
+    - Pure deterministic TypeScript matching engine evaluating destination facilities based on required medical capabilities. Specifically routes hemodialysis patients (`NG-101`) to `SHL-02` (District Civil Hospital Annexe) with active emergency backup power.
+    - Implemented strict exclusion filtering for facilities with $\ge 95\%$ capacity or grid power failure (`SHL-03` at 97% capacity and blackout is strictly excluded). Deprioritizes facilities lacking required specialized care (`SHL-01` lacks dialysis support).
+    - Created `src/components/dispatch/ShelterMatchCard.tsx` and exported via `src/components/dispatch/index.ts`. Integrated into the Human Coordinator Dispatch Gate (`AssignmentModal.tsx`).
+    - Enhanced `src/store/useAppStore.ts` (`assignResource` and `unassignResource`) to manage shelter occupancy increments/decrements (`capacityCurrent` and `capacityOccupied`) by incident headcount (increments `SHL-02` from 84 to 86 for `NG-101`) and records destination shelter in audit logging.
+  - **T10.2 (T-0 Pre-Disaster Staging Recommendations):**
+    - Created `src/lib/simulation/stagingAdvisor.ts` inspecting Sector 3A pre-disaster baseline priors (22 isolated elderly living alone, single access arterial cut off at T+3).
+    - Created `src/components/timeline/StagingAlertBadge.tsx` and exported via `src/components/timeline/index.ts`. Renders with `data-testid="pre-position-pill"`: *"Proactive Staging Recommended: Pre-position Shallow Jet-Boat 01 at High Ground Depot Alpha"* with rationale *"Arterial access road submerges at T+3; 22 isolated elderly registered in sector."*
+    - Integrated `<StagingAlertBadge />` into `src/components/timeline/TimelineScrubber.tsx` and `<StagingAlertBadge sectorId={incident.sectorId} />` into `src/components/inspector/IncidentInspector.tsx`.
+  - **Unit & Acceptance Testing:**
+    - Created `tests/milestone10.test.ts` verifying all Milestone 10 capabilities, exclusions, capacity increments, and staging triggers with 5 comprehensive tests.
+    - Updated `tests/acceptance.test.ts` with Tier 2 Acceptance Test Suite (Test 2.1 and Test 2.2).
+    - Ran full test suite: **11/11 test files passed, 127/127 tests passed (100% pass rate)**.
+  - **Hardening & Production Verification:**
+    - Verified `npx tsc --noEmit`: 0 errors.
+    - Verified `npm run lint`: `✔ No ESLint warnings or errors`.
+    - Verified `node scripts/verify-docs.mjs`: 12/12 seed incidents verified (100% math consistency).
+    - Verified `npm run build`: Clean Next.js 14 production build generating all 5/5 static pages.
+- **Suggested Commit Name:**
+  - `feat(milestone-10): capability-based shelter matching engine and T-0 proactive staging recommendations`
+- **Next Smallest Coding Task:**
+  - Task **`T11.1`** (Web Audio Waveform Player Component in Milestone 11).
+

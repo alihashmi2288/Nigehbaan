@@ -663,7 +663,7 @@
 
 ## Milestone 10: Shelter Matching & Evacuee Routing (Tier 2)
 
-### [ ] Task T10.1: Capability-Based Shelter Matching Engine
+### [x] Task T10.1: Capability-Based Shelter Matching Engine
 - **Tier:** Tier 2 (Post-Tier 1 Extension)
 - **Dependencies:** T9.3
 - **Files to create/edit:**
@@ -682,7 +682,7 @@
 
 ---
 
-### [ ] Task T10.2: T-0 Pre-Disaster Staging Recommendations
+### [x] Task T10.2: T-0 Pre-Disaster Staging Recommendations
 - **Tier:** Tier 2 (Post-Tier 1 Extension)
 - **Dependencies:** T10.1
 - **Files to create/edit:**

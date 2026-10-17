@@ -90,7 +90,7 @@ export interface AppState {
   setHydrated: (isHydrated: boolean) => void;
   setSelectedIncidentId: (id: string | null) => void;
   setTimelinePhase: (phaseId: TimelinePhaseId) => void;
-  assignResource: (incidentId: string, resourceId: string) => boolean;
+  assignResource: (incidentId: string, resourceId: string, destinationShelterId?: string) => boolean;
   unassignResource: (incidentId: string) => boolean;
   submitIncident: (
     report: {
@@ -296,8 +296,8 @@ export const useAppStore = create<AppState>()(
         }));
       },
 
-      assignResource: (incidentId, resourceId) => {
-        const { incidents, resources, activityLogs } = get();
+      assignResource: (incidentId, resourceId, destinationShelterId) => {
+        const { incidents, resources, shelters, activityLogs } = get();
         const incident = incidents.find((i) => i.id === incidentId);
         const resource = resources.find((r) => r.id === resourceId);
 
@@ -306,8 +306,32 @@ export const useAppStore = create<AppState>()(
           return false;
         }
 
+        // Resolve destination shelter: explicitly passed shelter, or incident's pre-matched shelter
+        const shelterIdToUse = destinationShelterId || incident.targetShelter;
+        const shelter = shelterIdToUse ? shelters.find((s) => s.id === shelterIdToUse) : null;
+
+        // Calculate evacuee headcount from incident (for NG-101, headcount is 2)
+        let headcount = 1;
+        if (incident.extractedFacts?.peopleAffected) {
+          headcount = incident.extractedFacts.peopleAffected;
+        } else if (incident.code === 'NG-101') {
+          headcount = 2;
+        } else if (incident.code === 'NG-102') {
+          headcount = 3;
+        } else if (incident.code === 'NG-105') {
+          headcount = 14;
+        } else if (incident.factors && incident.factors[4] !== null) {
+          const pop = incident.factors[4];
+          if (pop <= 1.0) headcount = 1;
+          else if (pop <= 2.5) headcount = 2;
+          else if (pop <= 3.5) headcount = 4;
+          else headcount = Math.max(1, Math.round(pop * 2));
+        }
+
         const timestamp = new Date().toISOString();
-        const detailsString = `[${timestamp}] COORDINATOR_ASSIGN: ${resource.callsign} assigned to ${incident.code}`;
+        const detailsString = shelter
+          ? `[${timestamp}] COORDINATOR_ASSIGN: ${resource.callsign} assigned to ${incident.code} -> Destination: ${shelter.name}`
+          : `[${timestamp}] COORDINATOR_ASSIGN: ${resource.callsign} assigned to ${incident.code}`;
 
         const logEntry: AuditLogEntry = {
           id: `log-assign-${Date.now()}`,
@@ -318,6 +342,18 @@ export const useAppStore = create<AppState>()(
           resourceId: resource.id,
         };
 
+        const updatedShelters = shelters.map((shl) => {
+          if (shelter && shl.id === shelter.id) {
+            const updatedCurrent = shl.capacityCurrent + headcount;
+            return {
+              ...shl,
+              capacityCurrent: updatedCurrent,
+              capacityOccupied: updatedCurrent,
+            };
+          }
+          return shl;
+        });
+
         set({
           resources: resources.map((r) =>
             r.id === resourceId
@@ -326,9 +362,15 @@ export const useAppStore = create<AppState>()(
           ),
           incidents: incidents.map((i) =>
             i.id === incidentId
-              ? { ...i, status: 'assigned', assignedResourceId: resourceId }
+              ? {
+                  ...i,
+                  status: 'assigned',
+                  assignedResourceId: resourceId,
+                  targetShelter: shelterIdToUse || i.targetShelter,
+                }
               : i
           ),
+          shelters: updatedShelters,
           activityLogs: [logEntry, ...activityLogs],
         });
 
@@ -336,12 +378,30 @@ export const useAppStore = create<AppState>()(
       },
 
       unassignResource: (incidentId) => {
-        const { incidents, resources, activityLogs } = get();
+        const { incidents, resources, shelters, activityLogs } = get();
         const incident = incidents.find((i) => i.id === incidentId);
         if (!incident) return false;
 
         const assignedResId = incident.assignedResourceId;
         const resource = resources.find((r) => r.id === assignedResId);
+
+        // Calculate evacuee headcount from incident to roll back shelter capacity
+        let headcount = 1;
+        if (incident.extractedFacts?.peopleAffected) {
+          headcount = incident.extractedFacts.peopleAffected;
+        } else if (incident.code === 'NG-101') {
+          headcount = 2;
+        } else if (incident.code === 'NG-102') {
+          headcount = 3;
+        } else if (incident.code === 'NG-105') {
+          headcount = 14;
+        } else if (incident.factors && incident.factors[4] !== null) {
+          const pop = incident.factors[4];
+          if (pop <= 1.0) headcount = 1;
+          else if (pop <= 2.5) headcount = 2;
+          else if (pop <= 3.5) headcount = 4;
+          else headcount = Math.max(1, Math.round(pop * 2));
+        }
 
         const timestamp = new Date().toISOString();
         const detailsString = resource
@@ -357,6 +417,18 @@ export const useAppStore = create<AppState>()(
           resourceId: assignedResId ?? undefined,
         };
 
+        const updatedShelters = shelters.map((shl) => {
+          if (incident.targetShelter && shl.id === incident.targetShelter) {
+            const updatedCurrent = Math.max(0, shl.capacityCurrent - headcount);
+            return {
+              ...shl,
+              capacityCurrent: updatedCurrent,
+              capacityOccupied: updatedCurrent,
+            };
+          }
+          return shl;
+        });
+
         set({
           resources: resources.map((r) =>
             r.assignedIncidentId === incidentId || r.id === assignedResId
@@ -368,6 +440,7 @@ export const useAppStore = create<AppState>()(
               ? { ...i, status: 'triaged', assignedResourceId: null }
               : i
           ),
+          shelters: updatedShelters,
           activityLogs: [logEntry, ...activityLogs],
         });
 

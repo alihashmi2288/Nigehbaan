@@ -41,6 +41,8 @@ import {
   getPristineSectors,
 } from '@/lib/simulation/seedLoader';
 import { ExtractedFactsSchema, Incident } from '@/types';
+import { matchShelterForIncident } from '@/lib/shelters';
+import { getSectorStagingRecommendation } from '@/lib/simulation/stagingAdvisor';
 
 /**
  * Tier 1 Acceptance Test Suite
@@ -475,6 +477,78 @@ describe('Tier 1 Acceptance Test Suite (Tests 1.1 – 1.9)', () => {
       expect(resetStore.selectedIncidentId).toBeNull();
       expect(resetStore.activityLogs[0].action).toBe('SIMULATION_RESET');
       expect(resetStore.activityLogs[0].details).toContain('SIMULATION_RESET');
+    });
+  });
+
+  // --------------------------------------------------------------------------
+  // Tier 2 Test Suite: Post-Tier 1 Extensions (docs/acceptance-tests.md Section 2)
+  // --------------------------------------------------------------------------
+  describe('Tier 2 Acceptance Test Suite (Milestone 10: Tests 2.1 – 2.2)', () => {
+    // ------------------------------------------------------------------------
+    // Test 2.1: Shelter Capacity & Capability Destination Matching
+    // ------------------------------------------------------------------------
+    describe('Test 2.1: Shelter Capacity & Capability Destination Matching', () => {
+      it('strictly filters SHL-03, deprioritizes SHL-01, selects SHL-02 for NG-101, and increments capacityOccupied', () => {
+        const store = useAppStore.getState();
+        const ng101 = store.incidents.find((i) => i.code === 'NG-101')!;
+        const res01 = store.resources.find((r) => r.id === 'RES-01')!;
+        const shelters = store.shelters;
+
+        // When: The shelter allocation engine evaluates candidate destinations for NG-101
+        const matchResult = matchShelterForIncident(ng101, shelters);
+
+        // Then:
+        // 1. SHL-03 is strictly filtered out (occupancy >= 95% and power failure)
+        const shl03 = matchResult.candidates.find((c) => c.shelter.id === 'SHL-03')!;
+        expect(shl03.isEligible).toBe(false);
+        expect(shl03.exclusionReason).toContain('95%');
+
+        // 2. SHL-01 is deprioritized (lacks medical capability)
+        const shl01 = matchResult.candidates.find((c) => c.shelter.id === 'SHL-01')!;
+        expect(shl01.isEligible).toBe(true);
+        expect(shl01.deprioritizationReason).toContain('Dialysis Support');
+
+        // 3. SHL-02 is selected as the recommended destination
+        expect(matchResult.recommendedShelter?.id).toBe('SHL-02');
+
+        // 4. Upon assignment, SHL-02.capacityOccupied increments by the incident headcount (84 -> 86)
+        const initialOccupied = shelters.find((s) => s.id === 'SHL-02')!.capacityCurrent;
+        expect(initialOccupied).toBe(84);
+
+        store.assignResource(ng101.id, res01.id, 'SHL-02');
+
+        const updatedShelter = useAppStore.getState().shelters.find((s) => s.id === 'SHL-02')!;
+        expect(updatedShelter.capacityCurrent).toBe(86);
+        expect(updatedShelter.capacityOccupied).toBe(86);
+      });
+    });
+
+    // ------------------------------------------------------------------------
+    // Test 2.2: T-0 Pre-Disaster Baseline Staging Recommendation
+    // ------------------------------------------------------------------------
+    describe('Test 2.2: T-0 Pre-Disaster Baseline Staging Recommendation', () => {
+      it('displays proactive staging recommendation pill for Sector 3A at T-0 with exact rationale', () => {
+        const store = useAppStore.getState();
+        expect(store.timelinePhase).toBe('T0');
+
+        // When: The coordinator inspects Sector 3A
+        const rec = getSectorStagingRecommendation('sector-3a', 'T0');
+
+        // Then:
+        // 1. Pre-position pill badge displays "Proactive Staging Recommended"
+        expect(rec).not.toBeNull();
+        expect(rec?.badgeText).toBe('Proactive Staging Recommended');
+
+        // 2. Recommends pre-positioning RES-01 (Shallow Jet-Boat 01) at High Ground Depot Alpha
+        expect(rec?.recommendedResourceId).toBe('RES-01');
+        expect(rec?.recommendedResourceCallsign).toBe('Shallow Jet-Boat 01');
+        expect(rec?.stagingLocation).toBe('High Ground Depot Alpha');
+
+        // 3. Rationale displays exact specification
+        expect(rec?.rationale).toBe(
+          'Arterial access road submerges at T+3; 22 isolated elderly registered in sector.'
+        );
+      });
     });
   });
 });
