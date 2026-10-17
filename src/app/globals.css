@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Canvas & Surface Ladder */
+  --canvas: #010102;
+  --surface-1: #0f1011;
+  --surface-2: #141516;
+  --surface-3: #18191a;
+  --surface-4: #191a1b;
+
+  /* Hairline Borders */
+  --hairline: #23252a;
+  --hairline-strong: #34343a;
+  --hairline-tertiary: #3e3e44;
+
+  /* Typography & Ink (WCAG AA Validated on #010102) */
+  --ink: #f7f8f8;
+  --ink-muted: #d0d6e0;
+  --ink-subtle: #8a8f98;
+  --ink-tertiary: #858a93;
+
+  /* Brand & Interactive Accent */
+  --primary: #5e6ad2;
+  --primary-hover: #828fff;
+  --primary-focus: #5e69d1;
+
+  /* Crisis Semantic Indicators */
+  --semantic-critical: #B42318;
+  --semantic-critical-text: #FDA29B;
+  --semantic-critical-bg: rgba(180, 35, 24, 0.15);
+  --semantic-critical-border: #F04438;
+
+  --semantic-warning: #92400E;
+  --semantic-warning-text: #FDB022;
+  --semantic-warning-bg: rgba(146, 64, 14, 0.15);
+  --semantic-warning-border: #D97706;
+
+  --semantic-blind-spot: #DB6D28;
+  --semantic-blind-spot-text: #F79009;
+  --semantic-blind-spot-bg: rgba(219, 109, 40, 0.18);
+  --semantic-blind-spot-border: #BD561D;
+
+  --semantic-success: #27a644;
+  --semantic-success-text: #75E0A7;
+  --semantic-success-bg: rgba(39, 166, 68, 0.15);
+  --semantic-success-border: #12B76A;
+
+  --semantic-unknown: #475569;
+  --semantic-unknown-text: #94A3B8;
+  --semantic-unknown-bg: rgba(71, 85, 105, 0.20);
+}
+
+body {
+  background-color: var(--canvas);
+  color: var(--ink);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Operational scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--hairline-strong);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-tertiary);
+}

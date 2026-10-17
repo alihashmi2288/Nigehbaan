@@ -40,7 +40,8 @@ If you cannot resolve a conflict, **STOP IMMEDIATELY**, do not guess, and log th
 
 ## 3. Current Implementation Status
 
-- **Current Tier:** **Milestone 0 --- Bootstrap & Project Setup**
-- **Next Smallest Coding Task:** Follow `TASKS.md` starting at task **`T0.1`** (Initialize Next.js App Router skeleton with TypeScript and Tailwind).
+- **Current Tier:** **Milestone 1 --- Deterministic Scoring Engine & Tests (Tier 1)**
+- **Completed:** Milestone 0 (Tasks T0.1, T0.2, T0.3, T0.4)
+- **Next Smallest Coding Task:** Follow `TASKS.md` starting at task **`T1.1`** (Core TypeScript Data Types & Zod Schemas).
 - **Reference:** See [`docs/memory.md`](./docs/memory.md) for full session logs and [`TASKS.md`](./TASKS.md) for task tracking.
 

@@ -11,7 +11,7 @@
 
 ## Milestone 0: Bootstrap & Project Setup (Tier 1)
 
-### [ ] Task T0.1: Initialize Next.js 14/15 App Router Skeleton
+### [x] Task T0.1: Initialize Next.js 14/15 App Router Skeleton
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** None
 - **Files to create/edit:**
@@ -33,7 +33,7 @@
 
 ---
 
-### [ ] Task T0.2: Configure Tailwind CSS with DESIGN.md Tokens
+### [x] Task T0.2: Configure Tailwind CSS with DESIGN.md Tokens
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T0.1
 - **Files to create/edit:**
@@ -60,7 +60,7 @@
 
 ---
 
-### [ ] Task T0.3: Setup Vitest Test Runner & Testing Infrastructure
+### [x] Task T0.3: Setup Vitest Test Runner & Testing Infrastructure
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T0.1
 - **Files to create/edit:**
@@ -77,7 +77,7 @@
 
 ---
 
-### [ ] Task T0.4: Deploy Empty Skeleton to Vercel
+### [x] Task T0.4: Deploy Empty Skeleton to Vercel
 - **Tier:** Tier 1 (Launch Blocker)
 - **Dependencies:** T0.1, T0.2
 - **Files to create/edit:**

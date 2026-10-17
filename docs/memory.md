@@ -122,8 +122,9 @@ The following architectural and product decisions were formally established and 
 
 See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation checklist.
 
-- **Current Active Milestone:** **Milestone 0 --- Bootstrap & Project Setup**
-- **Next Smallest Coding Task:** **`T0.1`** (Initialize Next.js 14/15 App Router skeleton with TypeScript strict mode).
+- **Current Active Milestone:** **Milestone 1 --- Deterministic Scoring Engine & Tests (Tier 1)**
+- **Completed Milestones:** **Milestone 0 --- Bootstrap & Project Setup** (Tasks T0.1, T0.2, T0.3, T0.4 verified)
+- **Next Smallest Coding Task:** **`T1.1`** (Core TypeScript Data Types & Zod Schemas).
 
 ---
 
@@ -143,8 +144,16 @@ See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation che
   - Added strict Hackathon Cut-Line Rule (18 Oct 12:00 PM) to `docs/rules.md` and `AGENTS.md`.
   - Refined `docs/demo-script.md` to be 100% Tier-1-only resilient, clearly separating Tier 2 extensions.
   - Authored `TASKS.md` containing 35 atomic, dependency-tracked tasks across all milestones with strict acceptance criteria.
+
+### Session --- 2026-10-17 17:10 PKT (Milestone 0: Bootstrap & Project Setup)
+- **Phase/Task:** Milestone 0 (Tasks T0.1, T0.2, T0.3, T0.4)
+- **Accomplishments:**
+  - **T0.1 (Next.js Skeleton):** Created `package.json`, `tsconfig.json` (strict mode, `@/*` paths), `next.config.mjs`, `src/app/layout.tsx` (with official metadata, dark class, and title `Nigehbaan (نگہبان) --- Tactical Disaster Triage`), and `src/app/page.tsx`.
+  - **T0.2 (Tailwind Tokens):** Created `tailwind.config.ts`, `postcss.config.mjs`, and `src/app/globals.css` with exact `DESIGN.md` tokens (Canvas `#010102`, Surfaces `#0f1011`–`#191a1b`, Hairlines `#23252a`–`#3e3e44`, Brand `#5e6ad2`, and all Crisis Semantics: Critical, Warning, Blind-Spot, Success, Unknown).
+  - **T0.3 (Vitest Runner):** Created `vitest.config.ts`, added `"test": "vitest run"` to `package.json`, and added `tests/sanity.test.ts`. Verified with `npm test`: 4/4 tests passed with 0 failures.
+  - **T0.4 (Build & Vercel Prep):** Verified production build with `npm run build`: zero errors, zero warnings, static page prerendering clean. Added `.gitignore` for node, Next.js, and Vitest artifacts. Formulated manual Vercel deployment guide.
 - **Next Smallest Coding Task:**
-  - Follow `TASKS.md` starting at task **`T0.1`** (Initialize Next.js 14/15 App Router skeleton with TypeScript).
+  - Task **`T1.1`** (Core TypeScript Data Types & Zod Schemas).
 
 
 
