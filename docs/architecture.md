@@ -1,561 +1,312 @@
 # Nigehbaan --- Architecture
 
-**Status:** Proposed MVP architecture\
-**Principle:** Build the smallest reliable end-to-end workflow within
-the 36-hour hackathon.
+**Status:** Planned MVP Architecture  
+**Principle:** Deliver a rock-solid, zero-downtime, fully explainable emergency coordination prototype for Vercel deployment within the 36-hour hackathon.
 
-------------------------------------------------------------------------
+---
 
-## 1. Architecture goals
+## 1. Architectural Goals & Invariants
 
-1.  Keep frontend and backend in one repository.
-2.  Make report intake resilient to AI provider failure.
-3.  Keep priority scoring deterministic and testable.
-4.  Require human approval for resource assignment.
-5.  Keep the demo repeatable using seeded fictional data.
-6.  Avoid complex infrastructure that does not improve the core
-    workflow.
+1. **Evaluator Reliability:** 100% demo uptime on Vercel without external database cold-starts, connection-pool exhaustion, or migration blockers.
+2. **AI Safety Boundaries:** Pure deterministic TypeScript code for all priority calculations (0–100 scale), uncertainty flags, blind-spot floors, and opportunity cost trade-offs. The LLM is strictly used for text extraction and speech-to-text.
+3. **Stateless AI Helpers:** Serverless API routes (`/api/ai/*`) act as stateless proxy helpers. If no API key is present or a rate limit occurs, the app falls back to rule-based heuristics with transparent UI labeling.
+4. **Client-Side Reactive Store:** All incident, resource, shelter, and simulation state lives in an in-memory client store (Zustand or React Context) backed by `localStorage` persistence, pre-warmed with the District Alpha seed dataset.
+5. **Human-in-the-Loop:** Dispatch actions update local state only upon explicit coordinator authorization.
+6. **Instant Deterministic Replay:** A 1-click simulation reset restores the pristine baseline state instantly.
 
-## 2. Proposed stack
+---
 
-  -----------------------------------------------------------------------
-  Layer                   Choice                  Use
-  ----------------------- ----------------------- -----------------------
-  Web application         Next.js App Router +    Pages and server-side
-                          TypeScript              routes
+## 2. Technology Stack
 
-  Styling                 Tailwind CSS +          Consistent, accessible
-                          shadcn/ui               components
+| Layer | Choice | Rationale |
+| :--- | :--- | :--- |
+| **Framework** | Next.js 14/15 App Router (TypeScript Strict) | Fast server-side rendering, API route encapsulation, edge deployment on Vercel. |
+| **Styling & UI** | Tailwind CSS + Lucide Icons | Built to exact tokens in `DESIGN.md` (neutral charcoal `#010102`, semantic crisis badges). |
+| **State & Persistence** | Reactive Client Store + `localStorage` | Zero-dependency, sub-millisecond response, immune to DB timeouts during live judging. |
+| **Business Logic** | Pure TypeScript Modules (`src/lib/*`) | Deterministic scoring, uncertainty detection, resource matching, and simulation runner. |
+| **Mapping** | Leaflet + React-Leaflet | Open-source tactical GIS mapping with custom crisis markers and sector polygons. |
+| **AI Intelligence** | Google Gemini API (`@google/genai`) | Structured fact extraction and bilingual audio transcription with heuristic fallback. |
+| **Validation** | Zod | Runtime schema validation for forms, AI payloads, and seed data. |
+| **Deployment** | Vercel | Seamless edge deployment with automated preview builds. |
 
-  Icons                   lucide-react            UI icons
+---
 
-  Data Store              In-Memory / Local       Zero-dependency resilient
-                          Storage Repository      state for Vercel demo;
-                          (Primary) + Supabase    instant, pre-warmed,
-                          PostgreSQL adapter      100% reliable uptime
+## 3. System Data Flow & Runtime Architecture
 
-  Audio / Voice           Web Audio API + Audio   Playback, waveform,
-                          Visualizer + Bilingual  and Urdu/English speech
-                          Speech Adapter          transcription for voice
-
-  Authentication          Demo mode / Session     Coordinator access;
-                          only if needed          demo mode is standard
-                                                  for the MVP
-
-  AI                      LLM API adapter         Extract structured
-                          (Gemini) with instant   incident details and
-                          heuristic fallback      explainability rationale
-
-  Validation              Zod                     Validate request
-                                                  payloads and AI output
-
-  Map                     Leaflet + React Leaflet Incident/resource
-                                                  markers using simulated
-                                                  coordinates
-
-  Charts                  Recharts only where     Small operational
-                          useful                  summaries
-
-  Deployment              Vercel                  Public demo
-
-  Source control          GitHub                  Code, commits,
-                                                  submission repository
-  -----------------------------------------------------------------------
-
-Use current stable package versions compatible with the environment. Do
-not spend hackathon time migrating versions without a concrete blocker.
-
-## 3. High-level system flow
-
-``` text
-Citizen Report Form  OR  Voice Call Hotline (Urdu/English)  OR  Proxy Intake
-            |                           |                           |
-            +---------------------------+---------------------------+
-                                        |
-                                        v
-                               POST /api/incidents
-                                        |
-                                        +----> Validate input (Zod)
-                                        |
-                                        +----> Save original report / audio first
-                                        |
-                                        +----> AI extraction & transcription service
-                                        |           |
-                                        |           +----> Validate structured result
-                                        |           +----> On failure, keep report & mark review needed
-                                        |
-                                        v
-                                 Incident record
-                                        |
-                                        +----> Deterministic priority engine (MCDA 5-factor)
-                                        |           |
-                                        |           +----> Enforce vulnerability floor (4.0/5.0)
-                                        |           +----> Generate explainable audit rationale
-                                        |
-                                        +----> Uncertainty detection & Sector Blind-Spot Monitor
-                                        |           |
-                                        |           +----> Synthesize system_blind_spot incidents
-                                        |
-                                        v
-                            Coordinator Dashboard + Map
-                                        ^
-                                        | (Driven by Timeline Scrubber: T-0, T-3, T-6, T-12)
-                                        v
-                          Resource recommendation service
-                                        |
-                                        v
-                          Human approves / edits / rejects
-                                        |
-                                        v
-                       Assignment + activity log + UI update
+```text
+               +-------------------------------------------------------+
+               |                  INGESTION CHANNELS                   |
+               |  Citizen Form  |  Voice Hotline  |  Proxy Report     |
+               +-------------------------------------------------------+
+                                           |
+                                           v
+       +-----------------------------------------------------------------------+
+       |                         STATELESS API ROUTES                          |
+       |  POST /api/ai/extract                   POST /api/ai/transcribe       |
+       |  -> Calls Gemini API                     -> Transcribes Urdu/English  |
+       |  -> On failure: Heuristic Rule Parser    -> On failure: Scripted text |
+       |  -> Emits { structuredFacts, isAI: boolean }                          |
+       +-----------------------------------------------------------------------+
+                                           |
+                                           v (Structured Facts)
+       +-----------------------------------------------------------------------+
+       |                  CLIENT-SIDE REACTIVE STATE STORE                     |
+       |                 (Zustand / Context + localStorage)                    |
+       |                                                                       |
+       |  Pre-warmed Seed State (District Alpha: Incidents, Assets, Shelters)  |
+       |  Actions: addIncident(), assignResource(), setTimeline(), reset()    |
+       +-----------------------------------------------------------------------+
+                      |                                       |
+                      v                                       v
+       +-----------------------------+         +-------------------------------+
+       |    DETERMINISTIC ENGINES    |         |       UNCERTAINTY RADAR       |
+       |  (Pure TypeScript in lib/)  |         |  (Pure TypeScript in lib/)    |
+       |                             |         |                               |
+       | 1. 5-Factor Scorer (0-100)  |         | 1. Missing Location Detector  |
+       | 2. Vulnerability Floors     |         | 2. Stale Report Monitor (>60m)|
+       | 3. Opportunity Cost Warning |         | 3. Conflict & Duplicate Flags |
+       | 4. Shelter Capacity Matcher |         | 4. Blind-Spot Sector Monitor  |
+       | 5. Timeline Scrubber Runner |         |    -> Synthesizes Incidents   |
+       +-----------------------------+         +-------------------------------+
+                      \                                       /
+                       \                                     /
+                        v                                   v
+       +-----------------------------------------------------------------------+
+       |                         TACTICAL COMMAND HUD                          |
+       |                                                                       |
+       |  [Interactive Leaflet GIS Map]   [Deterministic Priority Queue]       |
+       |  [Explainability Rationale Card] [Opportunity Cost Confirmation Modal]|
+       |  [Timeline Scrubber: T-0/3/6/12] [1-Click Reset Baseline Button]      |
+       +-----------------------------------------------------------------------+
+                                           |
+                                           v
+                       Human Coordinator Approves Dispatch
+                                           |
+                                           v
+       Store updates: Resource -> "assigned", Log entry appended, Map refreshed
 ```
 
-## 4. Application areas and routes
+---
 
-Suggested route map:
+## 4. Application Routes & Navigation
 
-``` text
+```text
 /
-  -> Redirect to /dashboard or show a small project entry screen
+  -> Root entry: Redirects to /dashboard
 
 /dashboard
-  -> Main operations overview: incident queue, map, resource summary
-
-/incidents
-  -> Filterable incident list
+  -> Unified Tactical Operations HUD:
+     - Top bar: Timeline Scrubber (T-0, T+3, T+6, T+12), Reset Button, Simulation badge
+     - Left pane: Priority Incident Queue with filter tabs & search
+     - Center pane: Interactive GIS Map with incident markers, resource bases, sector polygons
+     - Right inspector: Selected Incident details, Factor Breakdown, Rationale Card, Resource Dispatcher
 
 /incidents/new
-  -> Public/simple report form
-
-/incidents/[id]
-  -> Incident details, priority explanation, uncertainty flags, actions
-
-/resources
-  -> Resource inventory and assignments
+  -> Emergency Report Form:
+     - Direct self-report or Community Proxy mode
+     - Natural language description input
+     - Fact extraction preview with honest fallback badges
 
 /uncertainty
-  -> Uncertainty Radar: missing, stale, conflicting, potential duplicates, and sector blind-spot telemetry
+  -> Dedicated Uncertainty Radar Monitor:
+     - Review cards for missing locations, conflicting road claims, stale items, and blind spots
 
-/simulation
-  -> Start/reset demo scenario and inspect event progression
+/resources
+  -> Resource Fleet & Shelter Roster:
+     - Vehicle availability status, terrain capabilities, sector staging
+     - Shelter capacity meters, backup power status, medical capabilities
 
-/settings
-  -> Demo/data controls only if needed; do not build extensive settings
+/api/ai/extract
+  -> Stateless POST endpoint: extracts structured facts from text using Gemini with heuristic fallback
+
+/api/ai/transcribe
+  -> Stateless POST endpoint: transcribes distress audio using Gemini with scripted fallback
 ```
 
-For the hackathon, the most important views are `/dashboard`,
-`/incidents/new`, `/incidents/[id]`, `/resources`, and the simulation
-controls. Avoid building a complex marketing site unless the core
-product is already complete.
+---
 
-## 5. Suggested folder structure
+## 5. Repository File Structure
 
-``` text
+```text
 nigehbaan/
-├── app/
-│   ├── (dashboard)/
-│   │   ├── dashboard/page.tsx
-│   │   ├── incidents/page.tsx
-│   │   ├── incidents/new/page.tsx
-│   │   ├── incidents/[id]/page.tsx
-│   │   ├── resources/page.tsx
-│   │   ├── uncertainty/page.tsx
-│   │   └── simulation/page.tsx
-│   ├── api/
-│   │   ├── incidents/route.ts
-│   │   ├── incidents/[id]/route.ts
-│   │   ├── incidents/[id]/assign/route.ts
-│   │   ├── resources/route.ts
-│   │   ├── uncertainty/route.ts
-│   │   ├── sectors/blind-spots/route.ts
-│   │   └── simulation/route.ts
-│   ├── layout.tsx
-│   ├── page.tsx
-│   └── globals.css
-├── components/
-│   ├── layout/
-│   ├── dashboard/
-│   ├── incidents/
-│   ├── resources/
-│   ├── uncertainty/
-│   ├── maps/
-│   └── ui/
-├── lib/
-│   ├── ai/
-│   │   ├── provider.ts
-│   │   ├── extract-incident.ts
-│   │   └── schemas.ts
-│   ├── db/
-│   │   ├── client.ts
-│   │   └── queries.ts
-│   ├── incidents/
-│   │   ├── priority.ts
-│   │   ├── duplicate-check.ts
-│   │   ├── uncertainty.ts
-│   │   └── validation.ts
-│   ├── resources/
-│   │   ├── recommend.ts
-│   │   ├── assignments.ts
-│   │   ├── opportunityCost.ts
-│   │   └── shelterMatching.ts
-│   ├── simulation/
-│   │   ├── scenarios.ts
-│   │   └── runner.ts
-│   ├── audit/
-│   │   └── log.ts
-│   └── utils.ts
-├── types/
-│   ├── incident.ts
-│   ├── resource.ts
-│   ├── shelter.ts
-│   ├── assignment.ts
-│   └── sector.ts
-├── supabase/
-│   ├── migrations/
-│   └── seed.sql
+├── README.md                          <-- Project homepage & pitch
+├── AGENTS.md                          <-- AI agent system contract & tier rules
+├── DESIGN.md                          <-- Design system tokens & crisis UI specs
+├── docs/                              <-- Specifications & engineering documentation
+│   ├── PRD.md                         <-- Product requirements & tier matrix
+│   ├── scoring-spec.md                <-- Deterministic triage formula & lookup tables
+│   ├── seed-data.md                   <-- District Alpha scenarios, sectors, & timeline
+│   ├── acceptance-tests.md            <-- Given/When/Then test criteria
+│   ├── ai-prompts.md                  <-- System prompts, Zod schemas, & fallbacks
+│   ├── architecture.md                <-- System architecture & data flow (this file)
+│   ├── trade-offs.md                  <-- Architectural choices, cuts, & rationale
+│   ├── rules.md                       <-- Engineering standards & phase milestones
+│   ├── demo-script.md                 <-- 3-minute evaluation walkthrough & pitch
+│   ├── submission-checklist.md        <-- Hackathon compliance checklist
+│   └── memory.md                      <-- Living state & decision history
+├── src/
+│   ├── app/                           <-- Next.js App Router pages
+│   │   ├── (dashboard)/
+│   │   │   ├── dashboard/page.tsx
+│   │   │   ├── incidents/new/page.tsx
+│   │   │   ├── uncertainty/page.tsx
+│   │   │   └── resources/page.tsx
+│   │   ├── api/
+│   │   │   ├── ai/
+│   │   │   │   ├── extract/route.ts
+│   │   │   │   └── transcribe/route.ts
+│   │   ├── globals.css
+│   │   └── layout.tsx
+│   ├── components/
+│   │   ├── dashboard/                 <-- Incident queue, detail inspector, explainability card
+│   │   ├── maps/                      <-- Leaflet tactical GIS map, sector polygons, markers
+│   │   ├── uncertainty/               <-- Uncertainty Radar cards & blind spot alert badges
+│   │   ├── resources/                 <-- Opportunity cost warning modal, shelter meters
+│   │   ├── audio/                     <-- Voice distress player & waveform visualizer
+│   │   ├── simulation/                <-- Timeline scrubber (T-0 to T-12) & reset button
+│   │   └── ui/                        <-- Design system primitives (buttons, badges, inputs)
+│   ├── lib/                           <-- Pure TypeScript business logic engines
+│   │   ├── triage/
+│   │   │   ├── scoringEngine.ts       <-- 5-factor deterministic MCDA formula
+│   │   │   ├── lookupTables.ts        <-- Fact-to-score bucket mappings
+│   │   │   └── explainability.ts      <-- Audit rationale generator
+│   │   ├── uncertainty/
+│   │   │   ├── radar.ts               <-- Detector for missing, stale, and conflicting reports
+│   │   │   └── blindSpots.ts          <-- Sector silence evaluator & incident synthesizer
+│   │   ├── resources/
+│   │   │   ├── allocation.ts          <-- Vehicle suitability matching
+│   │   │   ├── opportunityCost.ts     <-- Sector depletion & queue turnaround delay calculator
+│   │   │   └── shelterMatching.ts     <-- Bed occupancy & medical capability matcher
+│   │   ├── simulation/
+│   │   │   ├── timelineRunner.ts      <-- Advances T-0, T-3, T-6, T-12 state
+│   │   │   └── seedData.ts            <-- District Alpha baseline scenario data
+│   │   ├── store/
+│   │   │   ├── useAppStore.ts         <-- Client-side reactive store with localStorage sync
+│   │   │   └── initialBaseline.ts     <-- Factory function for pristine reset
+│   │   └── ai/
+│   │       ├── geminiClient.ts        <-- Google Gemini API wrapper
+│   │       └── heuristicExtractor.ts  <-- Rule-based offline fallback parser
+│   └── types/
+│       ├── incident.ts                <-- Incident, report, and extraction interfaces
+│       ├── resource.ts                <-- Vehicle, boat, and crew interfaces
+│       ├── shelter.ts                 <-- Shelter capacity and capability interfaces
+│       ├── sector.ts                  <-- Sector polygon and telemetry interfaces
+│       └── uncertainty.ts             <-- Uncertainty flag types and schemas
 ├── tests/
-│   ├── priority.test.ts
-│   ├── uncertainty.test.ts
-│   └── resource-recommendation.test.ts
+│   ├── scoring.test.ts                <-- Deterministic unit tests for 5-factor scoring
+│   ├── uncertainty.test.ts            <-- Unit tests for radar flags and blind-spot floor
+│   └── opportunityCost.test.ts        <-- Unit tests for delay calculation and trade-offs
 ├── .env.example
-├── AGENTS.md
-├── DESIGN.md
-├── README.md
-├── docs/
-│   ├── PRD.md
-│   ├── architecture.md
-│   ├── trade-offs.md
-│   ├── rules.md
-│   └── memory.md
+├── package.json
+└── tsconfig.json
 ```
 
-This is a target structure, not a reason to create empty files for every
-item immediately. Add folders as implementation reaches each phase.
+---
 
-## 6. Data model
+## 6. Core Data Interfaces
 
-Use UUID primary keys and timestamps. Exact SQL types can be finalized
-during implementation.
+### `Incident` Interface
+```typescript
+export interface Incident {
+  id: string;
+  incidentCode: string;               // e.g. "NG-101"
+  originalReport: string;
+  sourceType: 'citizen' | 'voice_hotline' | 'community_proxy' | 'system_blind_spot';
+  timestamp: string;                  // ISO 8601
+  status: 'new' | 'investigating' | 'assigned' | 'in_progress' | 'resolved';
+  
+  // Location
+  sectorId: string;                   // e.g. "sector-3a"
+  locationText: string;
+  latitude: number | null;
+  longitude: number | null;
+  locationStatus: 'confirmed' | 'approximate' | 'missing';
 
-### `incidents`
+  // Structured Triage Factors (0 - 5 scale)
+  factors: {
+    lifeThreat: number;
+    medicalUrgency: number;
+    evacuationInability: number;
+    environmentalDanger: number;
+    populationAffected: number;
+  };
+  unknownFactorsCount: number;        // 0 to 5
+  
+  // Deterministic Scoring Output
+  priorityScore: number;              // 0.0 to 100.0
+  priorityCategory: 'Critical' | 'High' | 'Moderate' | 'Low';
+  confidenceScore: number;            // 0.0 to 1.0 (kept separate from urgency)
+  rationaleCard: string;              // Human-auditable explanation text
 
--   `id`
--   `incident_code` (human-readable, e.g. `NG-104`)
--   `original_report` (required)
--   `incident_type`
--   `status` (`new`, `needs_review`, `verified`, `assigned`,
-    `in_progress`, `resolved`, `closed`)
--   `latitude`, `longitude` (nullable)
--   `location_text` (nullable)
--   `location_status` (`confirmed`, `approximate`, `missing`,
-    `unverified`)
--   `people_affected` (nullable integer)
--   `medical_urgency` (nullable structured value)
--   `vulnerability_notes` (nullable)
--   `hazards` (JSONB or normalized fields)
--   `extracted_fields` (JSONB)
--   `extraction_status` (`pending`, `succeeded`, `failed`, `manual`)
--   `priority_score` (numeric, nullable until assessed)
--   `priority_category`
--   `factor_scores` (JSONB)
--   `information_confidence` (separate from priority; nullable)
--   `reporter_type` (`self`, `community_volunteer`, `field_worker`, `radio_relay`, `system_blind_spot`)
--   `communication_status` (`has_phone`, `no_phone`, `network_down`, `unknown`)
--   `proxy_reporter_name` (nullable)
--   `proxy_reporter_contact` (nullable)
--   `sector_id` (nullable UUID, references `sectors.id`)
--   `is_simulated` (boolean)
--   `reported_at`, `created_at`, `updated_at`
+  // Community Proxy & Telecom Status
+  communicationStatus: 'has_phone' | 'no_phone' | 'network_down' | 'unknown';
+  reporterPhone?: string;
 
-### `resources`
-
--   `id`
--   `name`
--   `resource_type` (`rescue_team`, `boat`, `ambulance`, `supply_kit`,
-    `shelter_capacity`, etc.)
--   `capabilities` (JSONB or array)
--   `status` (`available`, `assigned`, `unavailable`, `maintenance`)
--   `latitude`, `longitude` (nullable)
--   `current_assignment_id` (nullable if circular reference is avoided)
--   `is_simulated`
--   `updated_at`
-
-### `assignments`
-
--   `id`
--   `incident_id`
--   `resource_id`
--   `destination_shelter_id` (nullable UUID, references `shelters.id`)
--   `status` (`proposed`, `approved`, `in_progress`, `completed`,
-    `cancelled`)
--   `recommendation_reason`
--   `opportunity_cost_warning` (JSONB: `{ depleted_asset_type, remaining_in_sector, delayed_incident_id, estimated_delay_minutes }`)
--   `constraints` (JSONB)
--   `approved_by` (nullable in demo)
--   `approved_at`
--   `created_at`, `updated_at`
-
-### `shelters`
-
--   `id` (UUID)
--   `name` (e.g. `Alpha High School Relief Camp`)
--   `sector_id` (UUID, references `sectors.id`)
--   `latitude`, `longitude`
--   `capacity_total` (integer)
--   `capacity_current` (integer)
--   `power_status` (`grid_online`, `generator_backup`, `blackout`)
--   `medical_capabilities` (JSONB array: e.g. `["first_aid", "dialysis_ready", "mobility_access"]`)
--   `status` (`operational`, `near_capacity`, `full`, `closed_flooded`)
--   `is_simulated` (boolean)
--   `updated_at`
-
-### `pre_disaster_vulnerabilities`
-
--   `id` (UUID)
--   `sector_id` (UUID, references `sectors.id`)
--   `vulnerability_type` (`isolated_elderly`, `chronic_dialysis`, `mobility_impaired`, `low_income_katchi_abadi`)
--   `headcount_estimate` (integer)
--   `data_source` (`lhw_registry`, `municipal_demographics`, `rural_clinic`)
--   `recommended_staging_asset` (`shallow_jet_boat`, `mobile_medical_unit`, `4x4_high_clearance`)
--   `staging_depot_name` (e.g. `Sector 3 High-Ground Depot`)
--   `is_simulated` (boolean)
-
-### `uncertainty_flags`
-
--   `id`
--   `incident_id` (nullable UUID when originating from sector silence)
--   `sector_id` (nullable UUID, references `sectors.id`)
--   `flag_type` (`missing_info`, `conflict`, `stale`,
-    `possible_duplicate`, `location_unverified`, `coverage_blind_spot`)
--   `severity`
--   `description`
--   `evidence` (JSONB; store the relevant fields/report references, not
-    unnecessary private data)
--   `status` (`open`, `under_review`, `resolved`, `dismissed`)
--   `resolution_note`
--   `created_at`, `updated_at`
-
-### `sectors`
-
--   `id` (UUID)
--   `sector_name` (e.g. `Sector 3A - Riverbank`)
--   `polygon_coordinates` (JSONB lat/lng array)
--   `risk_level` (`low`, `moderate`, `high`, `critical`)
--   `last_report_at` (timestamp, nullable)
--   `infrastructure_status` (`normal`, `cellular_down`, `power_outage`, `isolated`)
--   `silent_duration_minutes` (integer)
--   `suggested_action` (e.g. `dispatch_physical_welfare_check`)
--   `is_simulated` (boolean)
--   `created_at`, `updated_at`
-
-### `activity_log`
-
--   `id`
--   `actor_type` (`coordinator`, `system`, `simulation`)
--   `actor_label`
--   `action`
--   `entity_type`
--   `entity_id`
--   `summary`
--   `metadata` (JSONB; never include API keys or secrets)
--   `created_at`
-
-### Demo scenario
-
-For the MVP, use seeded data with `is_simulated = true`. Do not mix demo
-data and real reports without a clear visible distinction.
-
-## 7. Service boundaries
-
-### AI extraction service
-
-Input: original report and optional user-provided form fields.\
-Output: schema-validated candidate facts, missing fields, and
-uncertainty notes.\
-Must not: assign the final priority, invent a precise location, diagnose
-a person, or make dispatch decisions.
-
-### Priority service
-
-Input: verified/available incident factors and configured weights.\
-Output: deterministic score, category, and factor-by-factor
-explanation.\
-Enforces vulnerability score baseline (minimum 4.0/5.0) for no-phone
-households and system blind spots.\
-Must not: hide missing factors or treat confidence as urgency.
-
-### Uncertainty service
-
-Input: incident data, timestamps, related reports, route/resource
-facts, sector telemetry.\
-Output: flags for human review and sector-linked system incidents.\
-Monitors sector telemetry and raises `coverage_blind_spot` flags when
-hazard zones have no communications traffic for a configured threshold
-duration. Upon escalation, automatically generates a synthetic incident
-record with `reporter_type: 'system_blind_spot'` linked to `sector_id`,
-allowing dead zones to seamlessly enter the standard incident queue,
-deterministic priority engine, and resource recommendation workflow.\
-Must not: silently delete/merge reports or declare uncertain claims
-false.
-
-### Resource recommendation & shelter matching service
-
-Input: incident requirements, available resource capabilities, shelter capacities, assignment status, known constraints.\
-Output: two-stage recommendation:
-1. **Asset-to-Incident:** Ranked compatible rescue vehicles (shallow jet-boats, heavy 4x4s, mobile clinics) matched against terrain water depth and patient mobility.
-2. **Incident-to-Shelter:** Destination relief shelter/field hospital matching live bed capacity, generator backup status, and medical facilities (e.g. dialysis readiness), auto-filtering facilities >95% full or grid-down.\
-Must not: perform real dispatch or mark a resource assigned until a human approves.
-
-### Tactical opportunity cost calculator service
-
-Input: proposed asset assignment, incident sector, active queued incidents.\
-Output: deterministic trade-off warning struct (`depleted_asset_type`, `remaining_in_sector`, `delayed_incident_id`, `estimated_delay_minutes`).\
-Logic: If assigning asset leaves 0 units of capability in sector, locates next highest queued incident requiring this capability and computes turnaround delay:
-$$\Delta t = \text{turnaround\_estimate} + \text{transit\_time}$$
-Must not: rely on LLM prompts or non-deterministic estimations; calculations are strictly audited application arithmetic.
-
-### Simulation service
-
-Input: scenario ID and event index or timeline phase (`T0`, `T3`, `T6`, `T12`).\
-Output: deterministic changes to simulated records, sector statuses, and activity log.\
-Features:
-- At `T0 Early Warning`, evaluates static Pre-Disaster Vulnerability Baselines (LHW registers, chronic dialysis lists, low-lying settlements) against incoming hydrological surge forecasts to generate proactive staging recommendations before roads submerge at `T3`.
-- At `T3 Flood Surge`, updates flood inundation contours and road cutoffs.
-- At `T6 Grid Blackout`, triggers cell tower drops and automated `coverage_blind_spot` escalations.
-- At `T12 Peak Crisis`, models resource exhaustion and acute opportunity cost trade-offs.\
-Must not: modify real data or hide that events are simulated.
-
-### Bilingual voice intake & transcription service
-
-Input: raw or simulated audio recording / speech stream (Urdu or English).\
-Output: dual-language transcript, translation, detected vocal urgency cues, confidence score.\
-Must not: invent callers or fabricate transcripts without source audio.
-
-### Explainable rationale service
-
-Input: incident factor scores, baseline elevation, flood speed, mobility notes.\
-Output: human-auditable transparent rationale bullets explaining the priority ranking.\
-Must not: override deterministic math with non-deterministic text.
-
-## 8. API design
-
-Recommended minimal routes:
-
-  -----------------------------------------------------------------------
-  Method + route                      Purpose
-  ----------------------------------- -----------------------------------
-  `POST /api/incidents`               Save report, attempt extraction,
-                                      calculate initial assessment
-
-  `POST /api/incidents/audio`         Ingest simulated/real voice call,
-                                      return transcription and entity candidates
-
-  `GET /api/incidents`                List/filter incidents
-
-  `GET /api/incidents/:id`            Retrieve incident and flags
-
-  `PATCH /api/incidents/:id`          Coordinator
-                                      edits/status/verification
-
-  `GET /api/resources`                List resources and availability
-
-  `POST /api/resources/opportunity-cost` Compute deterministic trade-off
-                                      impact and queue delay before assignment
-
-  `GET /api/shelters`                 List relief shelters, live bed
-                                      capacities, generator, and clinical status
-
-  `GET /api/vulnerabilities/baseline` Return pre-disaster vulnerable population
-                                      registry and proactive staging targets
-
-  `POST /api/incidents/:id/assign`    Create recommendation or approve
-                                      assignment, depending on explicit
-                                      action
-
-  `GET /api/uncertainty`              List open uncertainty flags
-
-  `PATCH /api/uncertainty/:id`        Update review status/resolution
-
-  `GET /api/sectors/blind-spots`      Returns spatial telemetry for silent
-                                      and offline map sectors
-
-  `POST /api/simulation/start`        Reset/load the fictional scenario
-
-  `POST /api/simulation/next`         Apply the next deterministic event
-
-  `POST /api/simulation/timeline`     Scrub scenario state to target phase
-                                      (`T0`, `T3`, `T6`, `T12`)
-
-  `POST /api/simulation/reset`        Restore the baseline demo dataset
-  -----------------------------------------------------------------------
-
-Use explicit action names for proposal vs approval; do not let one
-ambiguous endpoint both recommend and dispatch.
-
-## 9. AI extraction contract
-
-The model should return JSON matching a schema similar to:
-
-``` json
-{
-  "incidentType": "flood_rescue",
-  "locationText": "near the main market",
-  "latitude": null,
-  "longitude": null,
-  "locationStatus": "unverified",
-  "peopleAffected": 6,
-  "immediateHazards": ["water rising"],
-  "medicalUrgency": "reported_injury",
-  "mobilityConcerns": ["elderly person unable to walk"],
-  "missingInformation": ["exact address"],
-  "uncertainClaims": ["water is rising rapidly"],
-  "evidenceQuotes": [
-    "Water is rising rapidly",
-    "one person is injured"
-  ]
+  // Active Assignment
+  assignedResourceId?: string | null;
+  assignedShelterId?: string | null;
 }
 ```
 
-The model must not fabricate coordinates. Coordinates may only come from
-a user selection, trusted geocoding result, or seeded simulation.
-Validate enum values and bounds with Zod. If output is invalid, retry at
-most once if time/cost permits, then mark for manual review.
+### `Resource` Interface
+```typescript
+export interface Resource {
+  id: string;
+  callsign: string;                   // e.g. "Shallow Jet-Boat 01"
+  type: 'shallow_boat' | 'deep_boat' | 'heavy_4x4' | 'mobile_medical' | 'recon_patrol';
+  sectorId: string;
+  status: 'available' | 'assigned' | 'in_transit' | 'maintenance';
+  crewCapacity: number;
+  transitSpeedKmH: number;
+  turnaroundMinutes: number;          // Baseline roundtrip cycle time (e.g. 35 mins)
+}
+```
 
-## 10. Deployment and environment
+### `Shelter` Interface
+```typescript
+export interface Shelter {
+  id: string;
+  name: string;                       // e.g. "Government High School Relief Camp"
+  sectorId: string;
+  capacityTotal: number;
+  capacityOccupied: number;
+  hasGeneratorPower: boolean;
+  medicalCapabilities: Array<'basic_first_aid' | 'dialysis_support' | 'maternal_care' | 'oxygen'>;
+  status: 'active' | 'full' | 'compromised';
+}
+```
 
-Expected environment variables (names can change to match the selected
-provider): - `NEXT_PUBLIC_SUPABASE_URL` -
-`NEXT_PUBLIC_SUPABASE_ANON_KEY` - `SUPABASE_SERVICE_ROLE_KEY`
-(server-only; never expose in client) - `LLM_API_KEY` (server-only) -
-`LLM_MODEL` (optional) - `NEXT_PUBLIC_APP_MODE=demo`
+---
 
-Create `.env.example` with placeholders only. Never commit `.env.local`
-or real credentials. The frontend must not receive server-only keys.
+## 7. Tier 2: Progressive Web App (PWA) & Offline Queue Design
 
-## 11. Fallback architecture
+In Tier 2, Nigehbaan includes an installable PWA manifest and service worker for field coordinators and volunteers operating in unstable cellular areas:
 
-If database setup or external APIs consume too much time: 1. Keep the
-service interfaces. 2. Use a local in-memory or seeded demo repository
-only for a clearly labelled local demo. 3. Ensure the deployed version
-has a deterministic fallback scenario. 4. Never pretend local in-memory
-changes persist across server restarts. 5. Prefer the smallest
-end-to-end implementation over half-finished infrastructure.
+1. **Static Shell Caching:** Cache the HTML shell, Tailwind CSS bundle, and Leaflet vector assets using Cache-First strategy.
+2. **Offline Report Queue:** When a report is submitted without network connectivity:
+   - Save the raw submission to `localStorage` / `IndexedDB` under `pending_offline_submissions`.
+   - Show an immediate UI indicator: *"Report queued locally (offline mode)"*.
+   - Listen for `window.addEventListener('online')` to trigger a background sync.
+3. **Graceful De-duplication:** On sync, check timestamps and reporter phone to prevent duplicate ingestion.
 
-## 12. Architecture decisions
+---
 
--   **One repository:** reduces coordination and deployment overhead.
--   **AI only for extraction and summarization:** keeps safety-critical
-    scoring explainable.
--   **Deterministic scoring:** repeatable tests and understandable
-    decisions.
--   **Human approval:** prevents the prototype from claiming autonomous
-    emergency dispatch.
--   **Simulated data:** makes the demo reliable without pretending to
-    have live disaster feeds.
--   **Simple resource rules:** enough to demonstrate constraints without
-    building a complex optimizer.
--   **Sector-to-incident synthesis:** Dead-zone sector escalations generate
-    a linked synthetic incident record (`reporter_type: 'system_blind_spot'`)
-    rather than requiring a parallel dispatch system. This leverages the
-    existing incident queue, priority scoring engine, and recommendation
-    pipeline uniformly.
+## 8. Deployment & Environment Configuration
+
+### Environment Variables (`.env.example`)
+```bash
+# Server-Side Only: Google Gemini API Key for Extraction & Speech-to-Text
+GEMINI_API_KEY=""
+
+# Optional: Gemini Model Override (Defaults to gemini-2.5-flash)
+GEMINI_MODEL="gemini-2.5-flash"
+
+# Application Mode
+NEXT_PUBLIC_APP_MODE="demo"
+```
+
+### Vercel Deployment Checklist
+- Deploy Next.js App Router to Vercel without database connection dependencies.
+- Zero server-side persistent state: Next.js API routes are strictly stateless JSON converters.
+- Client boots up instantly by initializing the seed scenario in `localStorage` if empty.
+- 1-Click "Reset Simulation" clears `localStorage` and re-injects pristine baseline seed data.

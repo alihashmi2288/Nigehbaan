@@ -1,107 +1,46 @@
-# Nigehbaan (نگہبان) --- AI Agent Instructions & System Contract
+# Nigehbaan (نگہبان) --- AI Agent System Contract
 
 > **MANDATORY INSTRUCTION FOR ALL AI CODING AGENTS (Antigravity, Claude, Gemini, Cursor, Copilot):**  
-> Before generating, modifying, or refactoring ANY code in this repository, you **MUST** read and strictly adhere to the project specifications and rules detailed below.
+> Before generating, modifying, or refactoring ANY code in this repository, you **MUST** read and strictly adhere to the non-negotiable rules and reading sequence below.
 
 ---
 
 ## 1. Required Reading Order (Source of Truth)
 
-Before starting any task or implementation phase, read these authoritative documents in sequence:
+Read these authoritative specification files before touching code:
+1. **[`docs/scoring-spec.md`](./docs/scoring-spec.md)** --- Exact lookup tables, 0–5 factor scoring rules, MCDA formula (0–100 scale), unknown factor renormalization, and blind-spot floors.
+2. **[`docs/seed-data.md`](./docs/seed-data.md)** --- District Alpha scenario data: 12 incidents, 6 resources, 3 shelters, 4 sector polygons, and timeline events ($T-0, T+3, T+6, T+12$).
+3. **[`docs/acceptance-tests.md`](./docs/acceptance-tests.md)** --- Given/When/Then test criteria for every Tier 1 and Tier 2 feature.
+4. **[`DESIGN.md`](./DESIGN.md)** --- Authoritative visual design tokens (`#010102` canvas, `#0f1011` surface, `#5e6ad2` primary, crisis semantic badges), typography, and WCAG AA contrast standards.
+5. **[`docs/rules.md`](./docs/rules.md)** --- Engineering standards, milestone checklist, and deadline rules.
+6. **[`docs/memory.md`](./docs/memory.md)** --- Living project state, active decisions, and session changelog.
 
-1. **[`docs/rules.md`](./docs/rules.md)** --- Engineering standards, AI boundaries, deterministic scoring rules, error handling, and the 8-phase milestone checklist.
-2. **[`docs/architecture.md`](./docs/architecture.md)** --- Full-stack Next.js App Router architecture, service boundaries, data schemas, API routes, and Vercel resilience design.
-3. **[`DESIGN.md`](./DESIGN.md)** --- Authoritative Nigehbaan Design System: exact color tokens (`--canvas: #010102`, `--surface-1: #0f1011`, `--primary: #5e6ad2`, `--critical: #B42318`, `--warning: #92400E`, `--blind-spot: #DB6D28`), typography (Inter/SF Pro Display), and component constraints.
-4. **[`docs/PRD.md`](./docs/PRD.md)** --- Product requirements, acceptance criteria, and user journeys (including Community Proxy reporting and Bilingual Voice Hotline).
-5. **[`docs/trade-offs.md`](./docs/trade-offs.md)** --- Architectural and product rationale: what was chosen, what was left out, and why.
-6. **[`docs/memory.md`](./docs/memory.md)** --- Living project state, active decisions, and session handoff tracker.
-
----
-
-## 2. Immutable Engineering & Architectural Constraints
-
-Every AI agent must follow these strict technical rules:
-
-### A. Technology Stack & Deployment
-- **Framework:** Next.js 14/15 App Router with TypeScript (Strict mode).
-- **Styling:** Tailwind CSS using the exact tokens from `DESIGN.md`. Do **NOT** introduce random Tailwind utility colors (e.g. `bg-purple-600`, `bg-red-500`)—always map to Nigehbaan design tokens.
-- **Target Deployment:** **Vercel**. Every change must compile cleanly with `npm run build`.
-- **Data Persistence Strategy:** The primary runtime data store is a **zero-dependency, resilient In-Memory / Local Storage Repository** pre-warmed with the Sindh/Indus flood scenario (`SIMULATED DATA`). This guarantees 100% demo uptime and sub-millisecond response on Vercel without third-party database latency or migration blockers.
-
-### B. AI Boundaries & Safety Invariants
-- **NEVER allow an LLM to generate the final priority score or opportunity cost.** Priority is calculated strictly via the deterministic 5-factor MCDA mathematical formula in `src/lib/triageEngine.ts`. Opportunity cost trade-offs (asset availability and delay penalties to next queued incidents) are calculated via deterministic heuristics in `src/lib/resourceAllocation.ts`.
-- **LLM Role:** The Google Gemini API is used *only* for:
-  1. Structured fact extraction from unstructured citizen reports.
-  2. Bilingual speech-to-text translation (Urdu/English).
-  3. Generating human-auditable natural language explainability cards.
-- **Resilient Fallback:** All AI services must include automatic heuristic fallbacks so the app operates 100% reliably even if no API key is set on Vercel.
-- **NO Autonomous Dispatch:** The system *recommends* resources and matched destination shelters; an explicit human coordinator approval is required to assign an asset.
-- **NO Medical Diagnosis:** Triage scores are operational decision-support heuristics, never clinical diagnoses.
-
-### C. The "Invisible Vulnerable" & Uncertainty Radar
-- **Decouple Urgency from Confidence:** Missing information must be flagged as uncertain, but must **never** automatically lower an incident's priority.
-- **Pre-Disaster Baseline & T-0 Staging:** Community health/demographic baseline data (isolated elderly, chronic illness registry, low-lying informal settlements) is leveraged at `T-0 Early Warning` to recommend proactive staging before infrastructure fails.
-- **Sector-to-Incident Synthesis:** When a monitored geographical sector exhibits zero incoming communications during flood conditions, the system raises a `coverage_blind_spot` and automatically creates a synthetic incident (`reporter_type = 'system_blind_spot'`) with an enforced **$4.0 / 5.0$ vulnerability floor**, routing it into the dispatch queue for an immediate **Physical Welfare Recon / Field Sweep**.
-- **Community Proxy Reporting:** Intake must track whether the victim has phone access (`has_phone`, `no_phone`, `network_down`, `unknown`).
-
-### D. UI/UX & Aesthetics
-- Strictly follow `DESIGN.md`.
-- High information density, neutral charcoal surfaces, hairline borders (`1px #23252a`), clean typography.
-- **NO decorative cyberpunk neon glows, flashing emergency sirens, or rainbow gradients.** Urgent states are indicated through semantic text badges and crisp border highlights.
-
-### E. Mandatory Living Memory & Decision History (`docs/memory.md`)
-- **Continuous Decision Tracking:** Every codebase decision, file creation, code edit, refactoring, library addition, and design adjustment **MUST** be recorded in [`docs/memory.md`](./docs/memory.md).
-- **Changelog Integrity:** You must maintain a continuous, granular chronological history in `docs/memory.md` (Section 5) specifying:
-  1. What was changed and why (architectural and implementation decisions).
-  2. Exact file paths added, modified, or removed.
-  3. Commands executed and their outcomes.
-  4. Current blockers, tests verified, and the next pending task.
-- **Never proceed across sessions without logging:** Before completing a response or ending a turn where code was modified, the living history in `docs/memory.md` must be up to date.
+> **RULE ON CONFLICTS:** If any specification documents conflict, **STOP IMMEDIATELY**, do not guess, and log the conflict in `docs/memory.md`.
 
 ---
 
-## 3. Project File Tree & Component Map
+## 2. Non-Negotiable Engineering Rules (The 10 Invariants)
 
-```text
-nigehbaan/
-├── AGENTS.md                  <-- You are here (AI coding contract)
-├── DESIGN.md                  <-- Authoritative visual design tokens
-├── README.md                  <-- Public repository homepage
-├── docs/                      <-- Complete engineering specifications
-│   ├── PRD.md
-│   ├── architecture.md
-│   ├── trade-offs.md
-│   ├── rules.md
-│   └── memory.md
-├── src/
-│   ├── app/                   <-- Next.js App Router pages and API routes
-│   │   ├── (dashboard)/       <-- Operations command center
-│   │   ├── api/               <-- Serverless triage, audio, dispatch endpoints
-│   │   ├── globals.css
-│   │   └── layout.tsx
-│   ├── components/            <-- Reusable UI components
-│   │   ├── dashboard/         <-- Incident queue, explainability cards
-│   │   ├── maps/              <-- Leaflet tactical GIS map & blind spot overlays
-│   │   ├── uncertainty/       <-- Uncertainty Radar & blind spot monitor
-│   │   ├── audio/             <-- Voice distress player & waveform visualizer
-│   │   ├── simulation/        <-- Timeline scrubber (T-0 to T-12)
-│   │   └── ui/                <-- Primitive buttons, inputs, dialogs
-│   ├── lib/                   <-- Core business logic (deterministic)
-│   │   ├── triage/            <-- 5-factor mathematical scoring engine
-│   │   ├── uncertainty/       <-- Epistemic flag detectors
-│   │   ├── data/              <-- In-memory scenario repository & seed data
-│   │   └── ai/                <-- Gemini extraction adapter & fallback
-│   └── types/                 <-- TypeScript interfaces & Zod schemas
-```
+1. **Deterministic Triage (0–100 Scale):** Final priority scores are calculated strictly by the deterministic 5-factor mathematical formula in `src/lib/triage/scoringEngine.ts`. **The LLM must NEVER compute priority scores.**
+2. **Renormalize Unknowns (Never Zero):** When factor data is missing, renormalize weights across known factors:
+   $$\text{Score} = 100 \times \frac{\sum_{\text{known}} (w_i \cdot f_i / 5)}{\sum_{\text{known}} w_i}$$
+   Missing data flags uncertainty; it **never** lowers priority.
+3. **Blind-Spot & No-Phone Floors:** If `communication_status == 'no_phone'`, Evacuation Inability is $\ge 4.0$. If a sector goes dark during rising floodwaters, synthesize a `system_blind_spot` incident with an enforced minimum score of **60.0 (High)** labeled *"Physical Welfare Recon / Field Sweep"*. It is never auto-Critical.
+4. **Deterministic Opportunity Cost:** Asset scarcity and queue turnaround delay penalties (+35 min) must be computed by deterministic arithmetic (`src/lib/resources/opportunityCost.ts`), never guessed by an LLM.
+5. **No Autonomous Dispatch:** The system *recommends* resources and matched shelters; an explicit human coordinator approval is required to assign an asset.
+6. **Client-Side State with `localStorage`:** All runtime application state lives in a client-side store (Zustand or React Context) backed by `localStorage` persistence and pre-warmed with the District Alpha scenario. Never rely on server-side global memory.
+7. **Stateless AI Helpers with Honest Fallbacks:** Serverless API routes (`/api/ai/*`) are strictly stateless proxy handlers. If Gemini is unavailable, the UI must explicitly display:
+   - Text fallback: *"Offline heuristic extraction (not AI)"*
+   - Audio fallback: *"Scripted transcript for simulated call"*
+   - **Never disguise fallbacks as live AI.**
+8. **1-Click Reset:** The UI must include a Reset button that restores the pristine baseline seed data in `localStorage` completely.
+9. **Strict Tier Discipline:** Agents must complete and verify Tier 1 entirely before touching Tier 2 features. Tier 3 features (Supabase, Auth, What-If routing sandbox, turn-by-turn navigation) are cut.
+10. **Strict Hackathon Deadline:** All work must be completed and pushed well before **10:00 PM on 18 October 2026 (Asia/Karachi)**. Commits after this timestamp result in disqualification. Target code freeze is **6:00 PM on 18 October 2026**.
 
 ---
 
-## 4. Definition of Done for Any Code Change
+## 3. Current Implementation Status
 
-Before marking any task or phase complete:
-1. **TypeScript Typecheck:** Run `npm run type-check` (or `npx tsc --noEmit`) to verify zero type errors.
-2. **Build Verification:** Run `npm run build` to ensure valid Next.js serverless compilation.
-3. **Deterministic Verification:** Ensure deterministic scoring unit tests pass with identical outputs for identical inputs.
-4. **Visual & Interactive Verification:** Test the feature in the browser (handling loading, empty, and error states).
-5. **Mandatory History & Decision Log in [`docs/memory.md`](./docs/memory.md):** Append a session entry documenting every codebase decision, reason for changes, files modified, verification status, and next steps.
-6. **Strict Hackathon Deadline:** All work must be completed and pushed well before **10:00 PM on 18 October 2026** (commits after this timestamp result in disqualification).
+- **Current Tier:** **Milestone 0 --- Bootstrap & Project Setup**
+- **Next Smallest Coding Task:** Initialize Next.js 14/15 skeleton with Tailwind and `DESIGN.md` tokens, verify clean build, and deploy empty skeleton to Vercel.
+- **Reference:** See [`docs/memory.md`](./docs/memory.md) for full session logs.

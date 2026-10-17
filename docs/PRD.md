@@ -1,507 +1,224 @@
 # Nigehbaan --- Product Requirements Document (PRD)
 
-**Project:** Nigehbaan\
-**Event:** CODE//CONNECT'26 --- Vibe Coding Hackathon\
-**Chosen problem:** Problem 01 --- Disaster Response\
-**Document status:** Hackathon MVP scope\
-**Version:** 1.0\
-**Primary tagline:** *Clear priorities. Coordinated response.*
-
-------------------------------------------------------------------------
-
-## 1. Executive summary
-
-Nigehbaan is an AI-assisted disaster-response coordination prototype for
-flood emergencies. It helps an emergency coordinator turn scattered,
-unstructured reports into structured incidents, understand which reports
-may need urgent attention, identify missing or conflicting information,
-and recommend suitable resource assignments.
-
-The MVP will demonstrate a complete workflow using clearly labelled
-fictional data: submit a report, extract its details, assess priority
-using transparent deterministic rules, review uncertainty, recommend a
-resource, approve an assignment, and see the dashboard update when
-conditions change.
-
-Nigehbaan is a **decision-support prototype**, not an autonomous
-emergency-dispatch system. A human coordinator remains responsible for
-consequential decisions.
-
-## 2. Problem statement
-
-During floods and other disasters, warnings and reports may be
-incomplete, late, duplicated, inaccurate, or unavailable because of
-connectivity failures. Some residents---such as elderly people, people
-with disabilities, people living alone, and people unable to evacuate
-independently---may be especially vulnerable. Rescue teams, vehicles,
-shelters, and supplies are limited.
-
-Coordinators need a clearer way to organize incoming reports, assess
-urgency, understand uncertainty, and coordinate available resources.
-
-## 3. Product vision
-
-Help responders build a clearer operational picture from imperfect
-information and make more transparent, reviewable coordination
-decisions.
-
-### Product promise
-
-> Turn scattered emergency reports into explainable priorities and
-> actionable resource recommendations.
-
-### What success looks like
-
-A judge or user can submit a report and follow the complete journey from
-raw text to structured incident, priority explanation, uncertainty
-review, resource recommendation, human approval, and status update
-without relying on slides or hidden manual steps.
-
-## 4. Target users
-
-### Primary user: Emergency coordination officer
-
-Needs to review multiple incidents, compare urgency, check uncertain
-information, and coordinate limited resources from one dashboard.
-
-### Secondary user: Volunteer or community reporter (including Community Proxy Reporter)
-
-Needs a simple way to submit an emergency report without knowing
-technical incident categories or completing every field. Also acts as a
-Community Proxy Reporter submitting on behalf of vulnerable neighbors,
-family members, or residents who lack phones or connectivity.
-
-### Tertiary user: Shelter & Relief Manager
-
-Needs to balance shelter capacity, bed availability, generator backup, and medical capability against inbound evacuees, ensuring incoming victims (especially those with chronic conditions or mobility impairments) are routed to capable shelters before facilities breach capacity.
-
-### Demo-only stakeholder: Evaluator
-
-Needs to understand the problem, see the product work live, inspect how
-decisions are made, and understand limitations.
-
-## 5. Scope
-
-### In scope for the MVP
-
-1.  Coordinator operations dashboard.
-2.  Simple emergency-report submission form.
-3.  AI-assisted extraction of structured facts from report text.
-4.  Preservation of the original report and distinction between reported
-    facts, extracted fields, and unknown information.
-5.  Deterministic, explainable incident-priority scoring.
-6.  Incident queue with filters and status indicators.
-7.  Interactive map using clearly labelled simulated coordinates.
-8.  Resource inventory and suitability-aware assignment recommendations.
-9.  Human approval/override of assignments.
-10. Uncertainty Radar for missing, stale, conflicting, and potential
-    duplicate reports.
-11. A limited What-If scenario for a road closure or unavailable
-    resource, if the core workflow is stable.
-12. Seeded flood simulation for a repeatable live demo.
-13. Error states and graceful handling when the AI provider is
-    unavailable.
-14. Basic audit/activity log for important coordinator actions.
-15. Dual-mode intake: Direct self-reporting and Community Proxy intake
-    (tracking subject phone accessibility).
-16. Sector Blind-Spot detection for zero-report / communications-down
-    hazard areas.
-17. Bilingual (Urdu / English) Voice & Audio Distress Ingestion & Transcription
-    with audio visualizer waveform, designed specifically for low-literacy,
-    elderly, or panicking victims unable to navigate text forms.
-18. Interactive Disaster Timeline Scrubber (T-0 to T-12) simulation progression
-    enabling operators to observe flooding surge, communication tower collapses,
-    and evolving blind spots dynamically.
-19. Explainable AI Rationale Cards providing transparent, human-auditable
-    justifications alongside deterministic priority scores.
-20. Pre-Disaster Vulnerability Baseline & T-0 Proactive Staging: Community health logs
-    and demographic baselines overlaid with hydrological forecasts at T-0 to recommend
-    pre-positioning boats and medical assets before roads flood.
-21. Deterministic Opportunity Cost & Competing Priority Warnings: Explicit trade-off
-    confirmation alerts showing asset depletion and queue delay impacts before dispatch approval.
-22. Two-Stage Allocation & Shelter Capacity Destination Matching: Matching both vehicle capability
-    and destination relief shelter bed/generator capacity.
-
-### Explicitly out of scope
-
--   Real emergency dispatch or contact with emergency services.
--   Claims of live flood prediction or satellite analysis without real,
-    validated data.
--   Autonomous decisions about who receives rescue.
--   Medical diagnosis or clinically validated triage.
--   Facial recognition, identity tracking, or invasive surveillance.
--   Training a new AI model from scratch.
--   Production-grade national-scale operations, guaranteed offline
-    synchronization, or operational routing.
--   Treating generated priority scores as scientifically validated
-    emergency standards.
-
-## 6. Main user journeys
-
-### Journey A --- Submit and process an emergency report
-
-1.  Reporter opens the report form.
-2.  Reporter enters a natural-language description and any known
-    location/details.
-3.  System saves the original report before attempting AI extraction.
-4.  AI returns a validated structured extraction, or the incident
-    remains saved and marked `processing_failed`/`needs_review`.
-5.  UI shows extracted fields and explicitly marks unknown or
-    unconfirmed details.
-6.  Coordinator can edit/correct the extraction.
-
-### Journey B --- Review incident priority
-
-1.  Coordinator opens the incident queue.
-2.  Incidents are ordered using deterministic scoring rules and
-    tie-breakers.
-3.  Coordinator opens an incident.
-4.  System displays score, category, contributing factors, source
-    details, uncertainty flags, and missing information.
-5.  Coordinator may request clarification, mark information verified,
-    change status, or proceed to resource review.
-
-### Journey C --- Recommend and approve a resource with Opportunity Cost & Shelter Matching
-
-1.  Coordinator selects an incident.
-2.  System performs two-stage matching:
-    a. **Asset-to-Incident:** Filters specialized vehicles (shallow jet-boat, 4x4, mobile clinic) by terrain obstacles and patient mobility.
-    b. **Incident-to-Shelter:** Matches destination relief shelters/hospitals based on live bed capacity, generator backup, and clinical capability (e.g. dialysis support), auto-filtering shelters >95% full.
-3.  **Opportunity Cost Trade-Off Warning:** System calculates and displays explicit consequences before approval (e.g., remaining asset count in sector, turnaround delay penalty to next queued high-urgency incident).
-4.  Coordinator reviews the trade-off, selects or overrides the matched shelter destination, and approves the assignment.
-5.  Assignment, shelter capacity counter, and activity log update; resource availability changes consistently.
-
-### Journey D --- Resolve uncertainty
-
-1.  Uncertainty Radar displays incomplete, stale, contradictory, or
-    potentially duplicated reports.
-2.  Coordinator opens a flag and reviews its evidence.
-3.  Coordinator records a resolution, requests verification, or leaves
-    the flag open.
-4.  The system does not silently discard or merge reports.
-
-### Journey E --- Run and scrub a multi-phase disaster simulation
-
-1.  Coordinator initiates or scrubs the simulation across key timeline
-    phases (`T-0 Early Warning`, `T+3 Flood Surge`, `T+6 Grid Blackout`, `T+12 Peak Crisis`).
-2.  Predefined fictional incidents arrive in sequence; water levels rise;
-    road cutoffs activate dynamically.
-3.  Cellular towers fail at T+6, triggering automated `coverage_blind_spot`
-    escalations in the Uncertainty Radar.
-4.  A road-closure/resource-shortage event affects a proposed
-    assignment.
-5.  System flags affected decisions and asks for human review.
-6.  Coordinator reviews and approves an alternative or leaves the case
-    unresolved.
-
-### Journey F --- Detect and respond to an unreachable blind spot
-
-1.  System monitors incoming report density across predefined geographical
-    sectors.
-2.  When a high-hazard sector exhibits zero incoming communications past
-    a configured threshold duration, the system raises a
-    `coverage_blind_spot` uncertainty flag and visualizes the silent
-    sector polygon on the map.
-3.  The priority engine assigns the sector incident an automatic high
-    baseline vulnerability score.
-4.  The coordinator opens the blind spot from the map or Uncertainty
-    Radar and initiates a physical welfare check / recon sweep dispatch.
-
-### Journey G --- Ingest and process bilingual voice / audio distress calls
-
-1.  A caller or field scout submits a voice distress recording (simulated Urdu or English).
-2.  System generates a real-time audio waveform visualizer and plays back the voice signal.
-3.  AI speech-to-text service provides dual-language transcription and translation.
-4.  Extracted entities (medical urgency, water depth, mobility impairment) are structured
-    and fed into the deterministic priority engine and incident queue with visible provenance.
-5.  Coordinator inspects the raw audio, transcript, and AI-extracted candidates side-by-side.
-
-### Journey H --- Pre-Disaster Vulnerability Baseline & T-0 Proactive Staging
-
-1.  Prior to active flood inundation, coordinator inspects the Pre-Disaster Vulnerability Registry (Lady Health Worker logs, chronic dialysis patients, low-lying informal settlements / *katchi abadis*).
-2.  At `T-0 Early Warning` on the Timeline Scrubber, hydrological surge forecasts intersect with vulnerability hotspots.
-3.  System generates proactive staging recommendations (e.g. stage Shallow Jet-Boat 01 and Mobile Medical Unit at high-ground staging depot near Sector 3A).
-4.  Coordinator approves pre-positioning, securing asset access before arterial roads submerge at `T+3`.
-
-## 7. Functional requirements
-
-  ----------------------------------------------------------------------------
-  ID                Requirement       Priority          Acceptance condition
-  ----------------- ----------------- ----------------- ----------------------
-  FR-01             Create an         Must              Original text and
-                    incident from a                     creation time are
-                    report                              saved and shown
-
-  FR-02             Extract           Must              Validated output fills
-                    structured report                   supported fields;
-                    details with AI                     unsupported facts
-                                                        remain unknown
-
-  FR-03             Work when AI      Must              Report remains saved
-                    extraction fails                    and can be reviewed
-                                                        manually
-
-  FR-04             Calculate a       Must              Same inputs produce
-                    deterministic                       same score; factors
-                    priority score                      and formula are
-                                                        visible
-
-  FR-05             Show an           Must              User can see category,
-                    explainable                         status, location
-                    incident queue                      quality, and priority
-
-  FR-06             Display incidents Must              Selecting a map marker
-                    on an interactive                   and incident row opens
-                    map                                 the same incident
-
-  FR-07             Manage resource   Must              Availability,
-                    inventory                           capability, and
-                                                        assignment status are
-                                                        visible
-
-  FR-08             Recommend         Must              Assigned/unavailable
-                    compatible                          resources are
-                    resources                           excluded; reason is
-                                                        shown
-
-  FR-09             Require human     Must              No recommendation
-                    approval for                        changes to an
-                    assignment                          assignment without
-                                                        coordinator action
-
-  FR-10             Detect missing    Must              Missing location or
-                    required                            other configured
-                    information                         fields produce a
-                                                        review flag
-
-  FR-11             Flag potential    Must              Likely duplicates are
-                    duplicate reports                   flagged for review,
-                                                        never silently merged
-
-  FR-12             Surface           Must              Contradictory
-                    conflicting                         road/incident
-                    reports                             information is visible
-                                                        with timestamps/source
-                                                        text
-
-  FR-13             Record important  Must              Assignment, status
-                    actions                             changes, overrides,
-                                                        and verification
-                                                        actions create log
-                                                        entries
-
-  FR-14             Run repeatable    Must              One action loads/plays
-                    flood simulation                    a known scenario and
-                                                        updates the UI
-
-  FR-15             What-If planning  Should            Road closure or
-                                                        resource
-                                                        unavailability flags
-                                                        affected assignments
-
-  FR-16             Save a report     Could             Only if core
-                    draft locally                       functionality is
-                                                        complete; clearly
-                                                        distinguish local
-                                                        draft from server
-                                                        receipt
-
-  FR-17             Authentication    Could             Add only if it does
-                                                        not jeopardize the
-                                                        demo; otherwise use a
-                                                        clearly labelled demo
-                                                        mode
-
-  FR-18             Sector Blind-Spot Must              System evaluates
-                    Detection                           monitored geographical
-                                                        sectors and flags areas
-                                                        with zero reports or
-                                                        confirmed cellular
-                                                        outages as
-                                                        coverage_blind_spot
-                                                        incidents requiring
-                                                        manual field sweeps /
-                                                        welfare checks
-
-  FR-19             Community Proxy   Must              Report intake supports
-                    Reporting                           filing on behalf of
-                                                        others and records
-                                                        whether the affected
-                                                        subject has phone
-                                                        access
-
-  FR-20             Bilingual Voice   Must              System supports voice
-                    Distress Intake                     distress playback,
-                    & Transcription                     interactive audio waveform,
-                                                        and bilingual Urdu/English
-                                                        speech transcription
-
-  FR-21             Interactive       Must              Scrubber control advances
-                    Disaster Timeline                   disaster scenario across
-                    Scrubber                            T-0, T-3, T-6, and T-12,
-                                                        updating water levels, road
-                                                        cutoffs, and blind spots
-
-  FR-22             Explainable AI    Must              Every incident score is
-                    Rationale Cards                     accompanied by a transparent
-                                                        human-auditable summary of
-                                                        why it was prioritized
-
-  FR-23             Pre-Disaster      Must              System overlays static
-                    Vulnerability                       vulnerability registries (LHW logs,
-                    Baseline & T-0                      dialysis lists, katchi abadis) with
-                    Staging                             T-0 hydrological alerts to recommend
-                                                        staging assets before road cutoffs
-
-  FR-24             Tactical          Must              System deterministically computes
-                    Opportunity Cost                    and displays resource scarcity
-                    Warnings                            trade-off alerts and queue turnaround
-                                                        delay penalties before human dispatch
-                                                        confirmation
-
-  FR-25             Shelter Capacity  Must              Resource assignment matches both vehicle
-                    Destination                         capability and destination relief shelter
-                    Matching                            bed/generator capacity, auto-filtering
-                                                        facilities >95% full or grid-down
-  ----------------------------------------------------------------------------
-
-## 8. Priority model
-
-The prototype will use deterministic rules, not an LLM-generated final
-score. Proposed factor weights are initial engineering assumptions for
-demonstration and **are not clinically or operationally validated**.
-
-  Factor                                         Initial weight
-  -------------------------------------------- ----------------
-  Immediate threat to life                                  30%
-  Medical urgency                                           25%
-  Vulnerability / inability to self-evacuate                20%
-  Environmental danger / time sensitivity                   15%
-  Number of people potentially affected                     10%
-  **Total**                                            **100%**
-
-Each factor may be represented on a documented 0--5 scale. Weighted
-score: `sum((factor_score / 5) * weight)` producing 0--100.
-
-Requirements: - Explain the contribution of each factor. - Preserve
-unknown values as unknown; do not silently treat missing data as zero
-risk. - Vulnerability baseline floor: If `communication_status == 'no_phone'`
-or `reporter_type == 'system_blind_spot'`, the vulnerability factor receives
-an automatic minimum baseline score of `4.0 / 5.0` (guaranteeing at least a
-16-point contribution to total priority). - Display information confidence
-separately from incident urgency. - Low confidence must trigger review, not
-automatically deprioritize an incident. - Use transparent, configurable
-categories such as Critical / High / Moderate / Low; thresholds must be
-documented and tested. - Human coordinator can override a recommendation,
-with a reason recorded. - Include a disclaimer that this is a demonstration
-scoring model, not validated emergency triage.
-
-## 9. Uncertainty Radar requirements
-
-The feature flags: - Missing or unconfirmed location. - Required
-information missing. - Conflicting claims (e.g., road reported open and
-blocked). - Stale information based on configurable age. - Potential
-duplicate reports based on shared location, time window, and text
-similarity or simple matching. - Unreachable coverage blind spots
-(monitored hazard sectors exhibiting zero incoming reports or confirmed
-telecommunication outages).
-
-Each flag must show: - What is uncertain. - Which reports/fields
-triggered the flag. - When the information was received. - Operational
-decisions potentially affected. - Suggested verification action. -
-Current review status.
-
-The system must not automatically delete, merge, or label a
-person/report as untrustworthy solely because of an algorithmic match.
-
-## 10. Non-functional requirements
-
--   **Usability:** Main incident status and recommended next action
-    should be understandable at a glance.
--   **Accessibility:** High contrast, keyboard-usable controls, labels
-    beyond color alone, readable type, and clear focus states.
--   **Performance:** Common dashboard interactions should feel
-    responsive with the seeded demo dataset.
--   **Reliability:** AI failure must not destroy the original report.
--   **Data integrity:** Resource availability and assignment states must
-    stay consistent.
--   **Security:** API keys server-side; validate inputs; avoid exposing
-    personal details unnecessarily.
--   **Transparency:** Clearly distinguish simulated data, reported
-    facts, AI-extracted fields, and system recommendations.
--   **Responsive behavior:** Coordinator dashboard optimized for
-    laptop/desktop; report form usable on mobile.
--   **Observability:** Errors are visible to the operator in useful
-    language; do not leak secrets or raw sensitive stack traces.
-
-## 11. Demo data and scenario
-
-Use a fictional area named `District Alpha` and clearly label all
-incidents, resource locations, road conditions, shelters, and metrics as
-simulated.
-
-Suggested scenario events: 1. Family stranded in rising water; exact
-location partly missing. 2. Elderly resident unable to self-evacuate. 3.
-Multiple houses affected; no immediate injury reported. 4. Two reports
-may refer to the same incident. 5. Conflicting reports about a road
-being open/blocked. 6. A rescue resource becomes unavailable or a route
-restriction is added. 7. Sector 3A (Riverbank settlement) has 0 reports
-for 90 minutes while flood water level rises; system flags a
-`coverage_blind_spot` and generates a physical welfare check dispatch
-recommendation.
-
-No real people's private data or live emergency calls should be used.
-
-## 12. Success metrics for the prototype
-
-These are prototype acceptance measures, not real-world impact claims: -
-Complete the report-to-assignment workflow during the demo. - Every
-displayed priority has a visible explanation. - All seeded
-missing/conflicting/duplicate cases trigger the expected flags. - AI
-failure leaves the report accessible for manual review. - Unavailable
-resources cannot be assigned. - Human override is possible and logged. -
-Demo can be reset and replayed. - A first-time evaluator can understand
-the main workflow with minimal verbal explanation.
-
-## 13. Risks and mitigations
-
-  -----------------------------------------------------------------------
-  Risk                                Mitigation
-  ----------------------------------- -----------------------------------
-  AI invents details                  Structured schema, validation,
-                                      original report visible, unknown
-                                      values allowed
-
-  Incorrect priority ordering         Transparent rules, scenario tests,
-                                      human control, explicit limitations
-
-  False duplicate detection           Flag only; require human
-                                      confirmation
-
-  Map data mistaken for live data     Persistent "SIMULATED DATA" label
-
-  API limits/outage                   Save first, fallback to manual
-                                      processing and seeded demo
-
-  Scope grows too large               Must/Should/Could priorities;
-                                      finish end-to-end flow first
-
-  Deployment fails near deadline      Deploy early, keep seeded
-                                      local/demo path, test live URL
-
-  Unclear event AI policy             Confirm detailed AI-tool rules with
-                                      organizers before relying on a tool
-                                      or service
-  -----------------------------------------------------------------------
-
-## 14. Submission readiness
-
-Before the hackathon deadline, prepare: - Team name and registered
-member names. - Public working demo URL. - GitHub repository with commit
-history. - Brief product description. - Key features. - Tools and
-technologies. - AI usage disclosure. - Demo instructions and any
-credentials.
-
-The uploaded instructions state that commits after 10:00 PM on 18
-October 2026 cause disqualification. Plan the final push and verify
-repository accessibility before that cutoff.
+**Project:** Nigehbaan (نگہبان)  
+**Event:** CODE//CONNECT'26 --- Vibe Coding Hackathon  
+**Problem Statement:** Problem 01 --- Disaster Response & Emergency Coordination  
+**Document Status:** Planned / Target MVP Specification  
+**Version:** 2.0 (Tiered Architecture Alignment)  
+**Primary Tagline:** *"Nigehbaan finds the people the system can't hear."*  
+
+---
+
+## 1. Executive Summary
+
+During catastrophic floods, emergency warnings rarely reach the most vulnerable—elderly residents living alone, low-income informal settlements (*katchi abadis*), people with disabilities or chronic illnesses, and those whose cellular infrastructure has collapsed. Standard disaster systems only prioritize citizens who shout the loudest with smartphones.
+
+**Nigehbaan** is an AI-assisted tactical disaster triage and coordination decision-support platform. It turns scattered citizen reports, community proxy submissions, and total communication dropouts into auditable triage priorities (0–100 deterministic scale) and actionable resource assignments with explicit opportunity cost warnings.
+
+Nigehbaan is an **operational decision-support prototype**, not an autonomous dispatch system. Consequential resource assignments always require explicit human coordinator approval.
+
+---
+
+## 2. Problem Statement
+
+In flood disasters (e.g. Sindh/Indus monsoon surges):
+1. **Information Incompleteness & Blackouts:** Reports are fragmented, delayed, and contradictory. Monitored sectors that go completely silent are often in the greatest danger, but traditional queues ignore them because no tickets are submitted.
+2. **Subjective & Opaque Triage:** Manual dispatchers get overwhelmed, defaulting to First-Come, First-Served (FCFS) or gut instinct, stranding high-vulnerability victims.
+3. **Hidden Opportunity Costs:** Dispatching a specialized shallow-draft boat to a low-urgency area depletes the sector, stranding dying patients in subsequent calls without the dispatcher realizing the delay penalty.
+4. **Shelter Mismatch:** Evacuees with acute needs (e.g., dialysis, oxygen) are sent to overcrowded shelters lacking generator power or medical facilities.
+
+---
+
+## 3. Product Vision & Differentiator
+
+### Core Promise
+> Turn incomplete emergency reports and communication blackouts into explainable priorities and auditable resource allocations.
+
+### Core Differentiator: The Uncertainty Radar & Blind-Spot Synthesis
+Nigehbaan decouples **urgency** from **information confidence**. When a high-hazard sector exhibits zero incoming communications during rising floodwaters, Nigehbaan flags a `coverage_blind_spot` and automatically synthesizes a high-priority incident (score $\ge 60$) for an immediate **Physical Welfare Recon / Field Sweep**.
+
+---
+
+## 4. Target Users & Stakeholders
+
+1. **Primary: Emergency Coordination Officer:** Needs a consolidated operational picture to compare incident urgency, inspect uncertainty flags, and allocate scarce assets with clear trade-off visibility.
+2. **Secondary: Citizen / Community Proxy Reporter:** Needs a simple web form to report emergencies for themselves or for vulnerable neighbors who lack phones or connectivity.
+3. **Tertiary: Shelter & Relief Manager (Tier 2):** Needs visibility into inbound evacuee volume matched against live shelter bed capacity, generator backup, and medical capabilities.
+4. **Evaluation Stakeholder: Hackathon Judge:** Needs to test the end-to-end workflow on Vercel, inspect the deterministic scoring math, scrub through the disaster timeline, and verify system resilience.
+
+---
+
+## 5. Scope & Tiered Implementation Roadmap
+
+To guarantee a 100% reliable, zero-downtime submission before the strict hackathon deadline, all requirements are organized into three disciplined tiers.
+
+```mermaid
+graph TD
+    subgraph "Tier 1: Core Essentials (Launch Blocker)"
+        T1A["Dashboard Shell & Map"]
+        T1B["Deterministic 5-Factor Scorer (0-100)"]
+        T1C["Report Form & AI/Heuristic Extraction"]
+        T1D["Uncertainty Radar (Blind Spots & Conflicts)"]
+        T1E["Resource Allocation & Opportunity Cost"]
+        T1F["Timeline Scrubber (T-0 to T-12)"]
+        T1G["Public Vercel Deploy & Reset Button"]
+    end
+
+    subgraph "Tier 2: Post-Tier 1 Extensions (Stretch Goals)"
+        T2A["Shelter Capacity Destination Matching"]
+        T2B["T-0 Pre-Disaster Baseline Staging"]
+        T2C["Urdu/English Voice Hotline Player"]
+        T2D["Community Proxy Intake Mode"]
+        T2E["Installable Offline PWA Queue"]
+        T2F["FCFS vs Nigehbaan Impact Panel"]
+    end
+
+    subgraph "Tier 3: Cut / Non-Goals"
+        T3A["What-If Sandbox Routing"]
+        T3B["Authentication / Login Walls"]
+        T3C["External Supabase Cloud DB"]
+        T3D["Turn-by-Turn GPS Navigation"]
+    end
+
+    T1A & T1B & T1C & T1D & T1E & T1F & T1G --> T2A & T2B & T2C & T2D & T2E & T2F
+```
+
+### Tier 1: Core Essentials (Demo Fails Without It)
+1. **Coordinator Operations Dashboard:** High-density split-screen layout with interactive Leaflet GIS map, prioritized incident queue, and selected incident inspector.
+2. **Deterministic Triage Scorer:** Pure TypeScript 5-factor MCDA formula producing an auditable 0–100 score, accompanied by an **Explainability Rationale Card**. Supported by automated unit tests.
+3. **Report Intake & Extraction:** Direct web report form with structured fact extraction (Google Gemini API) and transparent fallback (*"Offline heuristic extraction (not AI)"*).
+4. **Uncertainty Radar:** Explicit flags for missing locations, stale reports (>60m), contradictory road claims, and sector coverage blind spots. Missing data renormalizes weights and never lowers priority.
+5. **Smart Resource Recommendation & Opportunity Cost:** Compatibility filtering (shallow-draft boat vs. 4x4) with deterministic **Opportunity Cost Warnings** before human approval.
+6. **Timeline Scrubber ($T-0, T+3, T+6, T+12$):** Interactive progression driving water levels, road cutoffs, tower blackouts, and blind-spot incident synthesis.
+7. **Simulation Reset & Vercel Deployment:** 1-click reset restoring the pre-warmed `localStorage` baseline completely. Zero console errors on public Vercel deploy.
+
+### Tier 2: Post-Tier 1 Extensions (Build ONLY after Tier 1 is verified & deployed)
+1. **Shelter Capacity & Capability Destination Matching:** Dynamic routing based on shelter bed occupancy, generator status, and specialized care (dialysis/oxygen), auto-filtering shelters $>95\%$ full.
+2. **Pre-Disaster Baseline & T-0 Proactive Staging:** Demographic baselines (isolated elderly, chronic illness registry, low-lying settlements) recommending proactive staging before roads flood at $T+3$.
+3. **Bilingual Voice Intake (Urdu / English):** Audio distress player with waveform visualizer and dual-language transcription (Gemini speech-to-text or scripted fallback labeled *"Scripted transcript for simulated call"*).
+4. **Community Proxy Intake:** Intake mode for filing on behalf of others, tracking phone access status (`has_phone`, `no_phone`, `network_down`, `unknown`).
+5. **Installable PWA Form:** Offline queue with local caching and background sync for field volunteers.
+6. **"FCFS vs. Nigehbaan" Baseline Comparison Panel:** Analytical summary at $T+12$ comparing standard First-Come First-Served outcomes against Nigehbaan triage.
+
+### Tier 3: Cut / Non-Goals (Explicitly Out of Hackathon Scope)
+- **Complex What-If Sandboxes:** Replaced by the clean, predictable 4-step Timeline Scrubber.
+- **User Authentication / Passwords:** Unnecessary barrier for evaluators; use 1-click coordinator persona.
+- **External Database (Supabase):** Replaced by reactive client-side store with `localStorage` to eliminate network connection pool limits and serverless migration downtime during judging.
+- **Turn-by-Turn GPS Navigation for Boats:** Unrealistic without real bathymetric sonar sensors.
+- **Arbitrary Duplicate Auto-Merging:** Risky; duplicates are flagged for human review, never silently merged or deleted.
+
+---
+
+## 6. Main User Journeys
+
+### Journey A --- Submit and Process an Emergency Report *(Tier 1)*
+1. Citizen or field scout opens the report form.
+2. User enters unstructured description (e.g. *"Water entering house, elderly mother with heart condition, no boat"*).
+3. System saves the raw text immediately.
+4. Extractor parses structured entities (Life Threat: 4, Medical Urgency: 4, Mobility: 4, Location: Sector 2). If API is unavailable, system executes rule-based extraction and visibly labels it *"Offline heuristic extraction (not AI)"*.
+5. Incident appears in the queue with calculated priority score (82 / 100, Critical).
+
+### Journey B --- Review Incident Priority & Explainability *(Tier 1)*
+1. Coordinator inspects the incident queue, sorted by deterministic priority score.
+2. Coordinator clicks an incident to open the inspector card.
+3. System presents the 5 factor scores, the mathematical formula, and a human-auditable rationale card explaining the rating.
+4. Missing fields are visibly marked with confidence indicators without lowering priority.
+
+### Journey C --- Recommend and Approve Resource with Opportunity Cost *(Tier 1)*
+1. Coordinator selects an incident needing evacuation.
+2. System filters available assets by terrain suitability (e.g., Shallow Jet-Boat required for flood zone).
+3. Before dispatch approval, system displays an **Opportunity Cost Warning Card**: *"Assigning Shallow Jet-Boat 01 leaves 0 shallow-draft assets in Sector 3; Incident #4 [Score 78] will incur an estimated +35 min delay."*
+4. Coordinator reviews the trade-off and clicks "Approve Assignment".
+5. Resource status transitions to `assigned`, and an entry is written to the audit activity log.
+
+### Journey D --- Resolve Uncertainty in Radar *(Tier 1)*
+1. Uncertainty Radar highlights flags: Missing Location (Incident #3), Conflicting Road Reports (Route 4), Stale Report (>60 min), and Coverage Blind Spot.
+2. Coordinator clicks a flag, reviews the conflicting reports side-by-side, and records a verification note.
+3. Reports are never silently overwritten or merged.
+
+### Journey E --- Timeline Scrubbing & Blind-Spot Escalation *(Tier 1)*
+1. Coordinator scrubs the timeline from `T-0` through `T+6 Grid Blackout`.
+2. Telemetry indicates Sector 3A cell towers dropped 90 minutes ago with zero incoming reports while flood levels rose to 1.8m.
+3. Uncertainty Radar triggers a `coverage_blind_spot` and synthesizes an incident labeled **"Physical Welfare Recon / Field Sweep"** with a minimum score of **60 / 100 (High)**.
+4. Coordinator dispatches a recon patrol directly from the queue.
+
+### Journey F --- Shelter Capacity Destination Matching *(Tier 2)*
+1. Evacuee requiring dialysis is assigned an evacuation boat.
+2. System evaluates destination shelters: Shelter A (98% full - excluded), Shelter B (Grid down, generator failed - excluded), Shelter C (72% capacity, dialysis capability, backup power active - matched).
+3. Coordinator approves destination routing; Shelter C occupancy increments.
+
+### Journey G --- Bilingual Voice Distress Hotline *(Tier 2)*
+1. Evaluator opens the voice hotline player and clicks play on an incoming Urdu distress call.
+2. Audio visualizer renders live waveform.
+3. Speech-to-text service provides Urdu transcript and English translation.
+4. Extracted facts feed into the deterministic triage engine with provenance linked to audio timestamps.
+
+### Journey H --- Pre-Disaster Vulnerability Baseline & T-0 Proactive Staging *(Tier 2)*
+1. At `T-0 Early Warning`, coordinator toggles the Pre-Disaster Vulnerability Baseline (Lady Health Worker registry, chronic dialysis lists, low-lying informal settlements).
+2. Hydrological surge model predicts inundation of Sector 3A at `T+3`.
+3. System suggests proactive pre-positioning of Shallow Jet-Boat 01 at High Ground Staging Depot Alpha before arterial access roads submerge.
+
+---
+
+## 7. Functional Requirements Matrix
+
+| ID | Feature Description | Tier | Acceptance Criteria |
+| :--- | :--- | :---: | :--- |
+| **FR-01** | Raw Report Ingestion | **Tier 1** | Captures raw report text, timestamp, and reporter type. Original text is never altered. |
+| **FR-02** | Structured Fact Extraction | **Tier 1** | Extracts structured fields via Gemini; falls back gracefully to rule-based parser on failure. |
+| **FR-03** | Honest Fallback Labeling | **Tier 1** | Visibly tags fallback outputs as *"Offline heuristic extraction (not AI)"*. |
+| **FR-04** | Deterministic 5-Factor Scoring | **Tier 1** | Implements exact MCDA formula yielding 0–100 score; identical inputs produce identical scores. |
+| **FR-05** | Explainability Rationale Cards | **Tier 1** | Displays transparent breakdown of factor contributions and natural-language justification. |
+| **FR-06** | Incident Queue & Filtering | **Tier 1** | Renders sorted queue with status badges, priority categories (Critical/High/Moderate/Low), and sector filters. |
+| **FR-07** | Interactive GIS Command Map | **Tier 1** | Renders Leaflet map with incident markers, resource locations, and sector boundary overlays. |
+| **FR-08** | Resource Recommendation & Compatibility | **Tier 1** | Matches vehicles by terrain suitability; excludes already-assigned assets. |
+| **FR-09** | Opportunity Cost Warning | **Tier 1** | Computes and displays sector asset depletion and queue delay penalties before dispatch. |
+| **FR-10** | Human Dispatch Approval | **Tier 1** | Strictly requires coordinator confirmation before assigning an asset; records action in audit log. |
+| **FR-11** | Uncertainty Radar: Missing & Stale | **Tier 1** | Flags missing location and stale reports (>60 min); separates confidence from urgency. |
+| **FR-12** | Uncertainty Radar: Conflicts & Duplicates | **Tier 1** | Flags conflicting road claims and potential duplicate reports without silent merging. |
+| **FR-13** | Uncertainty Radar: Blind-Spot Synthesis | **Tier 1** | Synthesizes a `system_blind_spot` incident (Score $\ge 60$, High) when a sector goes dark. |
+| **FR-14** | Timeline Scrubber ($T-0 \to T+12$) | **Tier 1** | Controls 4 discrete scenario stages, updating water levels, closures, and tower telemetry. |
+| **FR-15** | 1-Click Simulation Reset | **Tier 1** | Restores seed data baseline in `localStorage` instantaneously. |
+| **FR-16** | Zero-Downtime Public Deployment | **Tier 1** | App builds cleanly and runs on public Vercel URL with no cold-start blockers. |
+| **FR-17** | Shelter Capacity Destination Matching | **Tier 2** | Evaluates bed capacity, power status, and clinical capabilities; auto-filters shelters $>95\%$ full. |
+| **FR-18** | T-0 Pre-Disaster Baseline Staging | **Tier 2** | Overlays static demographic vulnerability data at $T-0$ to recommend proactive staging. |
+| **FR-19** | Bilingual Voice Distress Hotline | **Tier 2** | Plays simulated audio, renders waveform, and displays Urdu/English transcription. |
+| **FR-20** | Community Proxy Intake Mode | **Tier 2** | Allows reporting on behalf of others; tracks phone access (`has_phone`, `no_phone`, `network_down`). |
+| **FR-21** | Installable PWA with Offline Queue | **Tier 2** | Caches shell and queues offline report submissions for background sync. |
+| **FR-22** | FCFS vs. Nigehbaan Impact Panel | **Tier 2** | Displays simulated comparative metrics on $T+12$ screen showing lives saved vs. FCFS. |
+
+---
+
+## 8. Deterministic Priority Model Specification
+
+Priority scoring is governed by a transparent, multi-criteria mathematical formula. For complete lookup tables, factor bucket definitions, and worked examples, see **[`docs/scoring-spec.md`](./scoring-spec.md)**.
+
+### Mathematical Formula
+$$\text{Priority Score} = 100 \times \sum_{i=1}^5 \left(w_i \cdot \frac{\text{factor}_i}{5}\right)$$
+
+### Factor Weights & Scale (0–5 per factor)
+1. **Immediate Threat to Life ($w_1 = 0.30$):** Active drowning, roof collapse, swept away, chest-deep water.
+2. **Medical Urgency ($w_2 = 0.25$):** Dialysis-dependent, oxygen-dependent, active bleeding, diabetic insulin-dependent.
+3. **Evacuation Inability ($w_3 = 0.20$):** Bedridden, wheelchair, unaccompanied minor, isolated elderly.
+4. **Environmental Danger ($w_4 = 0.15$):** Rising flood velocity, structural failure risk, fast surge.
+5. **Population Affected ($w_5 = 0.10$):** Headcount buckets (1 person = 1.0, 2–4 = 2.5, 5–10 = 4.0, >10 = 5.0).
+
+### Priority Categories
+- **Critical:** $\ge 75.0$ (Immediate life-safety intervention required)
+- **High:** $55.0 - 74.9$ (Urgent medical/evacuation dispatch)
+- **Moderate:** $35.0 - 54.9$ (Stable shelter/welfare check)
+- **Low:** $< 35.0$ (Property report / non-life-safety inquiry)
+
+### Unknown Factors & Renormalization Rule
+Missing information is **never treated as zero**. The priority score is calculated over known factors with weights renormalized:
+$$\text{Score} = 100 \times \frac{\sum_{i \in \text{known}} \left(w_i \cdot \frac{\text{factor}_i}{5}\right)}{\sum_{i \in \text{known}} w_i}$$
+The UI displays *"N of 5 factors unknown"* and keeps the information confidence metric separate from priority. Low confidence raises a review flag; it never lowers urgency.
+
+### Vulnerability Floor & Blind-Spot Floor Rules
+1. **No-Phone Floor:** If `communication_status == 'no_phone'`, Evacuation Inability is enforced at $\ge 4.0$.
+2. **System Blind-Spot Floor:** An incident generated from a silent sector (`reporter_type == 'system_blind_spot'`) receives:
+   - Evacuation Inability $= 4.0$
+   - Environmental Danger $=$ Sector flood hazard level ($4.0 - 5.0$)
+   - **Enforced Minimum Total Score:** $\ge 60.0$ (High priority)
+   - Label: *"Physical Welfare Recon / Field Sweep"*
+   - *Rationale:* It is never auto-Critical because no individual is confirmed, but ranks above Moderate confirmed incidents (e.g. wet floor) and below confirmed Critical emergencies (e.g. dialysis patient in rising water).
