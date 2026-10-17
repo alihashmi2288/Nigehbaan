@@ -26,7 +26,9 @@ import {
   Crosshair,
   Building2,
   Truck,
+  PhoneCall,
 } from 'lucide-react';
+import { VoiceDistressPlayer } from '../voice';
 
 export const IncidentInspector: React.FC = () => {
   const selectedIncidentId = useAppStore((state) => state.selectedIncidentId);
@@ -39,6 +41,7 @@ export const IncidentInspector: React.FC = () => {
 
   const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
   const [isConflictModalOpen, setIsConflictModalOpen] = useState(false);
+  const [isVoicePlayerOpen, setIsVoicePlayerOpen] = useState(false);
 
   const incident = incidents.find((i) => i.id === selectedIncidentId);
 
@@ -300,7 +303,28 @@ export const IncidentInspector: React.FC = () => {
               </p>
             </div>
           )}
+
+          {/* Voice Hotline Audio Recording Player Trigger (Milestone 11 / Test 2.3) */}
+          {incident.reporterType === 'voice_hotline' && (
+            <div className="pt-1">
+              <button
+                type="button"
+                data-testid="inspector-play-voice-button"
+                onClick={() => setIsVoicePlayerOpen(true)}
+                className="w-full px-3 py-2 rounded text-xs font-mono font-bold bg-brand/15 hover:bg-brand/25 text-brand border border-brand/30 flex items-center justify-center gap-2 transition-all shadow-sm"
+              >
+                <PhoneCall className="w-3.5 h-3.5 animate-pulse" />
+                <span>Play Voice Recording &amp; Waveform</span>
+              </button>
+            </div>
+          )}
         </div>
+
+        {/* Voice Distress Modal for Inspector */}
+        <VoiceDistressPlayer
+          isOpen={isVoicePlayerOpen}
+          onClose={() => setIsVoicePlayerOpen(false)}
+        />
 
         {/* Uncertainty Radar Flags */}
         {incident.uncertaintyFlags.length > 0 && (

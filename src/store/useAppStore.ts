@@ -18,6 +18,11 @@ import { getPristineState, normalizeIncident } from '@/lib/simulation/seedLoader
 import { rankIncidentQueue } from '@/lib/triage/queueRanker';
 import { calculatePriorityScore } from '@/lib/triage/scoringEngine';
 import { detectAndSynthesizeBlindSpots } from '@/lib/uncertainty';
+import {
+  SCRIPTED_AUDIO_FALLBACK_BADGE,
+  SIMULATED_CALL_NG102,
+  AudioTranscriptionResult,
+} from '@/lib/ai/audioFallback';
 
 export const PHASE_ORDER: Record<TimelinePhaseId, number> = {
   T0: 0,
@@ -108,6 +113,7 @@ export interface AppState {
       extractedFacts?: ExtractedFacts;
     }
   ) => Incident;
+  ingestVoiceIncident: (callData?: Partial<AudioTranscriptionResult>) => Incident;
   updateIncident: (incidentId: string, updates: Partial<Incident>) => void;
   updateResource: (resourceId: string, updates: Partial<Resource>) => void;
   resetSimulation: () => void;
@@ -509,6 +515,83 @@ export const useAppStore = create<AppState>()(
         });
 
         return newIncident;
+      },
+
+      ingestVoiceIncident: (callData) => {
+        const state = get();
+        const timestamp = new Date().toISOString();
+        const fallback = SIMULATED_CALL_NG102;
+
+        const existingIndex = state.incidents.findIndex((i) => i.code === 'NG-102');
+        const badge = callData?.provenanceBadge ?? SCRIPTED_AUDIO_FALLBACK_BADGE;
+        const isAI = callData?.isAI ?? false;
+        const text = callData?.originalTranscript ?? fallback.originalTranscript;
+        const translation = callData?.englishTranslation ?? fallback.englishTranslation;
+        const factors = (callData?.factors ?? fallback.factors) as IncidentFactors;
+        const facts = callData?.extractedFacts ?? fallback.extractedFacts;
+
+        let ng102: Incident;
+        let updatedIncidents: Incident[];
+
+        if (existingIndex >= 0) {
+          const existing = state.incidents[existingIndex];
+          ng102 = normalizeIncident({
+            ...existing,
+            phaseArrival: state.timelinePhase,
+            reportText: text,
+            reportTranslation: translation,
+            factors,
+            status: 'triaged',
+            provenanceBadge: badge,
+            isAI,
+            extractedFacts: facts,
+            timestamp: existing.timestamp || timestamp,
+          });
+          updatedIncidents = [
+            ng102,
+            ...state.incidents.filter((i) => i.code !== 'NG-102'),
+          ];
+        } else {
+          const raw = {
+            id: 'inc-102',
+            code: 'NG-102',
+            sectorId: 'sector-3a',
+            reporterType: 'voice_hotline' as const,
+            phoneAccess: 'has_phone' as const,
+            timestamp,
+            phaseArrival: state.timelinePhase,
+            reportText: text,
+            reportTranslation: translation,
+            factors,
+            uncertaintyFlags: [] as UncertaintyFlag[],
+            coordinates: [24.943, 67.165] as [number, number],
+            targetResource: 'shallow_boat',
+            targetShelter: 'SHL-01',
+            assignedResourceId: null,
+            status: 'triaged' as const,
+            provenanceBadge: badge,
+            isAI,
+            extractedFacts: facts,
+          };
+          ng102 = normalizeIncident(raw);
+          updatedIncidents = [ng102, ...state.incidents];
+        }
+
+        const logEntry: AuditLogEntry = {
+          id: `log-voice-${Date.now()}`,
+          timestamp,
+          action: 'INCIDENT_SUBMITTED',
+          details: `[${timestamp}] INCIDENT_SUBMITTED: Voice distress call ingested -> ${ng102.code} (Priority: ${ng102.score?.toFixed(1) ?? '81.0'} - ${ng102.category})`,
+          incidentId: ng102.id,
+        };
+
+        set({
+          incidents: updatedIncidents,
+          selectedIncidentId: ng102.id,
+          activityLogs: [logEntry, ...state.activityLogs],
+        });
+
+        return ng102;
       },
 
       updateIncident: (incidentId, updates) => {

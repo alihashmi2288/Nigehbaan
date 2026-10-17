@@ -329,3 +329,31 @@ See [`TASKS.md`](./TASKS.md) for the complete, atomic 35-task implementation che
 - **Next Smallest Coding Task:**
   - Task **`T11.1`** (Web Audio Waveform Player Component in Milestone 11).
 
+### Session --- 2026-10-17 21:10 PKT (Milestone 11: Bilingual Voice Distress Hotline)
+- **Phase/Task:** Milestone 11 (Tasks T11.1, T11.2) --- Tier 2 Extension
+- **Accomplishments:**
+  - **T11.1 (Web Audio Waveform Player Component):**
+    - Created `src/components/voice/VoiceDistressPlayer.tsx` and exported via `src/components/voice/index.ts`.
+    - Implemented HTML5 Canvas Web Audio API visualizer displaying animated real-time waveform bars with gradient illumination (`#5e6ad2` tactical brand to `#FDA29B` critical peak).
+    - Added full playback controls: Play/Pause toggling (`data-testid="play-distress-call-button"`), timeline scrubbing with real-time range slider and timestamp counter (`00:00.0 / 00:14.5`), rewind reset, and mute toggle.
+    - Implemented high-contrast bilingual transcript card displaying spoken Urdu in `dir="rtl"` alongside English translation in `dir="ltr"` with audio degradation telemetry badges.
+  - **T11.2 (Speech-to-Text Integration & Simulated Audio Fallback):**
+    - Created `src/lib/ai/audioFallback.ts` encapsulating verified static transcript data for simulated voice distress call (`CALL-NG102` / `NG-102`), factors `[5.0, 2.0, 4.5, 5.0, 4.0]`, deterministic priority score `81.0` (Critical), and honest provenance badge: `"Scripted transcript for simulated call"` (Invariant 7).
+    - Created stateless API route `src/app/api/ai/transcribe/route.ts` implementing `docs/ai-prompts.md` Section 3 with 5-second timeout and 1 automatic retry, falling back to honest scripted transcript when `GEMINI_API_KEY` is missing or times out.
+    - Added `ingestVoiceIncident` action to `src/store/useAppStore.ts` ensuring `NG-102` is triaged with score `81.0` (Critical), honest badge, and selected in the inspector.
+    - Added Voice Hotline button (`data-testid="open-voice-hotline-button"`) to HUD header in `src/app/page.tsx` and quick audio playback trigger in `src/components/inspector/IncidentInspector.tsx`.
+  - **Testing & Acceptance Verification:**
+    - Created `tests/milestone11.test.ts` with 4 comprehensive tests covering fallback constants, deterministic scoring of `NG-102` factors, `/api/ai/transcribe` route handler, and store ingestion.
+    - Updated `tests/acceptance.test.ts` with **Acceptance Test 2.3** verifying all 4 criteria from `docs/acceptance-tests.md`:
+      1. Web Audio visualizer initializes.
+      2. Transcript renders Urdu in `dir="rtl"` alongside English translation.
+      3. Provenance badge displays `Scripted transcript for simulated call`.
+      4. Incident `NG-102` generated with score `81.0` and Critical category.
+    - Ran full test suite: **12/12 test files passed, 132/132 tests passed (100% pass rate)**.
+  - **Production Build Verification:**
+    - Executed `npm run build`: Clean Next.js 14 production compilation generating all 5/5 static pages and `/api/ai/transcribe` dynamic route with 0 errors/warnings.
+- **Suggested Commit Name:**
+  - `feat(milestone-11): bilingual voice distress hotline, web audio waveform visualizer, and honest STT fallback`
+- **Next Smallest Coding Task:**
+  - Task **`T12.1`** (PWA Manifest & Service Worker Offline Submission Queue in Milestone 12).
+

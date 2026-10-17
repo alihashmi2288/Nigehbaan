@@ -701,7 +701,7 @@
 
 ## Milestone 11: Bilingual Voice Distress Hotline (Tier 2)
 
-### [ ] Task T11.1: Web Audio Waveform Player Component
+### [x] Task T11.1: Web Audio Waveform Player Component
 - **Tier:** Tier 2 (Post-Tier 1 Extension)
 - **Dependencies:** T9.3
 - **Files to create/edit:**
@@ -718,7 +718,7 @@
 
 ---
 
-### [ ] Task T11.2: Speech-to-Text Integration & Simulated Audio Fallback
+### [x] Task T11.2: Speech-to-Text Integration & Simulated Audio Fallback
 - **Tier:** Tier 2 (Post-Tier 1 Extension)
 - **Dependencies:** T11.1
 - **Files to create/edit:**

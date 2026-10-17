@@ -13,12 +13,14 @@ import {
   Sliders,
   PlusCircle,
   History,
+  PhoneCall,
 } from 'lucide-react';
 import { ResetButton } from '@/components/layout';
 import { MapWrapper } from '@/components/map';
 import { IncidentQueue } from '@/components/queue';
 import { IncidentInspector } from '@/components/inspector';
 import { IntakeModal } from '@/components/intake';
+import { VoiceDistressPlayer } from '@/components/voice';
 import { UncertaintyRadarPanel } from '@/components/uncertainty';
 import { AuditLogDrawer } from '@/components/audit';
 import { TimelineScrubber } from '@/components/timeline';
@@ -38,6 +40,7 @@ export default function Home() {
 
   const [isIntakeModalOpen, setIsIntakeModalOpen] = useState(false);
   const [isAuditModalOpen, setIsAuditModalOpen] = useState(false);
+  const [isVoiceHotlineOpen, setIsVoiceHotlineOpen] = useState(false);
 
   useEffect(() => {
     setHydrated(true);
@@ -70,6 +73,17 @@ export default function Home() {
         </div>
 
         <div className="flex items-center gap-3">
+          {/* Bilingual Voice Distress Hotline (Milestone 11 / Acceptance Test 2.3) */}
+          <button
+            type="button"
+            data-testid="open-voice-hotline-button"
+            onClick={() => setIsVoiceHotlineOpen(true)}
+            className="px-3 py-1.5 rounded text-xs font-mono font-bold bg-semantic-critical/20 hover:bg-semantic-critical/30 text-semantic-critical-text border border-semantic-critical-border flex items-center gap-1.5 transition-all shadow-sm"
+          >
+            <PhoneCall className="w-3.5 h-3.5 animate-pulse" />
+            <span>Voice Hotline</span>
+          </button>
+
           {/* Emergency Intake Button (Task T5.1 & T5.4) */}
           <button
             type="button"
@@ -103,7 +117,7 @@ export default function Home() {
           </span>
           <span className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono bg-surface-2 border border-hairline text-brand">
             <Terminal className="w-3.5 h-3.5" />
-            Milestone 8: Disaster Timeline Scrubber &amp; Dynamic Telemetry Active
+            Milestone 11: Bilingual Voice Distress Hotline Active
           </span>
         </div>
       </header>
@@ -112,6 +126,12 @@ export default function Home() {
       <IntakeModal
         isOpen={isIntakeModalOpen}
         onClose={() => setIsIntakeModalOpen(false)}
+      />
+
+      {/* Voice Distress Hotline Modal (Milestone 11 / Acceptance Test 2.3) */}
+      <VoiceDistressPlayer
+        isOpen={isVoiceHotlineOpen}
+        onClose={() => setIsVoiceHotlineOpen(false)}
       />
 
       {/* Operational Activity Audit Log Drawer (Task T7.3) */}

@@ -43,6 +43,10 @@ import {
 import { ExtractedFactsSchema, Incident } from '@/types';
 import { matchShelterForIncident } from '@/lib/shelters';
 import { getSectorStagingRecommendation } from '@/lib/simulation/stagingAdvisor';
+import {
+  getSimulatedAudioFallback,
+  SCRIPTED_AUDIO_FALLBACK_BADGE,
+} from '@/lib/ai/audioFallback';
 
 /**
  * Tier 1 Acceptance Test Suite
@@ -548,6 +552,46 @@ describe('Tier 1 Acceptance Test Suite (Tests 1.1 – 1.9)', () => {
         expect(rec?.rationale).toBe(
           'Arterial access road submerges at T+3; 22 isolated elderly registered in sector.'
         );
+      });
+    });
+
+    // ------------------------------------------------------------------------
+    // Test 2.3: Bilingual Voice Distress Hotline Player (Milestone 11)
+    // ------------------------------------------------------------------------
+    describe('Test 2.3: Bilingual Voice Distress Hotline Player', () => {
+      it('animates playback, renders Urdu RTL transcript & translation, honest badge, and generates Incident NG-102 (Score 81.0, Critical)', () => {
+        // Given: Evaluator navigates to the voice distress simulator
+        const store = useAppStore.getState();
+        expect(store.timelinePhase).toBe('T0');
+
+        // When: Evaluator clicks "Play Distress Call" (ingests simulated hotline call)
+        const fallback = getSimulatedAudioFallback();
+        const incident = store.ingestVoiceIncident(fallback);
+
+        // Then:
+        // 1. The transcript displays the spoken Urdu phrase in dir="rtl" alongside English translation
+        expect(incident.reportText).toBe(
+          'چھت پر بیٹھے ہیں پانی بڑھ رہا ہے۔ دو چھوٹے بچے ساتھ ہیں چھت سے آوازیں آ رہی ہیں۔'
+        );
+        expect(incident.reportTranslation).toBe(
+          'Sitting on roof, water rising, 2 babies with us, roof is making cracking sounds.'
+        );
+
+        // 2. Provenance tag displays: "Scripted transcript for simulated call"
+        expect(incident.provenanceBadge).toBe(SCRIPTED_AUDIO_FALLBACK_BADGE);
+        expect(incident.provenanceBadge).toBe('Scripted transcript for simulated call');
+        expect(incident.isAI).toBe(false);
+
+        // 3. Extracted facts generate Incident NG-102 (Score 81.0, Critical)
+        expect(incident.code).toBe('NG-102');
+        expect(incident.score).toBe(81.0);
+        expect(incident.category).toBe('Critical');
+        expect(incident.sectorId).toBe('sector-3a');
+        expect(incident.targetResource).toBe('shallow_boat');
+        expect(incident.targetShelter).toBe('SHL-01');
+
+        // 4. Store state updates selection to NG-102
+        expect(useAppStore.getState().selectedIncidentId).toBe(incident.id);
       });
     });
   });
