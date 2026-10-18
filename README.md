@@ -128,12 +128,7 @@ graph TD
 - **Members:**
   1. **Syed Ali Hashmi** (Team Leader) --- Roll No: `EB-24210106108` | 3rd Year BSSE (UBIT)
   2. **Syed Umer Hashmi** --- Roll No: `EB-25210006105` | 2nd Year BSCS (UBIT)
-- **Live Demo Link (Home):** [https://nigehbaan.vercel.app](https://nigehbaan.vercel.app)
-- **Command Cockpit (HUD):** [https://nigehbaan.vercel.app/dashboard](https://nigehbaan.vercel.app/dashboard)
-- **Platform Guide & Blueprint:** [https://nigehbaan.vercel.app/guide](https://nigehbaan.vercel.app/guide)
-- **Citizen Distress Intake:** [https://nigehbaan.vercel.app/incidents/new](https://nigehbaan.vercel.app/incidents/new)
-- **3-Minute Video Walkthrough:** [https://youtu.be/nigehbaan-demo](https://youtu.be/nigehbaan-demo)
-- **GitHub Repository:** [https://github.com/alihashmi2288/Nigehbaan.git](https://github.com/alihashmi2288/Nigehbaan.git)
+  
 - **AI Policy Notice:** AI-tool policy compliance to be confirmed with event organizers.
 
 ---
